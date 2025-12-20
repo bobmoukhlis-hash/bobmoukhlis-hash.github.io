@@ -3,55 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChatAI Bob PRO 2025</title>
+  <title>ChatAI Bob PRO 2025 💎</title>
   <style>
     body {
       margin: 0;
       height: 100vh;
       background-color: #000;
-      color: #00fff7;
+      color: #00ffee;
       font-family: "Segoe UI", Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
+      text-align: center;
     }
+
     h1 {
-      font-size: 1.6em;
-      text-align: center;
+      font-size: 1.8em;
+      margin-bottom: 10px;
+      color: #00eaff;
     }
+
     p {
-      font-size: 1em;
-      color: #a0faff;
-      text-align: center;
+      color: #ccc;
+      font-size: 1.1em;
     }
-    .btn {
-      margin-top: 25px;
-      background-color: #00fff7;
+
+    .button {
+      background-color: #00eaff;
       color: #000;
-      padding: 12px 28px;
+      padding: 14px 28px;
+      border-radius: 40px;
       border: none;
-      border-radius: 25px;
-      font-size: 16px;
+      font-size: 1.1em;
+      font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s;
+      margin-top: 25px;
+      transition: 0.3s;
     }
-    .btn:hover {
-      background-color: #00ccff;
-      transform: scale(1.05);
+
+    .button:hover {
+      background-color: #00ffee;
     }
+
+    iframe {
+      width: 100%;
+      height: 100vh;
+      border: none;
+      display: none;
+    }
+
     .paypal {
       position: absolute;
       bottom: 20px;
       text-align: center;
       width: 100%;
+      font-size: 1em;
     }
+
     .paypal a {
-      color: #00e6ff;
+      color: #00eaff;
       text-decoration: none;
-      font-size: 16px;
     }
+
     .paypal a:hover {
       text-decoration: underline;
     }
@@ -60,17 +74,23 @@
 <body>
   <h1>🤖 Benvenuto in ChatAI Bob PRO 2025</h1>
   <p>Chat, immagini, video e voce AI — Premium integrato 💎</p>
-  <button class="btn" onclick="avviaChat()">🚀 Avvia ChatAI Bob PRO</button>
+
+  <button class="button" onclick="avviaChat()">🚀 Avvia ChatAI Bob PRO</button>
+
+  <iframe id="chatFrame" src="https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO"></iframe>
 
   <div class="paypal">
-    <a href="https://www.paypal.com/donate?business=bobmoukhlis@gmail.com&item_name=Supporto+ChatAI+Bob+PRO&currency_code=EUR" target="_blank">
-      💎 Sostieni ChatAI Bob PRO su PayPal
+    💎 <a href="https://www.paypal.com/donate?business=bobmoukhlis@gmail.com&item_name=Supporto+ChatAI+Bob+PRO&currency_code=EUR" target="_blank">
+      Sostieni ChatAI Bob PRO su PayPal
     </a>
   </div>
 
   <script>
     function avviaChat() {
-      window.open("https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO", "_blank");
+      document.querySelector("h1").style.display = "none";
+      document.querySelector("p").style.display = "none";
+      document.querySelector(".button").style.display = "none";
+      document.getElementById("chatFrame").style.display = "block";
     }
   </script>
 </body>
