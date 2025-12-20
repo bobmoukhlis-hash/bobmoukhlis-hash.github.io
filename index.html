@@ -7,42 +7,44 @@
   <style>
     html, body {
       background-color: #000;
-      color: white;
+      color: #00ffcc;
       font-family: Arial, sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100vh;
       margin: 0;
-      flex-direction: column;
+      text-align: center;
     }
-    button {
-      background-color: #00ffcc;
-      color: #000;
-      border: none;
-      padding: 15px 25px;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
+    h2 {
+      margin-bottom: 20px;
     }
-    button:hover {
-      background-color: #00bfa5;
+    .loader {
+      border: 4px solid #222;
+      border-top: 4px solid #00ffcc;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
     }
-    footer {
-      position: fixed;
-      bottom: 10px;
-      color: #00ffcc;
-      font-size: 14px;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
+  <script>
+    // Attendi 1 secondo e poi reindirizza alla chat ufficiale
+    setTimeout(() => {
+      window.location.href = "https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO";
+    }, 1000);
+  </script>
 </head>
 <body>
-  <h2>🤖 ChatAI Bob PRO</h2>
-  <p>Assistente AI sempre attivo 24/7</p>
-  <button onclick="window.open('https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO', '_blank')">
-    Apri ChatAI Bob
-  </button>
-  <footer>ChatAI Bob by AI Labs</footer>
+  <div>
+    <h2>🤖 ChatAI Bob PRO si sta avviando...</h2>
+    <div class="loader"></div>
+    <p>Attendi un momento ⏳</p>
+  </div>
 </body>
 </html>
