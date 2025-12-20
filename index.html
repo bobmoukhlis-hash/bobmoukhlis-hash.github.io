@@ -15,44 +15,32 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
       text-align: center;
     }
-
-    h1 {
-      font-size: 1.8em;
-      margin-bottom: 10px;
-      color: #00eaff;
+    h2 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
     }
-
-    p {
-      color: #ccc;
-      font-size: 1.1em;
+    .loader {
+      border: 4px solid #222;
+      border-top: 4px solid #00ffee;
+      border-radius: 50%;
+      width: 45px;
+      height: 45px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
     }
-
-    .button {
-      background-color: #00eaff;
-      color: #000;
-      padding: 14px 28px;
-      border-radius: 40px;
-      border: none;
-      font-size: 1.1em;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 25px;
-      transition: 0.3s;
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
-
-    .button:hover {
-      background-color: #00ffee;
-    }
-
     iframe {
       width: 100%;
       height: 100vh;
       border: none;
       display: none;
     }
-
     .paypal {
       position: absolute;
       bottom: 20px;
@@ -60,24 +48,26 @@
       width: 100%;
       font-size: 1em;
     }
-
     .paypal a {
-      color: #00eaff;
+      color: #00ffee;
       text-decoration: none;
     }
-
     .paypal a:hover {
       text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <h1>🤖 Benvenuto in ChatAI Bob PRO 2025</h1>
-  <p>Chat, immagini, video e voce AI — Premium integrato 💎</p>
+  <div id="loading">
+    <h2>🤖 ChatAI Bob PRO si sta avviando...</h2>
+    <div class="loader"></div>
+    <p>Attendi un momento ⏳</p>
+  </div>
 
-  <button class="button" onclick="avviaChat()">🚀 Avvia ChatAI Bob PRO</button>
-
-  <iframe id="chatFrame" src="https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO"></iframe>
+  <iframe id="chatFrame" 
+    src="https://bouabid79-chat-ai-bob-pro.hf.space"
+    allow="microphone; camera; clipboard-read; clipboard-write">
+  </iframe>
 
   <div class="paypal">
     💎 <a href="https://www.paypal.com/donate?business=bobmoukhlis@gmail.com&item_name=Supporto+ChatAI+Bob+PRO&currency_code=EUR" target="_blank">
@@ -86,12 +76,11 @@
   </div>
 
   <script>
-    function avviaChat() {
-      document.querySelector("h1").style.display = "none";
-      document.querySelector("p").style.display = "none";
-      document.querySelector(".button").style.display = "none";
+    // Mostra la chat dopo 2 secondi
+    setTimeout(() => {
+      document.getElementById("loading").style.display = "none";
       document.getElementById("chatFrame").style.display = "block";
-    }
+    }, 2000);
   </script>
 </body>
 </html>
