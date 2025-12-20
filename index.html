@@ -49,4 +49,33 @@
       font-size: 14px;
     }
     #premium a {
-      color
+      color: #00ccff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    #premium a:hover {
+      color: #00ffaa;
+    }
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <h2>🤖 ChatAI Bob PRO si sta avviando...</h2>
+    <div class="loader"></div>
+    <p>Attendi un momento ⏳</p>
+  </div>
+
+  <div id="premium">
+    💎 <a href="https://www.paypal.com/donate?business=bobmoukhlis@gmail.com&item_name=Supporto+ChatAI+Bob+PRO&currency_code=EUR" target="_blank">
+      Sostienimi su PayPal (Premium automatico)
+    </a>
+  </div>
+
+  <script>
+    // Dopo 2 secondi apre la chat ufficiale su Hugging Face
+    setTimeout(() => {
+      window.location.href = "https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO";
+    }, 2000);
+  </script>
+</body>
+</html>
