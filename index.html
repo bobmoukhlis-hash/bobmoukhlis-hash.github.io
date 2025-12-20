@@ -15,7 +15,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      animation: fadeIn 1.5s ease;
       overflow: hidden;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     h2 {
       font-size: 1.5em;
@@ -36,8 +41,9 @@
     }
     #premium {
       position: absolute;
-      bottom: 20px;
+      bottom: 25px;
       text-align: center;
+      width: 100%;
       color: #fff;
       font-size: 14px;
     }
@@ -58,12 +64,13 @@
     <p>Attendi un momento ⏳</p>
   </div>
 
-  <div https://www.paypal.com/donate?business=bobmoukhlis@gmail.com&item_name=Supporto+ChatAI+Bob+PRO&currency_code=EUR
+  <div id="premium">
+    💎 <a href="https://www.paypal.com/donate?business=TUO_EMAIL_PAYPAL&item_name=Supporto+ChatAI+Bob+PRO&currency_code=EUR" target="_blank">
+      Sostienimi su PayPal (Premium automatico)
     </a>
   </div>
 
   <script>
-    // Dopo 2 secondi apre la chat ufficiale su Hugging Face
     setTimeout(() => {
       window.location.href = "https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO";
     }, 2000);
