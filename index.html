@@ -31,29 +31,25 @@
     cursor: pointer;
     z-index: 9999;
   }
-  #uploadBtn {
-    position: fixed;
-    bottom: 15px;
-    left: 15px;
-    background-color: #0088ff;
-    color: #fff;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 25px;
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
-    z-index: 9999;
-  }
 </style>
+<script>
+window.onload = function() {
+  const iframe = document.getElementById("bobChat");
+  // Se Hugging Face non si carica, mostra un messaggio automatico
+  setTimeout(() => {
+    if (!iframe.contentWindow || iframe.contentWindow.length === 0) {
+      document.body.innerHTML += '<p style="color:white;text-align:center;margin-top:40%;">⏳ Caricamento ChatAI Bob...</p>';
+    }
+  }, 3000);
+};
+</script>
 </head>
 <body>
-  <<iframe src="https://Bouabid79-chatai-bob-pro.hf.space"ed=true" 
+  <iframe 
+    id="bobChat"
+    src="https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO?embed=true" 
     allow="camera; microphone; clipboard-read; clipboard-write">
   </iframe>
-
-  <input type="file" id="fileInput" accept="image/*" style="display:none;">
-  <button id="uploadBtn" onclick="document.getElementById('fileInput').click()">📷 Carica</button>
   <button id="exitBtn" onclick="window.close();">Esci</button>
 </body>
 </html>
