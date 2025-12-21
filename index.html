@@ -40,10 +40,17 @@ h1 {
   -webkit-text-fill-color: transparent;
   margin: 10px 0;
 }
-p {
-  font-size: 1.1em;
-  opacity: 0.9;
-  margin-bottom: 30px;
+#typing {
+  font-size: 1.2em;
+  color: #00eaff;
+  min-height: 1.5em;
+  white-space: nowrap;
+  border-right: 3px solid #00eaff;
+  animation: blink 0.8s infinite;
+  margin-bottom: 25px;
+}
+@keyframes blink {
+  50% { border-color: transparent; }
 }
 
 /* --- Pulsanti --- */
@@ -77,7 +84,7 @@ button:hover {
 
   <img src="https://cdn-icons-png.flaticon.com/512/4712/4712100.png" width="120" alt="AI Logo">
   <h1>🤖 ChatAI Bob PRO 2025</h1>
-  <p>L'assistente AI creativa — Chat, Immagini, Video e Voce</p>
+  <div id="typing"></div>
   
   <button onclick="window.open('https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO', '_blank')">
     🚀 Apri ChatAI Bob PRO
@@ -92,7 +99,7 @@ button:hover {
   </div>
 
 <script>
-/* --- Effetto particelle AI Glow --- */
+/* --- Particelle AI Glow --- */
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
@@ -131,6 +138,29 @@ window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 });
+
+/* --- Effetto scrittura automatica --- */
+const text = ["L'assistente AI creativa 🚀", "Chat • Immagini • Video • Voce 🎨", "Powered by Hugging Face 💠"];
+let i = 0, j = 0, isDeleting = false, speed = 80;
+
+function typeEffect() {
+  const typingDiv = document.getElementById('typing');
+  if (!typingDiv) return;
+  typingDiv.textContent = text[i].substring(0, j);
+  
+  if (!isDeleting && j < text[i].length) {
+    j++;
+    setTimeout(typeEffect, speed);
+  } else if (isDeleting && j > 0) {
+    j--;
+    setTimeout(typeEffect, speed / 2);
+  } else {
+    isDeleting = !isDeleting;
+    if (!isDeleting) i = (i + 1) % text.length;
+    setTimeout(typeEffect, 1000);
+  }
+}
+typeEffect();
 </script>
 </body>
 </html>
