@@ -16,6 +16,8 @@
     width: 100%;
     height: 100%;
     border: none;
+    background-color: #000;
+    filter: invert(1) hue-rotate(180deg);
   }
   #exitBtn {
     position: fixed;
@@ -32,21 +34,9 @@
     z-index: 9999;
   }
 </style>
-<script>
-window.onload = function() {
-  const iframe = document.getElementById("bobChat");
-  // Se Hugging Face non si carica, mostra un messaggio automatico
-  setTimeout(() => {
-    if (!iframe.contentWindow || iframe.contentWindow.length === 0) {
-      document.body.innerHTML += '<p style="color:white;text-align:center;margin-top:40%;">⏳ Caricamento ChatAI Bob...</p>';
-    }
-  }, 3000);
-};
-</script>
 </head>
 <body>
   <iframe 
-    id="bobChat"
     src="https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO?embed=true" 
     allow="camera; microphone; clipboard-read; clipboard-write">
   </iframe>
