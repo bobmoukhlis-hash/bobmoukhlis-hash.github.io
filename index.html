@@ -23,14 +23,16 @@
     img,video{width:100%;border-radius:12px;border:1px solid #1a2f55;background:#000}
     .paypal{display:block;text-align:center;margin-top:12px;text-decoration:none;font-weight:700;color:#00e5ff}
     .pill{display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid #1a2f55;background:#071022;font-size:12px;opacity:.9}
+    .mini{font-size:12px;opacity:.75}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="card">
       <h1>🤖 ChatAI Bob PRO 2025</h1>
-      <div class="muted">Chat (Groq via proxy), Immagini/GIF (Pollinations), Voce (browser TTS) + Donazioni PayPal</div>
-      <div style="margin-top:10px" class="pill">Nota: GitHub Pages non esegue Python. Questa è la versione web corretta.</div>
+      <div class="muted">Chat (Groq via Worker), Immagini/GIF (Pollinations), Microfono + Upload Foto + Voce</div>
+      <div style="margin-top:10px" class="pill">GitHub Pages ✅ (senza chiavi nel browser)</div>
+      <div class="mini" style="margin-top:8px">Suggerimento: per microfono/voce usa Chrome/Edge. Su alcuni browser mobile può essere limitato.</div>
     </div>
 
     <div style="height:12px"></div>
@@ -38,7 +40,7 @@
     <div class="grid">
       <div class="card">
         <label class="muted">✍️ Scrivi un messaggio</label>
-        <textarea id="prompt" placeholder="es. fammi un video realistico di un cane"></textarea>
+        <textarea id="prompt" placeholder="es. crea un esempio di codice html oppure descrivi questa foto"></textarea>
 
         <div style="height:10px"></div>
 
@@ -63,6 +65,16 @@
         </div>
 
         <div style="height:10px"></div>
+
+        <div class="row">
+          <button id="micBtn" style="background:#0b1220;border:1px solid #1a2f55;">🎤 Microfono</button>
+          <input id="photo" type="file" accept="image/*" />
+        </div>
+
+        <div style="height:10px"></div>
+        <img id="photoPreview" alt="" style="display:none" />
+
+        <div style="height:10px"></div>
         <button id="btn">🚀 Invia</button>
 
         <div style="height:10px"></div>
@@ -77,7 +89,7 @@
         </a>
 
         <div class="muted" style="margin-top:10px">
-          ⚠️ Per la chat serve un PROXY (Cloudflare Worker) per non esporre la tua chiave Groq nel browser.
+          ✅ Sicurezza: la chiave Groq è nel Cloudflare Worker (Secret). Qui c’è solo l’URL.
         </div>
       </div>
 
@@ -97,7 +109,12 @@
   </div>
 
 <script>
-  // --- filtro prompt (uguale al tuo concetto) ---
+  // ====== CONFIG (metti qui il tuo Worker) ======
+  const WORKER_BASE = "PASTE_YOUR_WORKER_URL_HERE"; // es: https://xxxx.workers.dev
+  const GROQ_CHAT_URL = WORKER_BASE.replace(/\/$/,"") + "/chat";
+  const GROQ_VISION_URL = WORKER_BASE.replace(/\/$/,"") + "/vision";
+
+  // --- filtro prompt ---
   function pulisciPrompt(prompt){
     const correzioni = {
       "cavolo":"animale divertente",
@@ -108,46 +125,31 @@
       "foto":"immagine realistica",
       "video":"clip animata"
     };
-    let p = (prompt||"").trim().toLowerCase();
+    let p = (prompt||"").trim();
     for (const [k,v] of Object.entries(correzioni)){
-      p = p.replaceAll(k, v);
+      // replace case-insensitive semplice
+      p = p.replace(new RegExp(k, "gi"), v);
     }
-    return p;
+    return p.trim();
   }
 
-  // ✅ Pollinations (immagini)
+  // ✅ Pollinations
   function pollinationsUrl(text){
     return "https://image.pollinations.ai/prompt/" + encodeURIComponent(text);
   }
-
-  // ✅ "Video" = GIF fake: usiamo 1 immagine “cinematic”
   function fakeGifUrl(text){
     return pollinationsUrl(text + " cinematic scene");
   }
 
-  // ✅ Groq via PROXY (NON mettere la chiave nel browser!)
-  // 👇 METTI QUI IL TUO WORKER (questa è la forma corretta)
-  const GROQ_PROXY_URL = "https://groq-proxy-bob--orange-boat-63af.bobmoukhlis.workers.dev";
-
-  function normalizeUrl(u){
-    // evita errori strani se manca lo schema o ci sono spazi
-    let s = (u || "").trim();
-    // (opzionale) aggiungi slash finale se vuoi: non è obbligatorio
-    return s;
-  }
-
-  async function safeReadJson(res){
-    const text = await res.text();
-    try { return { json: JSON.parse(text), raw: text }; }
-    catch { return { json: null, raw: text }; }
+  async function safeJson(res){
+    const t = await res.text();
+    try { return JSON.parse(t); } catch { return { _raw: t }; }
   }
 
   async function chatGroq(prompt, lang){
-    const url = normalizeUrl(GROQ_PROXY_URL);
-    if(!url){
-      return "❌ PROXY Groq non configurato.\nInserisci GROQ_PROXY_URL nello script.";
+    if(!WORKER_BASE || WORKER_BASE.includes("PASTE_YOUR_WORKER_URL_HERE")){
+      return "❌ Inserisci il tuo Worker URL in WORKER_BASE nello script.";
     }
-
     const smart =
       "Rispondi in modo breve, pratico e professionale. Non fare domande: dai direttamente la soluzione.\n\n" +
       "Lingua richiesta: " + lang + "\n" +
@@ -155,7 +157,7 @@
 
     let res;
     try{
-      res = await fetch(url, {
+      res = await fetch(GROQ_CHAT_URL, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({
@@ -165,26 +167,48 @@
           max_tokens: 500
         })
       });
-    }catch(e){
-      return "❌ Non riesco a contattare il Worker.\nDettagli: " + e;
+    } catch(e){
+      return "❌ Worker non raggiungibile: " + e;
     }
 
-    const { json, raw } = await safeReadJson(res);
-
-    if(!res.ok){
-      return "❌ Errore proxy (" + res.status + "): " + (json?.error || raw || "errore sconosciuto");
-    }
-
-    // supporta sia {text:"..."} che {choices:[...]} se il tuo worker torna la risposta stile OpenAI
-    if(json?.text) return json.text;
-
-    const maybeChoice = json?.choices?.[0]?.message?.content;
-    if(maybeChoice) return maybeChoice;
-
-    return "⚠️ Risposta inattesa dal Worker:\n" + (raw || JSON.stringify(json));
+    const data = await safeJson(res);
+    if(!res.ok) return "❌ Errore Worker ("+res.status+"): " + (data?.error || data?._raw || JSON.stringify(data));
+    return data.text || "(nessuna risposta)";
   }
 
-  // ✅ Voce browser (no mp3)
+  function fileToBase64DataUrl(file){
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  async function visionGroq(prompt, image_base64){
+    if(!WORKER_BASE || WORKER_BASE.includes("PASTE_YOUR_WORKER_URL_HERE")){
+      return "❌ Inserisci il tuo Worker URL in WORKER_BASE nello script.";
+    }
+    let res;
+    try{
+      res = await fetch(GROQ_VISION_URL, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({
+          prompt: prompt || "Descrivi l'immagine.",
+          image_base64
+        })
+      });
+    } catch(e){
+      return "❌ Worker Vision non raggiungibile: " + e;
+    }
+
+    const data = await safeJson(res);
+    if(!res.ok) return "❌ Errore Vision ("+res.status+"): " + (data?.error || data?._raw || JSON.stringify(data));
+    return data.text || "(nessuna risposta)";
+  }
+
+  // ✅ Voce (TTS)
   function speak(text, lang){
     try{
       window.speechSynthesis.cancel();
@@ -196,6 +220,7 @@
     }
   }
 
+  // ====== UI hooks ======
   const promptEl = document.getElementById("prompt");
   const langEl = document.getElementById("lang");
   const tipoEl = document.getElementById("tipo");
@@ -205,8 +230,83 @@
   const gif = document.getElementById("gif");
   const speakBtn = document.getElementById("speakBtn");
 
+  const micBtn = document.getElementById("micBtn");
+  const photoInput = document.getElementById("photo");
+  const photoPreview = document.getElementById("photoPreview");
+
   let lastText = "";
 
+  function uiLangTag(){
+    return langEl.value === "it" ? "it-IT"
+      : langEl.value === "en" ? "en-US"
+      : langEl.value === "fr" ? "fr-FR"
+      : "es-ES";
+  }
+
+  // ====== Microfono (Speech-to-Text) ======
+  let recognizing = false;
+  let recognition = null;
+
+  function setupMic(lang){
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(!SpeechRecognition) return null;
+    const r = new SpeechRecognition();
+    r.continuous = false;
+    r.interimResults = true;
+    r.lang = lang;
+    return r;
+  }
+
+  micBtn.addEventListener("click", () => {
+    const l = uiLangTag();
+
+    if(!recognition) recognition = setupMic(l);
+    if(!recognition){
+      out.textContent = "❌ Microfono non supportato su questo browser.";
+      return;
+    }
+    recognition.lang = l;
+
+    if(recognizing){
+      recognition.stop();
+      recognizing = false;
+      micBtn.textContent = "🎤 Microfono";
+      return;
+    }
+
+    recognizing = true;
+    micBtn.textContent = "⏹ Stop";
+    recognition.start();
+
+    recognition.onresult = (e) => {
+      let transcript = "";
+      for (let i = e.resultIndex; i < e.results.length; i++){
+        transcript += e.results[i][0].transcript;
+      }
+      promptEl.value = transcript.trim();
+    };
+
+    recognition.onend = () => {
+      recognizing = false;
+      micBtn.textContent = "🎤 Microfono";
+    };
+
+    recognition.onerror = () => {
+      recognizing = false;
+      micBtn.textContent = "🎤 Microfono";
+    };
+  });
+
+  // ====== Preview foto ======
+  photoInput.addEventListener("change", async () => {
+    const f = photoInput.files?.[0];
+    if(!f) return;
+    const dataUrl = await fileToBase64DataUrl(f);
+    photoPreview.src = dataUrl;
+    photoPreview.style.display = "block";
+  });
+
+  // ====== Invio ======
   btn.addEventListener("click", async () => {
     const testo = pulisciPrompt(promptEl.value);
     const lang = langEl.value;
@@ -217,8 +317,8 @@
     out.textContent = "";
     lastText = "";
 
-    if(!testo){
-      out.textContent = "⚠️ Inserisci un messaggio.";
+    if(!testo && !photoInput.files?.[0]){
+      out.textContent = "⚠️ Scrivi un messaggio oppure carica una foto.";
       return;
     }
 
@@ -227,21 +327,29 @@
 
     try{
       if(tipo === "Immagine"){
-        const url = pollinationsUrl(testo);
+        const url = pollinationsUrl(testo || "creative image");
         img.src = url;
         img.style.display = "block";
         out.textContent = "🖼️ Immagine generata!";
         lastText = "Immagine generata";
       } else if(tipo === "Video"){
-        const url = fakeGifUrl(testo);
+        const url = fakeGifUrl(testo || "cinematic scene");
         gif.src = url;
         gif.style.display = "block";
         out.textContent = "🎥 GIF generata (anteprima).";
         lastText = "GIF generata";
       } else {
-        const text = await chatGroq(testo, lang);
-        out.textContent = text;
-        lastText = text;
+        const f = photoInput.files?.[0];
+        if(f){
+          const dataUrl = await fileToBase64DataUrl(f);
+          const text = await visionGroq(testo || "Descrivi questa foto.", dataUrl);
+          out.textContent = text;
+          lastText = text;
+        } else {
+          const text = await chatGroq(testo, lang);
+          out.textContent = text;
+          lastText = text;
+        }
       }
     } catch(e){
       out.textContent = "⚠️ Errore: " + e;
@@ -251,16 +359,13 @@
     }
   });
 
+  // ====== Leggi con voce ======
   speakBtn.addEventListener("click", () => {
     if(!lastText){
       out.textContent = out.textContent || "⚠️ Nessun testo da leggere.";
       return;
     }
-    const l = langEl.value === "it" ? "it-IT"
-            : langEl.value === "en" ? "en-US"
-            : langEl.value === "fr" ? "fr-FR"
-            : "es-ES";
-    speak(lastText, l);
+    speak(lastText, uiLangTag());
   });
 </script>
 </body>
