@@ -10,11 +10,29 @@
     padding: 0;
     height: 100%;
     background-color: #000;
+    color: white;
+    font-family: Arial, sans-serif;
     overflow: hidden;
   }
+  #loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  #loader img {
+    width: 90px;
+    animation: spin 2s linear infinite;
+  }
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
   iframe {
+    display: none;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     border: none;
   }
   #exitBtn {
@@ -34,10 +52,25 @@
 </style>
 </head>
 <body>
-  <iframe 
-    src="https://bouabid79-chat-ai-bob-pro.hf.space?__theme=dark" 
-    allow="microphone; camera; clipboard-read; clipboard-write; fullscreen">
+  <div id="loader">
+    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png" alt="Caricamento">
+    <p>Avvio ChatAI Bob...</p>
+  </div>
+
+  <iframe id="chatFrame" 
+    src="https://huggingface.co/spaces/Bouabid79/ChatAI-Bob-PRO?embed=true"
+    allow="camera; microphone; clipboard-read; clipboard-write">
   </iframe>
+
   <button id="exitBtn" onclick="window.close();">Esci</button>
+
+  <script>
+    const iframe = document.getElementById("chatFrame");
+    const loader = document.getElementById("loader");
+    iframe.onload = function() {
+      loader.style.display = "none";
+      iframe.style.display = "block";
+    };
+  </script>
 </body>
 </html>
