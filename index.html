@@ -3,39 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ChatAI Bob PRO 2026</title>
+  <title>ChatAI Bob PRO 2026 — Global</title>
+
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 12px;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 10px;
+    }
+    select, textarea, button {
+      width: 100%;
+      max-width: 600px;
+      margin: 8px auto;
+      display: block;
+      font-size: 16px;
+    }
+    textarea {
+      height: 90px;
+      padding: 10px;
+    }
+    button {
+      padding: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    button:disabled {
+      background: #aaa;
+    }
+    #output {
+      max-width: 600px;
+      margin: 15px auto;
+      padding: 10px;
+      background: white;
+      border-radius: 6px;
+      white-space: pre-wrap;
+    }
+    footer {
+      text-align: center;
+      opacity: 0.6;
+      margin-top: 30px;
+      font-size: 13px;
+    }
+  </style>
 </head>
 
-<body style="font-family:sans-serif;background:#f5f5f5;padding:10px;">
+<body>
 
-  <h2 style="text-align:center;">
-    🇲🇦 ChatAI Bob PRO 2026 — Global
-  </h2>
+  <!-- 🔝 HEADER -->
+  <h2>🇲🇦 ChatAI Bob PRO 2026 — Global</h2>
 
-  <div style="text-align:center;margin-bottom:10px;">
-    <select id="langMode">
-      <option value="auto" selected>🌍 AUTO</option>
-      <option value="ar">Arabic</option>
-      <option value="ary">Darija (MA)</option>
-      <option value="fr">Français</option>
-      <option value="it">Italiano</option>
-      <option value="en">English</option>
-    </select>
-  </div>
+  <!-- 🌍 LINGUA -->
+  <select id="langMode">
+    <option value="auto" selected>🌍 AUTO (consigliato)</option>
+    <option value="ar">🇸🇦 Arabic</option>
+    <option value="ary">🇲🇦 Darija (MA)</option>
+    <option value="fr">🇫🇷 Français</option>
+    <option value="it">🇮🇹 Italiano</option>
+    <option value="en">🇬🇧 English</option>
+  </select>
 
-  <textarea id="userText" placeholder="Scrivi qui..."
-    style="width:100%;height:80px;"></textarea>
+  <!-- ✍️ INPUT -->
+  <textarea id="userText" placeholder="Scrivi come vuoi… (Darija, Arabo, Italiano, ecc.)"></textarea>
 
-  <br><br>
+  <!-- 🚀 INVIA -->
+  <button id="sendBtn" onclick="sendMessage()">🚀 Invia</button>
 
-  <button onclick="test()">🚀 Test</button>
+  <!-- 💬 OUTPUT -->
+  <div id="output">⏳ Pronto.</div>
 
-  <pre id="out" style="margin-top:15px;"></pre>
+  <footer>
+    © <span id="year"></span> ChatAI Bob PRO
+  </footer>
 
+  <!-- 🧠 LOGICA -->
   <script>
-    function test(){
-      document.getElementById("out").textContent =
-        "✅ FUNZIONA — HTML OK";
+    const GROQ_PROXY_URL = "https://shy-poetry-9c52.bouabidmoukhlis.workers.dev";
+    document.getElementById("year").innerText = new Date().getFullYear();
+
+    function detectLang() {
+      const l = (navigator.language || "en").toLowerCase();
+      return l.split("-")[0];
+    }
+
+    function looksArabic(text) {
+      return /[\u0600-\u06FF]/.test(text);
+    }
+
+    function looksDarija(text) {
+      const words = ["شنو","واش","بزاف","دابا","فين","عافاك","مزيان","هاد","ديال","بغيت"];
+      return words.some(w => text.includes(w));
+    }
+
+    function systemInstruction(userText) {
+      const mode = document.getElementById("langMode").value;
+      const darija = looksDarija(userText);
+      const arabic = looksArabic(userText);
+
+      if (mode !== "auto") {
+        return `Reply ONLY in this language: ${mode}. Be short, clear and professional.`;
+      }
+
+      return `
+You are ChatAI Bob PRO 2026 (🇲🇦).
+Rules:
+- Reply in the SAME language as the user.
+- If Arabic script → reply in Arabic.
+- If Moroccan Darija → reply in Moroccan Darija.
+- If Modern Standard Arabic → reply in فصحى.
+- Be concise, useful, professional.
+Detected: ${darija ? "Darija" : arabic ? "Arabic" : detectLang()}
+`.trim();
+    }
+
+    async function sendMessage() {
+      const text = document.getElementById("userText").value.trim();
+      const output = document.getElementById("output");
+      const btn = document.getElementById("sendBtn");
+
+      if (!text) {
+        output.textContent = "⚠️ Scrivi un messaggio.";
+        return;
+      }
+
+      btn.disabled = true;
+      output.textContent = "⏳ Attendi…";
+
+      try {
+        const res = await fetch(GROQ_PROXY_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            messages: [
+              { role: "system", content: systemInstruction(text) },
+              { role: "user", content: text }
+            ],
+            max_tokens: 600
+          })
+        });
+
+        const data = await res.json();
+        output.textContent =
+          data.text ||
+          data.choices?.[0]?.message?.content ||
+          JSON.stringify(data, null, 2);
+
+      } catch (e) {
+        output.textContent = "❌ Errore: " + e.message;
+      }
+
+      btn.disabled = false;
     }
   </script>
 
