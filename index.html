@@ -21,28 +21,42 @@
 
   <!-- ✅ TUTTO IL JS QUI DENTRO -->
   <script>
-    // 🔗 QUI VA MESSA (OBBLIGATORIO)
-    const GROQ_PROXY_URL = "https://shy-poetry-9c52.bouabidmoukhlis.workers.dev";
+    <script>
+  // ✅ URL DEL TUO WORKER (GIUSTO)
+  const GROQ_PROXY_URL = "https://shy-poetry-9c52.bouabidmoukhlis.workers.dev";
 
-    function invia() {
-  const msg = document.getElementById("msg").value;
+  async function invia() {
+    const testo = document.getElementById("msg").value;
+    const lingua = document.querySelector("select").value;
 
-  document.getElementById("out").innerText =
-    "👋 Ciao!\n\nQuesta è una versione DEMO di ChatAI Bob...\n\nMessaggio ricevuto:\n➡️ " + msg;
-};
+    document.getElementById("out").innerText = "⏳ Sto pensando...";
 
+    try {
       const res = await fetch(GROQ_PROXY_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "llama-3.3-70b-versatile",
-          messages: [{ role: "user", content: testo }]
+          messages: [
+            {
+              role: "user",
+              content: testo
+            }
+          ]
         })
       });
 
       const data = await res.json();
-      document.getElementById("out").textContent =
+
+      document.getElementById("out").innerText =
         data.text || JSON.stringify(data, null, 2);
+
+    } catch (e) {
+      document.getElementById("out").innerText =
+        "❌ Errore di connessione al server AI";
+    }
+  }
+</script>
     }
   </script>
 
