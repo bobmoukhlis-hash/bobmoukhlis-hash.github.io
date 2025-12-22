@@ -2,122 +2,102 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>🤖 ChatAI Bob PRO 2025</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ChatAI Bob PRO 2025</title>
 
 <style>
 body{
   margin:0;
-  font-family:system-ui,Arial;
-  background:#070b12;
-  color:#e8f1ff;
-}
-.wrap{max-width:900px;margin:auto;padding:18px}
-.card{
   background:#0b1220;
-  border:1px solid #13223d;
+  color:#fff;
+  font-family:system-ui, Arial;
+}
+.container{
+  max-width:600px;
+  margin:40px auto;
+  padding:20px;
+}
+.card{
+  background:#0f1a33;
   border-radius:16px;
-  padding:16px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
 }
-h1{text-align:center}
-textarea,button{
+h1{text-align:center;margin-bottom:10px}
+textarea,select,button{
   width:100%;
-  margin:10px 0;
   padding:14px;
+  margin-top:12px;
   border-radius:10px;
-  border:1px solid #1a2f55;
-  background:#071022;
-  color:#e8f1ff;
+  border:none;
+  font-size:16px;
 }
+textarea{min-height:110px}
 button{
   background:linear-gradient(90deg,#00e5ff,#3b82f6);
   font-weight:bold;
   cursor:pointer;
 }
-.out{
-  white-space:pre-wrap;
+#out{
+  margin-top:15px;
   background:#071022;
+  padding:14px;
   border-radius:10px;
-  padding:12px;
-  min-height:140px;
+  white-space:pre-wrap;
+  min-height:80px;
 }
-.small{font-size:13px;opacity:.75}
-.warn{color:#FFD36E}
 </style>
 </head>
 
 <body>
-<div class="wrap">
-
+<div class="container">
   <div class="card">
     <h1>🤖 ChatAI Bob PRO 2025</h1>
-    <p class="small" style="text-align:center">
-      Chat AI via Hugging Face – HTML puro
-    </p>
-    <p class="small warn" style="text-align:center">
-      ⚠️ Demo pubblica – la chiave è visibile
-    </p>
-  </div>
 
-  <br>
+    <textarea id="msg" placeholder="Scrivi un messaggio..."></textarea>
 
-  <div class="card">
-    <textarea id="prompt" placeholder="Scrivi un messaggio…"></textarea>
+    <select id="lang">
+      <option value="it">Italiano</option>
+      <option value="en">English</option>
+    </select>
+
     <button onclick="send()">🚀 Invia</button>
-    <div id="out" class="out"></div>
-  </div>
 
+    <div id="out"></div>
+  </div>
 </div>
 
 <script>
-const HF_API_KEY = "hf_...YQGu";
-
-// Modello consigliato (veloce e stabile)
-const MODEL_URL =
-  "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
+const HF_TOKEN = "hf_INSERISCI_LA_TUA_CHIAVE";
+const MODEL = "HuggingFaceH4/zephyr-7b-beta";
 
 async function send(){
   const out = document.getElementById("out");
-  const text = document.getElementById("prompt").value.trim();
-
-  if(!text){
-    out.textContent = "⚠️ Scrivi qualcosa.";
-    return;
-  }
-
-  out.textContent = "⏳ Attendi…";
+  out.textContent = "⏳ Attendi...";
 
   try{
-    const res = await fetch(MODEL_URL,{
-      method:"POST",
-      headers:{
-        "Authorization":"Bearer " + HF_API_KEY,
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({
-        inputs: text,
-        parameters:{
-          max_new_tokens: 300,
-          temperature: 0.7
-        }
-      })
-    });
+    const r = await fetch(
+      "https://api-inference.huggingface.co/models/" + MODEL,
+      {
+        method:"POST",
+        headers:{
+          "Authorization":"Bearer " + HF_TOKEN,
+          "Content-Type":"application/json"
+        },
+        body: JSON.stringify({
+          inputs: document.getElementById("msg").value
+        })
+      }
+    );
 
-    const data = await res.json();
-
-    if(data.error){
-      out.textContent = "❌ Errore HF:\n" + data.error;
-      return;
-    }
-
+    const j = await r.json();
     out.textContent =
-      data[0]?.generated_text || JSON.stringify(data,null,2);
+      j[0]?.generated_text || JSON.stringify(j,null,2);
 
   }catch(e){
     out.textContent = "❌ Errore di connessione";
   }
 }
 </script>
-
 </body>
 </html>
