@@ -2,110 +2,76 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ChatAI Bob PRO 2026</title>
-
 <style>
-body{font-family:system-ui;background:#f4f6f8;margin:0;padding:12px}
+body{font-family:system-ui;margin:0;padding:12px;background:#f5f5f5}
 h2{text-align:center}
-input,select,textarea,button{
-  width:100%;max-width:600px;margin:8px auto;display:block;font-size:16px
-}
-textarea{height:90px;padding:10px}
-button{padding:12px;background:#007bff;color:#fff;border:0;border-radius:6px}
-#imgResult,#output{
-  max-width:600px;margin:12px auto;padding:10px;background:#fff;border-radius:6px
-}
-footer{text-align:center;opacity:.6;margin-top:30px}
+button,input,textarea{width:100%;max-width:600px;margin:8px auto;display:block;font-size:16px}
+button{background:#0d6efd;color:#fff;border:0;padding:12px;border-radius:6px}
+#out,#imgOut{background:#fff;padding:10px;border-radius:6px;max-width:600px;margin:auto}
 </style>
 </head>
 
-<body>Force clean index.html (mobile safe)
+<body>
 
 <h2>🇲🇦 ChatAI Bob PRO 2026</h2>
 
-<input type="file" id="imgInput" accept="image/*">
-<button id="imgBtn">🖼️ Analizza foto</button>
-<div id="imgResult">📷 Nessuna immagine analizzata.</div>
+<input type="file" id="img">
+<button onclick="analyze()">🖼️ Analizza foto</button>
+<div id="imgOut">📷 Nessuna immagine analizzata.</div>
 
-<textarea id="userText" placeholder="Scrivi come vuoi…"></textarea>
-<button id="sendBtn">🚀 Invia</button>
-<div id="output">⏳ Pronto.</div>
-
-<footer>© 2025 ChatAI Bob PRO</footer>
+<textarea id="txt" placeholder="Scrivi qui…"></textarea>
+<button onclick="send()">🚀 Invia</button>
+<div id="out">⏳ Pronto.</div>
 
 <script>
-const GROQ_PROXY_URL="https://groq-proxy-worker.bouabidmoukhlis.workers.dev";
+const API = "https://groq-proxy-worker.bouabidmoukhlis.workers.dev";
 
-document.getElementById("imgBtn").onclick=analyzeImage;
-document.getElementById("sendBtn").onclick=sendMessage;
-
-async function analyzeImage(){
-  const input=document.getElementById("imgInput");
-  const out=document.getElementById("imgResult");
-
-  if(!input.files || !input.files[0]){
-    out.textContent="❌ Nessun file selezionato.";
-    return;
-  }
-
-  out.textContent="⏳ Analisi in corso…";
-
-  try{
-    const base64=await toBase64(input.files[0]);
-
-    const r=await fetch(GROQ_PROXY_URL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({
-        model:"llama-3.2-90b-vision-preview",
-        messages:[{
-          role:"user",
-          content:[
-            {type:"text",text:"Descrivi questa immagine"},
-            {type:"image_url",image_url:{url:base64}}
-          ]
-        }],
-        max_tokens:300
-      })
-    });
-
-    const d=await r.json();
-    out.textContent=d?.choices?.[0]?.message?.content || "❌ Nessuna risposta";
-
-  }catch(e){
-    out.textContent="❌ Errore: "+e.message;
-  }
-}
-
-function toBase64(file){
-  return new Promise((ok,err)=>{
-    const r=new FileReader();
-    r.onload=()=>ok(r.result);
-    r.onerror=err;
-    r.readAsDataURL(file);
-  });
-}
-
-async function sendMessage(){
-  const text=document.getElementById("userText").value.trim();
-  const out=document.getElementById("output");
-  if(!text){out.textContent="⚠️ Scrivi qualcosa.";return;}
-
-  out.textContent="⏳ Attendi…";
-
-  const r=await fetch(GROQ_PROXY_URL,{
+async function send(){
+  const t = txt.value.trim();
+  if(!t) return;
+  out.textContent="⏳ Attendi...";
+  const r = await fetch(API,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
     body:JSON.stringify({
       model:"llama-3.3-70b-versatile",
-      messages:[{role:"user",content:text}],
-      max_tokens:600
+      messages:[{role:"user",content:t}]
     })
   });
+  const j = await r.json();
+  out.textContent = j.choices?.[0]?.message?.content || "❌ Nessuna risposta";
+}
 
-  const d=await r.json();
-  out.textContent=d?.choices?.[0]?.message?.content || "❌ Nessuna risposta";
+async function analyze(){
+  if(!img.files[0]){imgOut.textContent="❌ Nessun file selezionato";return;}
+  imgOut.textContent="⏳ Analisi...";
+  const b64 = await to64(img.files[0]);
+  const r = await fetch(API,{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"llama-3.2-90b-vision-preview",
+      messages:[{
+        role:"user",
+        content:[
+          {type:"text",text:"Descrivi questa immagine"},
+          {type:"image_url",image_url:{url:b64}}
+        ]
+      }]
+    })
+  });
+  const j = await r.json();
+  imgOut.textContent = j.choices?.[0]?.message?.content || "❌ Nessuna risposta";
+}
+
+function to64(f){
+  return new Promise(r=>{
+    const fr=new FileReader();
+    fr.onload=()=>r(fr.result);
+    fr.readAsDataURL(f);
+  });
 }
 </script>
 
