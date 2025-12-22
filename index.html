@@ -77,7 +77,46 @@
 
   <!-- 🚀 INVIA -->
   <button id="sendBtn" onclick="sendMessage()">🚀 Invia</button>
+async function analyzeImage() {
+  const file = document.getElementById("imgInput").files[0];
+  if (!file) {
+    alert("Seleziona una foto");
+    return;
+  }
 
+  const base64 = await toBase64(file);
+
+  const body = {
+    model: "llama-3.2-90b-vision-preview",
+    messages: [{
+      role: "user",
+      content: [
+        { type: "text", text: "Analizza questa immagine e descrivila in modo chiaro." },
+        { type: "image_url", image_url: { url: base64 } }
+      ]
+    }],
+    max_tokens: 300
+  };
+
+  const r = await fetch(GROQ_PROXY_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+
+  const data = await r.json();
+  document.getElementById("imgResult").textContent =
+    data?.choices?.[0]?.message?.content || "Nessuna risposta";
+}
+
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
   <!-- 💬 OUTPUT -->
   <div id="output">⏳ Pronto.</div>
 
