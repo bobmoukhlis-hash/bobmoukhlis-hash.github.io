@@ -24,8 +24,12 @@
     // 🔗 QUI VA MESSA (OBBLIGATORIO)
     const GROQ_PROXY_URL = "https://shy-poetry-9c52.bouabidmoukhlis.workers.dev";
 
-    async function invia() {
-      const testo = document.getElementById("msg").value;
+    function invia() {
+  const msg = document.getElementById("msg").value;
+
+  document.getElementById("out").innerText =
+    "👋 Ciao!\n\nQuesta è una versione DEMO di ChatAI Bob...\n\nMessaggio ricevuto:\n➡️ " + msg;
+};
 
       const res = await fetch(GROQ_PROXY_URL, {
         method: "POST",
