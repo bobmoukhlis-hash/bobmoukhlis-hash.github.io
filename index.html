@@ -2,109 +2,122 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>🤖 ChatAI Bob PRO 2025</title>
 
 <style>
-body{margin:0;font-family:system-ui,Arial;background:#070b12;color:#e8f1ff}
+body{
+  margin:0;
+  font-family:system-ui,Arial;
+  background:#070b12;
+  color:#e8f1ff;
+}
 .wrap{max-width:900px;margin:auto;padding:18px}
-.card{background:#0b1220;border:1px solid #13223d;border-radius:16px;padding:16px}
+.card{
+  background:#0b1220;
+  border:1px solid #13223d;
+  border-radius:16px;
+  padding:16px;
+}
 h1{text-align:center}
-textarea,select,button{width:100%;margin:10px 0;padding:12px;border-radius:10px;border:1px solid #1a2f55;background:#071022;color:#e8f1ff}
-button{background:#00c8ff;font-weight:bold}
-.out{background:#071022;border-radius:10px;padding:12px;min-height:120px;white-space:pre-wrap}
-img{width:100%;border-radius:12px;margin-top:10px;display:none}
-.row{display:flex;gap:10px}
-.row button{flex:1}
-.small{font-size:13px;opacity:.7}
+textarea,button{
+  width:100%;
+  margin:10px 0;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #1a2f55;
+  background:#071022;
+  color:#e8f1ff;
+}
+button{
+  background:linear-gradient(90deg,#00e5ff,#3b82f6);
+  font-weight:bold;
+  cursor:pointer;
+}
+.out{
+  white-space:pre-wrap;
+  background:#071022;
+  border-radius:10px;
+  padding:12px;
+  min-height:140px;
+}
+.small{font-size:13px;opacity:.75}
+.warn{color:#FFD36E}
 </style>
 </head>
 
 <body>
 <div class="wrap">
 
-<div class="card">
-<h1>🤖 ChatAI Bob PRO 2025</h1>
-<p class="small">Versione HTML pura — senza completions, senza API, senza backend</p>
-</div>
+  <div class="card">
+    <h1>🤖 ChatAI Bob PRO 2025</h1>
+    <p class="small" style="text-align:center">
+      Chat AI via Hugging Face – HTML puro
+    </p>
+    <p class="small warn" style="text-align:center">
+      ⚠️ Demo pubblica – la chiave è visibile
+    </p>
+  </div>
 
-<br>
+  <br>
 
-<div class="card">
-<textarea id="prompt" placeholder="Scrivi o usa il microfono…"></textarea>
-
-<select id="mode">
-<option value="chat">Demo Chat</option>
-<option value="img">Immagine AI</option>
-</select>
-
-<div class="row">
-<button onclick="mic()">🎤 Microfono</button>
-<button onclick="run()">🚀 Invia</button>
-</div>
-
-<div class="out" id="out"></div>
-<button onclick="speak()" class="small">🔊 Leggi con voce</button>
-
-<img id="img">
-</div>
+  <div class="card">
+    <textarea id="prompt" placeholder="Scrivi un messaggio…"></textarea>
+    <button onclick="send()">🚀 Invia</button>
+    <div id="out" class="out"></div>
+  </div>
 
 </div>
 
 <script>
-let lastText = "";
+const HF_API_KEY = "hf_...YQGu";
 
-// MICROFONO
-function mic(){
- const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
- if(!SR){ alert("Microfono non supportato"); return; }
- const r = new SR();
- r.lang="it-IT";
- r.onresult=e=>document.getElementById("prompt").value=e.results[0][0].transcript;
- r.start();
-}
+// Modello consigliato (veloce e stabile)
+const MODEL_URL =
+  "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
 
-// DEMO LOGICA (NO AI)
-function demoReply(t){
- if(t.includes("html")) return "<html>\\n  <body>\\n    <h1>Ciao!</h1>\\n  </body>\\n</html>";
- if(t.includes("css")) return "body { background:#000; color:#fff }";
- if(t.includes("js")) return "console.log('Hello world');";
- return "Demo offline ✅\\n\\nHai scritto:\\n"+t;
-}
+async function send(){
+  const out = document.getElementById("out");
+  const text = document.getElementById("prompt").value.trim();
 
-// IMMAGINI AI (PUBBLICO)
-function imgUrl(t){
- return "https://image.pollinations.ai/prompt/"+encodeURIComponent(t);
-}
+  if(!text){
+    out.textContent = "⚠️ Scrivi qualcosa.";
+    return;
+  }
 
-// INVIA
-function run(){
- const t = document.getElementById("prompt").value.trim();
- const mode = document.getElementById("mode").value;
- const out = document.getElementById("out");
- const img = document.getElementById("img");
- img.style.display="none";
+  out.textContent = "⏳ Attendi…";
 
- if(!t){ out.textContent="Scrivi qualcosa"; return; }
+  try{
+    const res = await fetch(MODEL_URL,{
+      method:"POST",
+      headers:{
+        "Authorization":"Bearer " + HF_API_KEY,
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        inputs: text,
+        parameters:{
+          max_new_tokens: 300,
+          temperature: 0.7
+        }
+      })
+    });
 
- if(mode==="img"){
-   img.src = imgUrl(t);
-   img.style.display="block";
-   out.textContent="🖼️ Immagine generata";
-   lastText="Immagine generata";
- }else{
-   lastText = demoReply(t);
-   out.textContent = lastText;
- }
-}
+    const data = await res.json();
 
-// VOCE
-function speak(){
- if(!lastText) return;
- const u = new SpeechSynthesisUtterance(lastText);
- u.lang="it-IT";
- speechSynthesis.speak(u);
+    if(data.error){
+      out.textContent = "❌ Errore HF:\n" + data.error;
+      return;
+    }
+
+    out.textContent =
+      data[0]?.generated_text || JSON.stringify(data,null,2);
+
+  }catch(e){
+    out.textContent = "❌ Errore di connessione";
+  }
 }
 </script>
+
 </body>
 </html>
