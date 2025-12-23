@@ -416,19 +416,39 @@ async function sendMessage(){
   userText.value = "";
   statusEl.textContent = "⏳ Attendi…";
 
-  try{
-    const r = await fetch(GROQ_PROXY_URL, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    messages: [
-      { role: "user", content: text }
-    ]
-  })
-});
+  try {
+  const r = await fetch(GROQ_PROXY_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      messages: [
+        { role: "user", content: text }
+      ]
+    })
+  });
 
+  const data = await r.json();
+  const reply = data.reply;
+
+  if (!reply) {
+    addBubble("assistant", "❌ Nessuna risposta. (Worker OK ma reply vuota)");
+    statusEl.textContent = "❌ Nessuna risposta.";
+  } else {
+    addBubble("assistant", reply);
+    statusEl.textContent = "✅ Fatto.";
+    speak(reply);
+  }
+
+} catch (e) {
+  addBubble("assistant", "❌ Errore rete / Worker");
+  statusEl.textContent = "❌ Errore: " + e.message;
+
+} finally {
+  busy = false;
+  sendBtn.disabled = false;
+}
 const data = await r.json();
 const reply = data.reply;
 
