@@ -429,12 +429,12 @@ async function sendMessage(){
     })
   });
 
-  const reply = data.choices?.[0]?.message?.content;
-  const reply = data.reply;
+const data = await r.json();
+const reply = data.choices?.[0]?.message?.content;
 
-  if (!reply) {if(!reply){
+if(!reply){
   throw new Error("Risposta vuota dal Worker");
-  }
+}
     addBubble("assistant", "❌ Nessuna risposta. (Worker OK ma reply vuota)");
     statusEl.textContent = "❌ Nessuna risposta.";
   } else {
