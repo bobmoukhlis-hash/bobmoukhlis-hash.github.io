@@ -417,15 +417,20 @@ async function sendMessage(){
   statusEl.textContent = "⏳ Attendi…";
 
   try{
-    const model = "llama-3.3-70b-versatile";
-    const reply = await callGroq({
-      model,
-      messages:[
-        {role:"system", content: systemPrompt(text)},
-        {role:"user", content: text}
-      ],
-      max_tokens: 650
-    });
+    const r = await fetch(GROQ_PROXY_URL, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    messages: [
+      { role: "user", content: text }
+    ]
+  })
+});
+
+const data = await r.json();
+const reply = data.reply;
 
     if(!reply){
       addBubble("assistant", "❌ Nessuna risposta. (Controlla Worker / chiave / rete)");
