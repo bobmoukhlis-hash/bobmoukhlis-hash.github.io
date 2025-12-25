@@ -1,87 +1,674 @@
+<!-- /index.html -->
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChatAI Free</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatAI Bob FREE</title>
 
-<style>
-body {
-  margin: 0;
-  background: #020617;
-  color: white;
-  font-family: Arial, sans-serif;
-}
-#chat {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-#messages {
-  flex: 1;
-  padding: 12px;
-  overflow-y: auto;
-}
-.msg-user { color: #38bdf8; margin-bottom: 6px; }
-.msg-ai { color: #a5f3fc; margin-bottom: 12px; }
-input, button {
-  padding: 12px;
-  border: none;
-  font-size: 16px;
-}
-button {
-  background: #38bdf8;
-  font-weight: bold;
-}
-</style>
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --panel: #0f172a;
+      --panel2: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --accent: #38bdf8;
+      --danger: #fb7185;
+      --ok: #34d399;
+      --border: rgba(255,255,255,0.08);
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: radial-gradient(1200px 800px at 10% 0%, #0f172a, var(--bg));
+      color: var(--text);
+    }
+
+    .app {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .topbar {
+      padding: 12px 14px;
+      background: linear-gradient(180deg, rgba(2,6,23,0.95), rgba(2,6,23,0.75));
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      background: rgba(56,189,248,0.08);
+      color: var(--accent);
+      border-radius: 999px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      padding: 10px 10px 0 10px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 14px;
+      user-select: none;
+    }
+    .tab.active {
+      border-color: rgba(56,189,248,0.35);
+      background: rgba(56,189,248,0.12);
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .content {
+      flex: 1;
+      padding: 10px;
+      display: grid;
+      gap: 10px;
+      min-height: 0;
+    }
+
+    .card {
+      background: rgba(15,23,42,0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .card-header {
+      padding: 12px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: rgba(17,24,39,0.5);
+    }
+
+    .card-header .title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .status {
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--muted);
+      box-shadow: 0 0 0 3px rgba(156,163,175,0.12);
+    }
+    .dot.ok { background: var(--ok); box-shadow: 0 0 0 3px rgba(52,211,153,0.12); }
+    .dot.bad { background: var(--danger); box-shadow: 0 0 0 3px rgba(251,113,133,0.12); }
+
+    .card-body {
+      padding: 12px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .row {
+      display: grid;
+      gap: 10px;
+    }
+
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(2,6,23,0.5);
+      color: var(--text);
+      outline: none;
+      font-size: 15px;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+
+    .btn {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid rgba(56,189,248,0.25);
+      background: rgba(56,189,248,0.16);
+      color: var(--accent);
+      font-weight: 800;
+      border-radius: 14px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    /* Chat */
+    .chat-box {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 0;
+    }
+    .messages {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-right: 4px;
+    }
+    .msg {
+      border: 1px solid var(--border);
+      background: rgba(2,6,23,0.35);
+      padding: 12px;
+      border-radius: 16px;
+      line-height: 1.35;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .msg.user {
+      border-color: rgba(56,189,248,0.25);
+      background: rgba(56,189,248,0.10);
+    }
+    .msg.ai {
+      border-color: rgba(255,255,255,0.08);
+      background: rgba(17,24,39,0.45);
+    }
+    .msg .meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .grid2 {
+      display: grid;
+      gap: 10px;
+    }
+    @media (min-width: 820px) {
+      .content { grid-template-columns: 1.2fr 0.8fr; }
+      .grid2 { grid-template-columns: 1fr 1fr; }
+    }
+
+    .media {
+      display: grid;
+      gap: 10px;
+    }
+    .preview {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: rgba(2,6,23,0.35);
+      padding: 10px;
+      overflow: hidden;
+    }
+    img, video {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .footer {
+      padding: 10px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+      background: rgba(2,6,23,0.35);
+    }
+
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.18);
+      border-top: 2px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 
 <body>
-<div id="chat">
-  <div id="messages"></div>
-  <input id="msg" placeholder="Scrivi un messaggio..." />
-  <button onclick="send()">Invia</button>
-</div>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        🤖 ChatAI Bob
+        <span class="pill">FREE</span>
+      </div>
+      <div class="status" id="status">
+        <span class="dot" id="statusDot"></span>
+        <span id="statusText">Backend: non verificato</span>
+      </div>
+    </div>
 
-<script>
-const GROQ_KEY = "gsk_AbC1234567890XYZxxxxxxxxxxxxxxxx";
+    <div class="tabs">
+      <div class="tab active" data-tab="chat">💬 Chat</div>
+      <div class="tab" data-tab="image">🖼️ Immagini</div>
+      <div class="tab" data-tab="video">🎥 Video breve</div>
+      <div class="tab" data-tab="analyze">📎 Analisi PDF / Foto</div>
+    </div>
 
-async function send() {
-  const input = document.getElementById("msg");
-  const text = input.value.trim();
-  if (!text) return;
+    <div class="content">
+      <!-- MAIN -->
+      <div class="card" id="mainCard">
+        <div class="card-header">
+          <div class="title" id="mainTitle">💬 Chat</div>
+          <div class="status" id="mainStatus">
+            <span id="mainSpinner" style="display:none" class="spinner"></span>
+            <span id="mainStatusText">Pronto</span>
+          </div>
+        </div>
 
-  add("👤 " + text, "msg-user");
-  input.value = "";
+        <div class="card-body" id="mainBody">
+          <!-- CHAT -->
+          <div class="chat-box" id="view-chat">
+            <div class="messages" id="messages"></div>
 
-  try {
-    const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + GROQ_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [{ role: "user", content: text }],
-        temperature: 0.7,
-        max_tokens: 300
-      })
-    });
+            <div class="row">
+              <textarea id="chatInput" placeholder="Scrivi come ChatGPT... (es. 'Spiegami come fare una landing page')"></textarea>
+              <button class="btn" id="chatSend">Invia</button>
+              <div class="hint">Suggerimento: fai richieste chiare. Questo frontend chiama il tuo backend Render.</div>
+            </div>
+          </div>
 
-    const data = await res.json();
-    add("🤖 " + data.choices[0].message.content, "msg-ai");
-  } catch (e) {
-    add("⚠️ Errore di connessione", "msg-ai");
-  }
-}
+          <!-- IMAGE -->
+          <div class="row" id="view-image" style="display:none">
+            <input type="text" id="imgPrompt" placeholder="Prompt immagine (es. 'cane realistico in spiaggia')" />
+            <button class="btn" id="imgGen">Genera immagine</button>
 
-function add(text, cls) {
-  const div = document.createElement("div");
-  div.className = cls;
-  div.innerText = text;
-  document.getElementById("messages").appendChild(div);
-}
-</script>
+            <div class="preview" id="imgPreview" style="display:none">
+              <div class="small" id="imgUrl"></div>
+              <img id="imgTag" alt="immagine generata" />
+            </div>
+
+            <div class="hint">Output atteso dal backend: <code>{ "url": "https://..." }</code></div>
+          </div>
+
+          <!-- VIDEO -->
+          <div class="row" id="view-video" style="display:none">
+            <input type="text" id="vidPrompt" placeholder="Prompt video breve (es. 'robot che saluta, 3 scene')" />
+            <button class="btn" id="vidGen">Genera video breve</button>
+
+            <div class="preview" id="vidPreview" style="display:none">
+              <div class="small" id="vidUrl"></div>
+              <video id="vidTag" controls playsinline></video>
+            </div>
+
+            <div class="hint">Output atteso dal backend: <code>{ "url": "https://..." }</code> (mp4/gif/webm)</div>
+          </div>
+
+          <!-- ANALYZE -->
+          <div class="row" id="view-analyze" style="display:none">
+            <input type="file" id="fileInput" accept=".pdf,image/*" />
+            <textarea id="analyzePrompt" placeholder="Cosa vuoi fare sul file? (es. 'Riassumi il PDF', 'Estrai dati', 'Descrivi la foto')"></textarea>
+            <button class="btn" id="analyzeBtn">Analizza</button>
+
+            <div class="preview" id="analyzePreview" style="display:none">
+              <div class="small">Risultato</div>
+              <div class="msg ai" id="analyzeOut"></div>
+            </div>
+
+            <div class="hint">
+              Invia <b>multipart/form-data</b> al backend: file + prompt. Output: <code>{ "text": "..." }</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIDE -->
+      <div class="card">
+        <div class="card-header">
+          <div class="title">⚙️ Impostazioni</div>
+          <div class="status">
+            <span class="small">1 URL da cambiare</span>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="row">
+            <input type="text" id="apiBase" placeholder="https://tuo-backend.onrender.com" />
+            <button class="btn" id="saveApi">Salva backend URL</button>
+            <div class="hint">
+              Metti qui il link del backend Render. Esempio: <code>https://chatai-bob.onrender.com</code><br/>
+              (Non mettere /chat, solo dominio base.)
+            </div>
+
+            <div class="preview">
+              <div class="small">Endpoints richiesti (backend Render)</div>
+              <div class="small" style="margin-top:6px; line-height:1.6;">
+                <div>POST <b>/chat</b> → JSON: <code>{ "message": "..." }</code> → JSON: <code>{ "text": "..." }</code></div>
+                <div>POST <b>/image</b> → JSON: <code>{ "prompt": "..." }</code> → JSON: <code>{ "url": "..." }</code></div>
+                <div>POST <b>/video</b> → JSON: <code>{ "prompt": "..." }</code> → JSON: <code>{ "url": "..." }</code></div>
+                <div>POST <b>/analyze</b> → multipart: <code>file</code> + <code>prompt</code> → JSON: <code>{ "text": "..." }</code></div>
+                <div>GET <b>/health</b> → JSON: <code>{ "status": "ok" }</code></div>
+              </div>
+            </div>
+
+            <button class="btn" id="checkHealth">Verifica backend</button>
+            <div class="hint">Se non risponde: controlla Render (sleep) o URL.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      ⚠️ Questo è solo frontend. La chiave Groq deve stare nel backend (Render), non qui.
+    </div>
+  </div>
+
+  <script>
+    // 1) IMPOSTA QUI IL TUO BACKEND (puoi anche lasciarlo vuoto e salvarlo dalla UI)
+    const DEFAULT_API_BASE = ""; // es: "https://tuo-backend.onrender.com"
+
+    const els = {
+      tabs: document.querySelectorAll(".tab"),
+      mainTitle: document.getElementById("mainTitle"),
+      mainStatusText: document.getElementById("mainStatusText"),
+      mainSpinner: document.getElementById("mainSpinner"),
+      statusDot: document.getElementById("statusDot"),
+      statusText: document.getElementById("statusText"),
+
+      apiBase: document.getElementById("apiBase"),
+      saveApi: document.getElementById("saveApi"),
+      checkHealth: document.getElementById("checkHealth"),
+
+      // Views
+      vChat: document.getElementById("view-chat"),
+      vImage: document.getElementById("view-image"),
+      vVideo: document.getElementById("view-video"),
+      vAnalyze: document.getElementById("view-analyze"),
+
+      // Chat
+      messages: document.getElementById("messages"),
+      chatInput: document.getElementById("chatInput"),
+      chatSend: document.getElementById("chatSend"),
+
+      // Image
+      imgPrompt: document.getElementById("imgPrompt"),
+      imgGen: document.getElementById("imgGen"),
+      imgPreview: document.getElementById("imgPreview"),
+      imgTag: document.getElementById("imgTag"),
+      imgUrl: document.getElementById("imgUrl"),
+
+      // Video
+      vidPrompt: document.getElementById("vidPrompt"),
+      vidGen: document.getElementById("vidGen"),
+      vidPreview: document.getElementById("vidPreview"),
+      vidTag: document.getElementById("vidTag"),
+      vidUrl: document.getElementById("vidUrl"),
+
+      // Analyze
+      fileInput: document.getElementById("fileInput"),
+      analyzePrompt: document.getElementById("analyzePrompt"),
+      analyzeBtn: document.getElementById("analyzeBtn"),
+      analyzePreview: document.getElementById("analyzePreview"),
+      analyzeOut: document.getElementById("analyzeOut"),
+    };
+
+    function nowTime() {
+      const d = new Date();
+      return d.toLocaleTimeString([], {hour: "2-digit", minute:"2-digit"});
+    }
+
+    function setBusy(isBusy, text) {
+      els.mainSpinner.style.display = isBusy ? "inline-block" : "none";
+      els.mainStatusText.textContent = text || (isBusy ? "Caricamento..." : "Pronto");
+      const disable = isBusy;
+      els.chatSend.disabled = disable;
+      els.imgGen.disabled = disable;
+      els.vidGen.disabled = disable;
+      els.analyzeBtn.disabled = disable;
+    }
+
+    function getApiBase() {
+      const saved = localStorage.getItem("API_BASE") || "";
+      return (saved || DEFAULT_API_BASE || "").replace(/\/+$/, "");
+    }
+
+    function setApiBase(v) {
+      const clean = (v || "").trim().replace(/\/+$/, "");
+      localStorage.setItem("API_BASE", clean);
+      els.apiBase.value = clean;
+      return clean;
+    }
+
+    async function apiFetch(path, opts) {
+      const base = getApiBase();
+      if (!base) throw new Error("API_BASE non impostato");
+      const url = base + path;
+      const res = await fetch(url, opts);
+      const ct = res.headers.get("content-type") || "";
+      let body = null;
+      if (ct.includes("application/json")) body = await res.json();
+      else body = await res.text();
+
+      if (!res.ok) {
+        const msg = (body && body.error) ? body.error : (typeof body === "string" ? body : JSON.stringify(body));
+        throw new Error(msg || ("HTTP " + res.status));
+      }
+      return body;
+    }
+
+    function addMessage(role, text) {
+      const wrap = document.createElement("div");
+      wrap.className = "msg " + (role === "user" ? "user" : "ai");
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.innerHTML = `<span>${role === "user" ? "👤 Tu" : "🤖 AI"}</span><span>${nowTime()}</span>`;
+
+      const content = document.createElement("div");
+      content.textContent = text;
+
+      wrap.appendChild(meta);
+      wrap.appendChild(content);
+      els.messages.appendChild(wrap);
+      els.messages.scrollTop = els.messages.scrollHeight;
+    }
+
+    function switchTab(name) {
+      els.tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+
+      els.vChat.style.display = name === "chat" ? "block" : "none";
+      els.vImage.style.display = name === "image" ? "block" : "none";
+      els.vVideo.style.display = name === "video" ? "block" : "none";
+      els.vAnalyze.style.display = name === "analyze" ? "block" : "none";
+
+      const titles = { chat: "💬 Chat", image: "🖼️ Generatore Immagini", video: "🎥 Generatore Video breve", analyze: "📎 Analisi PDF / Foto" };
+      els.mainTitle.textContent = titles[name] || "ChatAI";
+      els.mainStatusText.textContent = "Pronto";
+    }
+
+    async function checkHealth() {
+      try {
+        els.statusDot.className = "dot";
+        els.statusText.textContent = "Backend: verifica...";
+        const r = await apiFetch("/health", { method: "GET" });
+        if (r && r.status === "ok") {
+          els.statusDot.className = "dot ok";
+          els.statusText.textContent = "Backend: online";
+        } else {
+          els.statusDot.className = "dot bad";
+          els.statusText.textContent = "Backend: risposta non valida";
+        }
+      } catch (e) {
+        els.statusDot.className = "dot bad";
+        els.statusText.textContent = "Backend: offline / URL errato";
+      }
+    }
+
+    // Chat handler
+    async function onSendChat() {
+      const msg = (els.chatInput.value || "").trim();
+      if (!msg) return;
+      addMessage("user", msg);
+      els.chatInput.value = "";
+
+      setBusy(true, "Sto rispondendo...");
+      try {
+        const data = await apiFetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: msg })
+        });
+        addMessage("ai", data.text || "(nessuna risposta)");
+      } catch (e) {
+        addMessage("ai", "⚠️ Errore: " + (e.message || "connessione"));
+      } finally {
+        setBusy(false, "Pronto");
+      }
+    }
+
+    // Image handler
+    async function onGenImage() {
+      const prompt = (els.imgPrompt.value || "").trim();
+      if (!prompt) return;
+      setBusy(true, "Genero immagine...");
+      try {
+        const data = await apiFetch("/image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+        const url = data.url;
+        els.imgUrl.textContent = url || "";
+        els.imgTag.src = url;
+        els.imgPreview.style.display = url ? "block" : "none";
+      } catch (e) {
+        els.imgPreview.style.display = "none";
+        alert("Errore immagine: " + (e.message || "connessione"));
+      } finally {
+        setBusy(false, "Pronto");
+      }
+    }
+
+    // Video handler
+    async function onGenVideo() {
+      const prompt = (els.vidPrompt.value || "").trim();
+      if (!prompt) return;
+      setBusy(true, "Genero video...");
+      try {
+        const data = await apiFetch("/video", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt })
+        });
+        const url = data.url;
+        els.vidUrl.textContent = url || "";
+        els.vidTag.src = url || "";
+        els.vidPreview.style.display = url ? "block" : "none";
+      } catch (e) {
+        els.vidPreview.style.display = "none";
+        alert("Errore video: " + (e.message || "connessione"));
+      } finally {
+        setBusy(false, "Pronto");
+      }
+    }
+
+    // Analyze handler (PDF/Photo)
+    async function onAnalyze() {
+      const file = els.fileInput.files && els.fileInput.files[0];
+      const prompt = (els.analyzePrompt.value || "").trim();
+      if (!file) return alert("Seleziona un file (PDF o immagine).");
+      if (!prompt) return alert("Scrivi cosa vuoi fare sul file.");
+
+      setBusy(true, "Analizzo file...");
+      els.analyzePreview.style.display = "none";
+
+      try {
+        const form = new FormData();
+        form.append("file", file);
+        form.append("prompt", prompt);
+
+        const data = await apiFetch("/analyze", {
+          method: "POST",
+          body: form
+        });
+
+        els.analyzeOut.textContent = data.text || "(nessun risultato)";
+        els.analyzePreview.style.display = "block";
+      } catch (e) {
+        alert("Errore analisi: " + (e.message || "connessione"));
+      } finally {
+        setBusy(false, "Pronto");
+      }
+    }
+
+    // Init
+    (function init() {
+      els.tabs.forEach(t => t.addEventListener("click", () => switchTab(t.dataset.tab)));
+
+      els.chatSend.addEventListener("click", onSendChat);
+      els.chatInput.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter" && (ev.ctrlKey || ev.metaKey)) onSendChat();
+      });
+
+      els.imgGen.addEventListener("click", onGenImage);
+      els.vidGen.addEventListener("click", onGenVideo);
+      els.analyzeBtn.addEventListener("click", onAnalyze);
+
+      els.saveApi.addEventListener("click", async () => {
+        const v = setApiBase(els.apiBase.value);
+        alert(v ? "Backend salvato ✅" : "Inserisci URL backend (Render).");
+        if (v) await checkHealth();
+      });
+
+      els.checkHealth.addEventListener("click", checkHealth);
+
+      // Load saved API_BASE into input
+      const base = setApiBase(localStorage.getItem("API_BASE") || DEFAULT_API_BASE || "");
+      if (base) checkHealth();
+
+      // Hello message
+      addMessage("ai", "Ciao! Imposta l'URL del backend Render (a destra) e poi usa Chat / Immagini / Video / Analisi.");
+    })();
+  </script>
 </body>
 </html>
