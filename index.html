@@ -15,7 +15,7 @@ body{margin:0;font-family:Arial;background:#0b0f1a;color:#e5e7eb}
 .msg{margin:8px 0;padding:10px;border-radius:10px}
 .user{background:#38bdf822}
 .ai{background:#111827}
-textarea,input,button{width:100%;margin:6px 0;padding:10px}
+textarea,input,button,select{width:100%;margin:6px 0;padding:10px}
 button{background:#38bdf8;border:0;font-weight:bold}
 </style>
 </head>
@@ -32,47 +32,68 @@ button{background:#38bdf8;border:0;font-weight:bold}
 
 <div class="chat">
   <input id="apiBase" placeholder="https://chatai-bob-backend.onrender.com">
-  <button onclick="saveApi()">Salva backend URL</button>
+  <button id="saveApi">Salva backend URL</button>
+
+  <!-- 📁 PROGETTI -->
+  <input id="projectName" placeholder="Nome progetto (es. Libro)">
+  <select id="projectType">
+    <option value="BOOK">📘 Libro</option>
+    <option value="COACH">🧠 Coaching</option>
+    <option value="CODER">💻 Codice</option>
+    <option value="GENERAL">✨ Generale</option>
+  </select>
+  <button id="createProject">Crea progetto</button>
+  <div id="projectList"></div>
 
   <div id="messages"></div>
 
   <textarea id="input" placeholder="Scrivi..."></textarea>
-  <button onclick="sendMessage()">Invia</button>
+  <button id="sendBtn">Invia</button>
 </div>
 
 <script>
-let API_BASE = "";
+/* ================= CLIENT ID ================= */
+function getClientId(){
+  let id = localStorage.getItem("client_id");
+  if(!id){
+    id = "client_" + crypto.randomUUID();
+    localStorage.setItem("client_id", id);
+  }
+  return id;
+}
 
+/* ================= BASE ================= */
+let API_BASE = "";
 const statusDot = document.getElementById("statusDot");
 const statusText = document.getElementById("statusText");
 const messages = document.getElementById("messages");
 const input = document.getElementById("input");
 const apiBaseInput = document.getElementById("apiBase");
 
-function saveApi(){
+/* ================= BACKEND ================= */
+document.getElementById("saveApi").onclick = () => {
   API_BASE = apiBaseInput.value.trim().replace(/\/+$/, "");
   localStorage.setItem("API_BASE", API_BASE);
   checkHealth();
-}
+  loadProjects();
+};
 
 async function checkHealth(){
-  if(!API_BASE){
-    statusText.textContent="Backend: non verificato";
-    return;
-  }
+  if(!API_BASE) return;
   try{
     const r = await fetch(API_BASE + "/health");
     const d = await r.json();
     if(d.status==="ok"){
       statusDot.className="dot ok";
       statusText.textContent="Backend: online";
-    }else throw "";
+    } else throw "";
   }catch{
     statusDot.className="dot bad";
-    statusText.textContent="Backend: offline / URL errato";
+    statusText.textContent="Backend: offline";
   }
 }
 
+/* ================= CHAT ================= */
 function addMessage(role,text){
   const div=document.createElement("div");
   div.className="msg "+role;
@@ -81,7 +102,7 @@ function addMessage(role,text){
   messages.scrollTop=messages.scrollHeight;
 }
 
-async function sendMessage(){
+document.getElementById("sendBtn").onclick = async () => {
   const text=input.value.trim();
   if(!text)return;
   addMessage("user",text);
@@ -90,21 +111,70 @@ async function sendMessage(){
     const r=await fetch(API_BASE+"/chat",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({message:text})
+      body:JSON.stringify({
+        message:text,
+        client_id:getClientId()
+      })
     });
     const d=await r.json();
     addMessage("ai",d.text||"Nessuna risposta");
   }catch{
     addMessage("ai","❌ Errore connessione");
   }
+};
+
+/* ================= PROGETTI ================= */
+async function loadProjects(){
+  if(!API_BASE) return;
+  const r = await fetch(API_BASE+"/projects/list?client_id="+getClientId());
+  const d = await r.json();
+  const list=document.getElementById("projectList");
+  list.innerHTML="";
+  d.projects.forEach(p=>{
+    const b=document.createElement("button");
+    b.textContent="📂 "+p.name+" ("+p.type+")";
+    b.onclick=()=>selectProject(p.id,p.name);
+    list.appendChild(b);
+  });
 }
 
-(function init(){
+async function selectProject(id,name){
+  await fetch(API_BASE+"/projects/select",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      client_id:getClientId(),
+      project_id:id
+    })
+  });
+  alert("Progetto attivo: "+name);
+}
+
+document.getElementById("createProject").onclick = async ()=>{
+  const name=document.getElementById("projectName").value.trim();
+  const type=document.getElementById("projectType").value;
+  if(!name) return alert("Inserisci nome");
+  await fetch(API_BASE+"/projects/create",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      client_id:getClientId(),
+      name,
+      type
+    })
+  });
+  document.getElementById("projectName").value="";
+  loadProjects();
+};
+
+/* ================= INIT ================= */
+(function(){
   const saved=localStorage.getItem("API_BASE");
   if(saved){
     API_BASE=saved;
     apiBaseInput.value=saved;
     checkHealth();
+    loadProjects();
   }
 })();
 </script>
