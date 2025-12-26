@@ -405,7 +405,7 @@
 
   <script>
     // 1) IMPOSTA QUI IL TUO BACKEND (puoi anche lasciarlo vuoto e salvarlo dalla UI)
-    const DEFAULT_API_BASE = ""; // es: "https://tuo-backend.onrender.com"
+     // es: "https://tuo-backend.onrender.com"
 
     const els = {
       tabs: document.querySelectorAll(".tab"),
@@ -525,9 +525,29 @@
       els.mainTitle.textContent = titles[name] || "ChatAI";
       els.mainStatusText.textContent = "Pronto";
     }
-async function checkHealth() {
+
+}async function checkHealth() {
+  const base = getApiBase();
+  if (!base) {
+    els.statusDot.className = "dot";
+    els.statusText.textContent = "Backend: non verificato";
+    return;
+  }
+
   try {
-    const res = await fetch(API_BASE + "/health", { method: "GET" });
+    const res = await fetch(base + "/health");
+    const data = await res.json();
+
+    if (data.status === "ok") {
+      els.statusDot.className = "dot ok";
+      els.statusText.textContent = "Backend: online";
+    } else {
+      throw new Error("Risposta non valida");
+    }
+  } catch (e) {
+    els.statusDot.className = "dot bad";
+    els.statusText.textContent = "Backend: offline / URL errato";
+  }
 }
       }
     }
