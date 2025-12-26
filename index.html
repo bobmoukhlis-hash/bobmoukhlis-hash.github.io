@@ -658,5 +658,77 @@ async function checkHealth() {
       addMessage("ai", "Ciao! Imposta l'URL del backend Render (a destra) e poi usa Chat / Immagini / Video / Analisi.");
     })();
   </script>
-</body>
+</body><script>
+let API_BASE = localStorage.getItem("backend_url") || "";
+
+const statusDot = document.getElementById("statusDot");
+const statusText = document.getElementById("statusText");
+const input = document.getElementById("input");
+const messages = document.getElementById("messages");
+
+/* ===== SALVA URL ===== */
+function saveBackendUrl() {
+  const url = document.getElementById("backendUrl").value.trim();
+  if (!url) return;
+  localStorage.setItem("backend_url", url);
+  API_BASE = url;
+  checkHealth();
+}
+
+/* ===== CHECK BACKEND ===== */
+async function checkHealth() {
+  if (!API_BASE) {
+    statusText.textContent = "Backend: non verificato";
+    return;
+  }
+
+  try {
+    const res = await fetch(API_BASE + "/health");
+    const data = await res.json();
+
+    if (data.status === "ok") {
+      statusDot.className = "dot ok";
+      statusText.textContent = "Backend: online";
+    } else {
+      throw new Error();
+    }
+  } catch {
+    statusDot.className = "dot bad";
+    statusText.textContent = "Backend: offline / URL errato";
+  }
+}
+
+/* ===== CHAT ===== */
+async function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage("user", text);
+  input.value = "";
+
+  try {
+    const res = await fetch(API_BASE + "/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text })
+    });
+
+    const data = await res.json();
+    addMessage("ai", data.text || "Nessuna risposta");
+  } catch (e) {
+    addMessage("ai", "❌ Errore di connessione");
+  }
+}
+
+/* ===== UI ===== */
+function addMessage(role, text) {
+  const div = document.createElement("div");
+  div.className = role;
+  div.textContent = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+checkHealth();
+</script>
 </html>
