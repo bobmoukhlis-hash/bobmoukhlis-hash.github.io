@@ -525,10 +525,9 @@
       els.mainTitle.textContent = titles[name] || "ChatAI";
       els.mainStatusText.textContent = "Pronto";
     }
-
-    function checkHealth() {
-  els.statusDot.className = "dot ok";
-  els.statusText.textContent = "Backend: online";
+async function checkHealth() {
+  try {
+    const res = await fetch(API_BASE + "/health", { method: "GET" });
 }
       }
     }
