@@ -1,4 +1,6 @@
 🌐 ChatAI Bob – Informativa sulla Privacy
+<!--START_SECTION:activity-->
+<!--END_SECTION:activity-->
 🇮🇹 Italiano
 Ultimo aggiornamento: gennaio 2026
 Benvenuto su ChatAI Bob, sviluppata da Bouabid Moukhlis.
