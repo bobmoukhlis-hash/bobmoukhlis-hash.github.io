@@ -9,7 +9,36 @@
   <meta name="theme-color" content="#0b1220" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+.message-actions{
+  display:flex;
+  gap:7px;
+  margin-top:7px;
+  padding-left:3px;
+}
 
+.message-action{
+  background:#111827;
+  color:#9ca3af;
+  border:1px solid #1f2937;
+  border-radius:10px;
+  padding:6px 9px;
+  font-size:12px;
+  font-weight:normal;
+  cursor:pointer;
+  transition:.2s ease;
+}
+
+.message-action:hover{
+  border-color:#38bdf8;
+  color:#fff;
+  transform:translateY(-1px);
+}
+
+.message-action.active{
+  background:#172033;
+  border-color:#38bdf8;
+  color:#fff;
+}
   <style>
     body{
       margin:0;
@@ -420,42 +449,48 @@
     // UI MESSAGGI
     // =====================================================
 
-    function add(
-      role,
-      text
-    ) {
+    function add(role, text) {
+  const d = document.createElement("div");
+  d.className = "msg " + role;
 
-      const d =
-        document.createElement(
-          "div"
-        );
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text || "";
 
+  d.appendChild(bubble);
 
-      d.className =
-        "msg " +
-        role;
+  if (role === "ai") {
+    const actions = document.createElement("div");
+    actions.className = "message-actions";
 
+    const like = document.createElement("button");
+    like.className = "message-action";
+    like.type = "button";
+    like.textContent = "❤️ Mi piace";
 
-      d.innerHTML =
-        `<div class="bubble"></div>`;
+    const dislike = document.createElement("button");
+    dislike.className = "message-action";
+    dislike.type = "button";
+    dislike.textContent = "👎 Non mi piace";
 
+    like.onclick = function () {
+      like.classList.add("active");
+      dislike.classList.remove("active");
+    };
 
-      d.querySelector(
-        ".bubble"
-      ).textContent =
-        text || "";
+    dislike.onclick = function () {
+      dislike.classList.add("active");
+      like.classList.remove("active");
+    };
 
+    actions.appendChild(like);
+    actions.appendChild(dislike);
+    d.appendChild(actions);
+  }
 
-      $("messages")
-        .appendChild(d);
-
-
-      $("messages")
-        .scrollTop =
-        999999;
-
-    }
-
+  $("messages").appendChild(d);
+  $("messages").scrollTop = 999999;
+}
 
     // =====================================================
     // PULISCI
