@@ -5,13 +5,14 @@
 
   <meta charset="UTF-8" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 
   <title>ChatAI Bob</title>
 
   <link rel="manifest" href="./manifest.json" />
 
-  <meta name="theme-color" content="#0b1220" />
+  <meta name="theme-color" content="#070b14" />
 
   <meta name="mobile-web-app-capable" content="yes" />
 
@@ -19,54 +20,215 @@
 
   <style>
 
+    *{
+      box-sizing:border-box;
+    }
+
+    html,
     body{
       margin:0;
-      font-family:Arial, sans-serif;
-      background:#0b0f1a;
-      color:#e5e7eb;
+      padding:0;
+      width:100%;
+      height:100%;
     }
+
+    body{
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at top,
+          #111c35 0%,
+          #070b14 45%,
+          #05070d 100%
+        );
+
+      color:#f1f5f9;
+    }
+
+    /* =========================
+       APP
+       ========================= */
+
+    .app{
+      width:100%;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
 
     .top{
       position:sticky;
       top:0;
-      z-index:10;
-      background:#020617;
-      padding:12px;
+      z-index:50;
+
+      width:100%;
+
+      padding:
+        calc(12px + env(safe-area-inset-top))
+        16px
+        12px;
+
       display:flex;
       justify-content:space-between;
       align-items:center;
-      border-bottom:1px solid #1f2937;
+
+      background:rgba(5,9,18,.88);
+
+      backdrop-filter:blur(18px);
+      -webkit-backdrop-filter:blur(18px);
+
+      border-bottom:1px solid rgba(255,255,255,.08);
+
+      box-shadow:
+        0 8px 30px rgba(0,0,0,.25);
     }
 
-    .badge{
-      padding:6px 10px;
-      border-radius:999px;
-      background:#111827;
-      border:1px solid #1f2937;
-      font-size:12px;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
     }
+
+    .logo{
+      width:42px;
+      height:42px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #38bdf8,
+          #6366f1
+        );
+
+      font-size:22px;
+
+      box-shadow:
+        0 6px 20px rgba(56,189,248,.25);
+    }
+
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .brand-title{
+      font-size:16px;
+      font-weight:800;
+      letter-spacing:.2px;
+    }
+
+    .brand-subtitle{
+      font-size:11px;
+      color:#94a3b8;
+    }
+
+    .status{
+      display:flex;
+      align-items:center;
+      gap:7px;
+
+      padding:7px 10px;
+
+      border-radius:999px;
+
+      background:rgba(15,23,42,.85);
+
+      border:1px solid rgba(255,255,255,.08);
+
+      font-size:11px;
+      color:#cbd5e1;
+    }
+
+    .status-dot{
+      width:7px;
+      height:7px;
+
+      border-radius:50%;
+
+      background:#22c55e;
+
+      box-shadow:
+        0 0 10px rgba(34,197,94,.8);
+    }
+
+    /* =========================
+       MAIN
+       ========================= */
 
     .wrap{
-      max-width:900px;
-      margin:auto;
-      padding:12px;
+      width:100%;
+      max-width:920px;
+
+      margin:0 auto;
+
+      padding:
+        14px
+        14px
+        calc(14px + env(safe-area-inset-bottom));
     }
 
     .card{
-      background:#0b1220;
-      border:1px solid #1f2937;
-      border-radius:16px;
+      width:100%;
+
+      background:
+        rgba(8,14,27,.82);
+
+      border:
+        1px solid rgba(255,255,255,.08);
+
+      border-radius:24px;
+
       overflow:hidden;
+
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.28);
     }
 
+    /* =========================
+       MESSAGES
+       ========================= */
+
     #messages{
-      height:calc(100vh - 260px);
-      overflow:auto;
-      padding:14px;
+      height:calc(100vh - 280px);
+
+      min-height:400px;
+
+      overflow-y:auto;
+
+      padding:20px 16px;
+
+      scroll-behavior:smooth;
+    }
+
+    #messages::-webkit-scrollbar{
+      width:5px;
+    }
+
+    #messages::-webkit-scrollbar-thumb{
+      background:#263247;
+      border-radius:999px;
     }
 
     .msg{
-      margin:10px 0;
+      width:100%;
+
+      margin:16px 0;
+
       display:flex;
       flex-direction:column;
     }
@@ -79,121 +241,554 @@
       align-items:flex-start;
     }
 
+    .message-line{
+      display:flex;
+      align-items:flex-start;
+      gap:9px;
+
+      max-width:92%;
+    }
+
+    .avatar{
+      flex:0 0 32px;
+
+      width:32px;
+      height:32px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:11px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #38bdf8,
+          #6366f1
+        );
+
+      font-size:16px;
+
+      box-shadow:
+        0 5px 18px rgba(56,189,248,.18);
+    }
+
     .bubble{
-      max-width:78%;
-      padding:12px;
-      border-radius:14px;
-      background:#111827;
-      border:1px solid #1f2937;
+      max-width:calc(100% - 40px);
+
+      padding:13px 15px;
+
+      border-radius:18px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #121b2d,
+          #0d1525
+        );
+
+      border:
+        1px solid rgba(255,255,255,.07);
+
+      color:#e5e7eb;
+
       white-space:pre-wrap;
-      line-height:1.35;
+
+      line-height:1.5;
+
+      font-size:15px;
+
+      box-shadow:
+        0 8px 25px rgba(0,0,0,.15);
+    }
+
+    .msg.user .message-line{
+      justify-content:flex-end;
     }
 
     .msg.user .bubble{
-      background:#38bdf822;
-    }
+      max-width:82%;
 
-    .toolbar{
-      padding:12px;
-      border-top:1px solid #1f2937;
-    }
+      background:
+        linear-gradient(
+          135deg,
+          #0ea5e9,
+          #2563eb
+        );
 
-    input[type="text"]{
-      width:100%;
-      min-height:46px;
-      border-radius:14px;
-      background:#0a1020;
+      border-color:rgba(255,255,255,.12);
+
       color:#fff;
-      border:1px solid #1f2937;
-      padding:10px;
-      outline:none;
-      box-sizing:border-box;
+
+      border-bottom-right-radius:6px;
     }
 
-    button{
-      padding:10px 14px;
-      border-radius:12px;
-      border:0;
-      font-weight:bold;
-      cursor:pointer;
-      white-space:nowrap;
+    .msg.ai .bubble{
+      border-bottom-left-radius:6px;
     }
 
-    button:disabled{
-      opacity:.5;
-      cursor:not-allowed;
-    }
-
-    .send{
-      background:#38bdf8;
-      color:#001018;
-    }
-
-    .ghost{
-      background:transparent;
-      color:#fff;
-      border:1px solid #38bdf8;
-    }
-
-    .row{
-      display:flex;
-      gap:8px;
-      margin-top:8px;
-      flex-wrap:wrap;
-    }
-
-    .small{
-      font-size:12px;
-      opacity:.85;
-    }
-
-    .paypal-btn{
-      display:inline-block;
-      margin-top:8px;
-      padding:10px 14px;
-      border-radius:12px;
-      background:#0070ba;
-      color:#fff;
-      font-weight:bold;
-      text-decoration:none;
-    }
-
-    .paypal-btn:hover{
-      opacity:.9;
-    }
-
-    /* MI PIACE / NON MI PIACE */
+    /* =========================
+       MESSAGE ACTIONS
+       ========================= */
 
     .message-actions{
       display:flex;
-      gap:7px;
-      margin-top:7px;
-      padding-left:3px;
+
+      align-items:center;
+
+      gap:6px;
+
+      margin-top:8px;
+
+      margin-left:41px;
+
       flex-wrap:wrap;
     }
 
     .message-action{
-      background:#111827;
-      color:#9ca3af;
-      border:1px solid #1f2937;
+      appearance:none;
+
+      border:1px solid rgba(255,255,255,.08);
+
+      background:rgba(15,23,42,.75);
+
+      color:#94a3b8;
+
       border-radius:10px;
+
       padding:6px 9px;
-      font-size:12px;
-      font-weight:normal;
+
+      font-size:11px;
+
+      font-weight:600;
+
       cursor:pointer;
-      transition:.2s ease;
+
+      transition:
+        transform .18s ease,
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease;
     }
 
     .message-action:hover{
-      border-color:#38bdf8;
-      color:#fff;
       transform:translateY(-1px);
+
+      background:#172033;
+
+      border-color:#38bdf8;
+
+      color:#fff;
     }
 
     .message-action.active{
       background:#172033;
+
       border-color:#38bdf8;
+
       color:#fff;
+    }
+
+    /* =========================
+       TYPING
+       ========================= */
+
+    .typing{
+      display:flex;
+
+      align-items:center;
+
+      gap:5px;
+    }
+
+    .typing span{
+      width:6px;
+      height:6px;
+
+      border-radius:50%;
+
+      background:#64748b;
+
+      animation:
+        typing 1.2s infinite ease-in-out;
+    }
+
+    .typing span:nth-child(2){
+      animation-delay:.15s;
+    }
+
+    .typing span:nth-child(3){
+      animation-delay:.30s;
+    }
+
+    @keyframes typing{
+
+      0%,60%,100%{
+        transform:translateY(0);
+        opacity:.35;
+      }
+
+      30%{
+        transform:translateY(-4px);
+        opacity:1;
+      }
+
+    }
+
+    /* =========================
+       TOOLBAR
+       ========================= */
+
+    .toolbar{
+      padding:14px;
+
+      background:
+        rgba(5,10,20,.72);
+
+      border-top:
+        1px solid rgba(255,255,255,.07);
+    }
+
+    .input-box{
+      display:flex;
+
+      align-items:flex-end;
+
+      gap:8px;
+
+      padding:8px;
+
+      background:#0a1020;
+
+      border:
+        1px solid rgba(255,255,255,.08);
+
+      border-radius:18px;
+
+      transition:
+        border-color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .input-box:focus-within{
+      border-color:#38bdf8;
+
+      box-shadow:
+        0 0 0 3px rgba(56,189,248,.08);
+    }
+
+    input[type="text"]{
+      flex:1;
+
+      width:100%;
+
+      min-height:42px;
+
+      background:transparent;
+
+      color:#fff;
+
+      border:0;
+
+      outline:none;
+
+      padding:10px 8px;
+
+      font-size:14px;
+    }
+
+    input[type="text"]::placeholder{
+      color:#64748b;
+    }
+
+    .icon-btn{
+      width:42px;
+      height:42px;
+
+      flex:0 0 42px;
+
+      display:flex;
+
+      align-items:center;
+
+      justify-content:center;
+
+      border:0;
+
+      border-radius:13px;
+
+      background:#111827;
+
+      color:#cbd5e1;
+
+      cursor:pointer;
+
+      font-size:18px;
+
+      transition:.2s ease;
+    }
+
+    .icon-btn:hover{
+      background:#1e293b;
+
+      color:#fff;
+
+      transform:translateY(-1px);
+    }
+
+    .send-btn{
+      background:
+        linear-gradient(
+          135deg,
+          #38bdf8,
+          #2563eb
+        );
+
+      color:#fff;
+
+      box-shadow:
+        0 5px 18px rgba(37,99,235,.25);
+    }
+
+    .send-btn:hover{
+      filter:brightness(1.08);
+    }
+
+    .bottom-tools{
+      display:flex;
+
+      align-items:center;
+
+      gap:7px;
+
+      margin-top:9px;
+
+      flex-wrap:wrap;
+    }
+
+    .tool-btn{
+      display:flex;
+
+      align-items:center;
+
+      gap:6px;
+
+      padding:8px 10px;
+
+      border-radius:11px;
+
+      border:1px solid rgba(255,255,255,.07);
+
+      background:#0d1525;
+
+      color:#94a3b8;
+
+      font-size:11px;
+
+      cursor:pointer;
+
+      transition:.2s ease;
+    }
+
+    .tool-btn:hover{
+      color:#fff;
+
+      border-color:#38bdf8;
+
+      background:#111d31;
+    }
+
+    .tool-btn:disabled{
+      opacity:.35;
+
+      cursor:not-allowed;
+    }
+
+    /* =========================
+       PHOTO
+       ========================= */
+
+    .photo-area{
+      margin-top:9px;
+
+      padding:9px;
+
+      border-radius:13px;
+
+      background:#0a1020;
+
+      border:1px solid rgba(255,255,255,.06);
+    }
+
+    input[type="file"]{
+      width:100%;
+
+      color:#94a3b8;
+
+      font-size:11px;
+    }
+
+    /* =========================
+       SUPPORT
+       ========================= */
+
+    .support{
+      margin-top:10px;
+
+      display:flex;
+
+      justify-content:space-between;
+
+      align-items:center;
+
+      gap:10px;
+
+      padding:9px 2px;
+
+      color:#64748b;
+
+      font-size:11px;
+    }
+
+    .paypal-btn{
+      display:inline-flex;
+
+      align-items:center;
+
+      justify-content:center;
+
+      padding:8px 11px;
+
+      border-radius:10px;
+
+      background:#0070ba;
+
+      color:#fff;
+
+      font-size:11px;
+
+      font-weight:bold;
+
+      text-decoration:none;
+
+      transition:.2s ease;
+    }
+
+    .paypal-btn:hover{
+      opacity:.9;
+
+      transform:translateY(-1px);
+    }
+
+    /* =========================
+       TOAST
+       ========================= */
+
+    .toast{
+      position:fixed;
+
+      left:50%;
+
+      bottom:
+        calc(25px + env(safe-area-inset-bottom));
+
+      transform:
+        translate(-50%,20px);
+
+      padding:10px 15px;
+
+      border-radius:12px;
+
+      background:#111827;
+
+      border:1px solid rgba(255,255,255,.1);
+
+      color:#fff;
+
+      font-size:12px;
+
+      opacity:0;
+
+      pointer-events:none;
+
+      transition:.25s ease;
+
+      z-index:100;
+    }
+
+    .toast.show{
+      opacity:1;
+
+      transform:translate(-50%,0);
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media(max-width:600px){
+
+      .top{
+        padding-left:12px;
+        padding-right:12px;
+      }
+
+      .logo{
+        width:38px;
+        height:38px;
+        border-radius:12px;
+      }
+
+      .brand-title{
+        font-size:15px;
+      }
+
+      .brand-subtitle{
+        display:none;
+      }
+
+      .status{
+        padding:6px 8px;
+      }
+
+      .wrap{
+        padding:7px;
+      }
+
+      .card{
+        border-radius:19px;
+      }
+
+      #messages{
+        height:calc(100vh - 285px);
+        min-height:360px;
+        padding:15px 10px;
+      }
+
+      .message-line{
+        max-width:96%;
+      }
+
+      .bubble{
+        font-size:14px;
+        padding:11px 13px;
+      }
+
+      .message-actions{
+        margin-left:40px;
+      }
+
+      .message-action{
+        padding:6px 8px;
+        font-size:10px;
+      }
+
+      .support{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
     }
 
   </style>
@@ -202,14 +797,46 @@
 
 <body>
 
-  <div class="top">
-    <b>🤖 ChatAI Bob</b>
+<div class="app">
 
-    <span class="badge">
-      <span id="status">Backend: controllo…</span>
-    </span>
+  <!-- HEADER -->
+
+  <div class="top">
+
+    <div class="brand">
+
+      <div class="logo">
+        🤖
+      </div>
+
+      <div class="brand-text">
+
+        <div class="brand-title">
+          ChatAI Bob
+        </div>
+
+        <div class="brand-subtitle">
+          Il tuo assistente AI
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="status">
+
+      <span class="status-dot"></span>
+
+      <span id="status">
+        Controllo...
+      </span>
+
+    </div>
+
   </div>
 
+
+  <!-- CONTENUTO -->
 
   <div class="wrap">
 
@@ -218,70 +845,65 @@
       <div id="messages"></div>
 
 
+      <!-- TOOLBAR -->
+
       <div class="toolbar">
 
-        <input
-          id="input"
-          type="text"
-          placeholder="Scrivi una domanda..."
-        />
+        <div class="input-box">
 
-
-        <div class="row">
+          <input
+            id="input"
+            type="text"
+            placeholder="Scrivi a Bob..."
+            autocomplete="off"
+          />
 
           <button
-            class="ghost"
+            class="icon-btn"
             id="micBtn"
             onclick="startMic()"
+            title="Microfono"
           >
-            🎤 Microfono
+            🎤
           </button>
 
-
           <button
-            class="send"
+            class="icon-btn send-btn"
             id="sendBtn"
             onclick="sendMessage()"
+            title="Invia"
           >
-            Invia
-          </button>
-
-
-          <button
-            class="ghost"
-            id="clearBtn"
-          >
-            Pulisci
-          </button>
-
-
-          <button
-            class="ghost"
-            id="voiceToggle"
-            onclick="toggleVoice()"
-          >
-            🔊 Voce: ON
+            ➤
           </button>
 
         </div>
 
 
-        <!-- FOTO -->
-
-        <input
-          type="file"
-          id="photo"
-          accept="image/*"
-          style="margin-top:10px"
-        />
-
-
-        <div class="row">
+        <div class="bottom-tools">
 
           <button
+            class="tool-btn"
+            id="clearBtn"
+            type="button"
+          >
+            🗑️ Pulisci
+          </button>
+
+          <button
+            class="tool-btn"
+            id="voiceToggle"
+            onclick="toggleVoice()"
+            type="button"
+          >
+            🔊 Voce ON
+          </button>
+
+          <button
+            class="tool-btn"
             id="photoBtn"
-            class="ghost"
             onclick="sendPhoto()"
+            type="button"
+            disabled
           >
             📸 Analizza foto
           </button>
@@ -289,11 +911,22 @@
         </div>
 
 
-        <div
-          class="small"
-          style="margin-top:10px"
-        >
-          Supporta il progetto ❤️<br />
+        <div class="photo-area">
+
+          <input
+            type="file"
+            id="photo"
+            accept="image/*"
+          />
+
+        </div>
+
+
+        <div class="support">
+
+          <span>
+            Supporta ChatAI Bob ❤️
+          </span>
 
           <a
             class="paypal-btn"
@@ -301,7 +934,7 @@
             target="_blank"
             rel="noreferrer"
           >
-            Dona con PayPal
+            ❤️ Dona con PayPal
           </a>
 
         </div>
@@ -312,294 +945,640 @@
 
   </div>
 
-
-  <script>
-
-    // =====================================================
-    // CONFIG
-    // =====================================================
-
-    const API =
-      "https://chatai-bob-backend.onrender.com";
-
-    const $ =
-      (id) => document.getElementById(id);
+</div>
 
 
-    // =====================================================
-    // CLIENT ID
-    // =====================================================
-
-    const CLIENT_ID =
-      (() => {
-
-        let id =
-          localStorage.getItem(
-            "CLIENT_ID"
-          );
-
-        if (!id) {
-
-          id =
-            "web_" +
-            Math.random()
-              .toString(36)
-              .slice(2);
-
-          localStorage.setItem(
-            "CLIENT_ID",
-            id
-          );
-
-        }
-
-        return id;
-
-      })();
+<div
+  id="toast"
+  class="toast"
+></div>
 
 
-    // =====================================================
-    // CLEAN TEXT
-    // =====================================================
+<script>
 
-    function cleanText(t) {
+  // =====================================================
+  // CONFIG
+  // =====================================================
 
-      if (!t)
-        return "";
-
-      return String(t)
-
-        .replace(/\*\*/g, "")
-        .replace(/\*/g, "")
-        .replace(/#/g, "")
-
-        .replace(
-          /^\s*[-•]\s+/gm,
-          ""
-        )
-
-        .replace(
-          /^\s*\d+[\.\)]\s+/gm,
-          ""
-        )
-
-        .replace(
-          /\n{3,}/g,
-          "\n\n"
-        )
-
-        .trim();
-
-    }
+  const API =
+    "https://chatai-bob-backend.onrender.com";
 
 
-    // =====================================================
-    // VOCE
-    // =====================================================
-
-    let VOICE_ON =
-      true;
+  const $ =
+    (id) =>
+      document.getElementById(id);
 
 
-    function toggleVoice() {
+  // =====================================================
+  // CLIENT ID
+  // =====================================================
 
-      VOICE_ON =
-        !VOICE_ON;
+  const CLIENT_ID =
+    (() => {
 
+      let id =
+        localStorage.getItem(
+          "CLIENT_ID"
+        );
 
-      $("voiceToggle").textContent =
-        VOICE_ON
-          ? "🔊 Voce: ON"
-          : "🔇 Voce: OFF";
+      if (!id) {
 
+        id =
+          "web_" +
+          Math.random()
+            .toString(36)
+            .slice(2);
 
-      if (!VOICE_ON) {
-
-        speechSynthesis.cancel();
+        localStorage.setItem(
+          "CLIENT_ID",
+          id
+        );
 
       }
 
-    }
+      return id;
+
+    })();
 
 
-    function speak(text) {
+  // =====================================================
+  // TOAST
+  // =====================================================
 
-      if (!VOICE_ON)
-        return;
+  let toastTimer;
+
+  function showToast(text){
+
+    const toast =
+      $("toast");
+
+    toast.textContent =
+      text;
+
+    toast.classList.add(
+      "show"
+    );
+
+    clearTimeout(
+      toastTimer
+    );
+
+    toastTimer =
+      setTimeout(
+        () => {
+
+          toast.classList.remove(
+            "show"
+          );
+
+        },
+        1800
+      );
+
+  }
 
 
-      if (!text)
-        return;
+  // =====================================================
+  // CLEAN TEXT
+  // =====================================================
 
+  function cleanText(t){
 
-      if (
-        !(
-          "speechSynthesis"
-          in window
-        )
+    if (!t)
+      return "";
+
+    return String(t)
+
+      .replace(/\*\*/g,"")
+      .replace(/\*/g,"")
+      .replace(/#/g,"")
+
+      .replace(
+        /^\s*[-•]\s+/gm,
+        ""
       )
-        return;
+
+      .replace(
+        /^\s*\d+[\.\)]\s+/gm,
+        ""
+      )
+
+      .replace(
+        /\n{3,}/g,
+        "\n\n"
+      )
+
+      .trim();
+
+  }
 
 
-      const u =
-        new SpeechSynthesisUtterance(
-          text
-        );
+  // =====================================================
+  // VOCE
+  // =====================================================
+
+  let VOICE_ON =
+    true;
 
 
-      u.lang =
-        "it-IT";
+  function toggleVoice(){
 
+    VOICE_ON =
+      !VOICE_ON;
 
-      u.rate =
-        1;
+    $("voiceToggle").textContent =
+      VOICE_ON
+        ? "🔊 Voce ON"
+        : "🔇 Voce OFF";
 
+    if (!VOICE_ON){
 
       speechSynthesis.cancel();
 
+    }
 
-      speechSynthesis.speak(
-        u
+  }
+
+
+  function speak(text){
+
+    if (!VOICE_ON)
+      return;
+
+    if (!text)
+      return;
+
+    if (
+      !(
+        "speechSynthesis"
+        in window
+      )
+    )
+      return;
+
+    const u =
+      new SpeechSynthesisUtterance(
+        text
+      );
+
+    u.lang =
+      "it-IT";
+
+    u.rate =
+      1;
+
+    speechSynthesis.cancel();
+
+    speechSynthesis.speak(
+      u
+    );
+
+  }
+
+
+  // =====================================================
+  // COPIA
+  // =====================================================
+
+  async function copyMessage(text){
+
+    try{
+
+      await navigator.clipboard.writeText(
+        text
+      );
+
+      showToast(
+        "📋 Risposta copiata"
+      );
+
+    }catch{
+
+      showToast(
+        "Impossibile copiare"
+      );
+
+    }
+
+  }
+
+
+  // =====================================================
+  // CONDIVIDI
+  // =====================================================
+
+  async function shareMessage(text){
+
+    try{
+
+      if (
+        navigator.share
+      ){
+
+        await navigator.share({
+
+          title:
+            "ChatAI Bob",
+
+          text:
+            text
+
+        });
+
+      }else{
+
+        await navigator.clipboard.writeText(
+          text
+        );
+
+        showToast(
+          "🔗 Testo copiato per la condivisione"
+        );
+
+      }
+
+    }catch(e){
+
+      if (
+        e &&
+        e.name ===
+          "AbortError"
+      ){
+
+        return;
+
+      }
+
+      showToast(
+        "Condivisione non disponibile"
+      );
+
+    }
+
+  }
+
+
+  // =====================================================
+  // LIKE
+  // =====================================================
+
+  function setLike(
+    like,
+    dislike
+  ){
+
+    like.classList.add(
+      "active"
+    );
+
+    dislike.classList.remove(
+      "active"
+    );
+
+  }
+
+
+  function setDislike(
+    like,
+    dislike
+  ){
+
+    dislike.classList.add(
+      "active"
+    );
+
+    like.classList.remove(
+      "active"
+    );
+
+  }
+
+
+  // =====================================================
+  // UI MESSAGGI
+  // =====================================================
+
+  function add(
+    role,
+    text
+  ){
+
+    const d =
+      document.createElement(
+        "div"
+      );
+
+    d.className =
+      "msg " +
+      role;
+
+
+    const line =
+      document.createElement(
+        "div"
+      );
+
+    line.className =
+      "message-line";
+
+
+    // AVATAR BOB
+
+    if (
+      role ===
+      "ai"
+    ){
+
+      const avatar =
+        document.createElement(
+          "div"
+        );
+
+      avatar.className =
+        "avatar";
+
+      avatar.textContent =
+        "🤖";
+
+      line.appendChild(
+        avatar
       );
 
     }
 
 
-    // =====================================================
-    // UI MESSAGGI
-    // =====================================================
+    // BOLLA
 
-    function add(role, text) {
-  const d = document.createElement("div");
-  d.className = "msg " + role;
+    const bubble =
+      document.createElement(
+        "div"
+      );
 
-  const bubble = document.createElement("div");
-  bubble.className = "bubble";
-  bubble.textContent = text || "";
+    bubble.className =
+      "bubble";
 
-  d.appendChild(bubble);
-
-  if (role === "ai") {
-    const actions = document.createElement("div");
-    actions.className = "message-actions";
-
-    const like = document.createElement("button");
-    like.className = "message-action";
-    like.type = "button";
-    like.textContent = "❤️ Mi piace";
-
-    const dislike = document.createElement("button");
-    dislike.className = "message-action";
-    dislike.type = "button";
-    dislike.textContent = "👎 Non mi piace";
-
-    like.onclick = function () {
-      like.classList.add("active");
-      dislike.classList.remove("active");
-    };
-
-    dislike.onclick = function () {
-      dislike.classList.add("active");
-      like.classList.remove("active");
-    };
-
-    actions.appendChild(like);
-    actions.appendChild(dislike);
-    d.appendChild(actions);
-  }
-
-  $("messages").appendChild(d);
-  $("messages").scrollTop = 999999;
-}
-
-    // =====================================================
-    // PULISCI
-    // =====================================================
-
-    $("clearBtn").onclick =
-      () => {
-
-        $("messages")
-          .innerHTML =
-          "";
+    bubble.textContent =
+      text || "";
 
 
-        add(
-          "ai",
-          "Ciao 👋 Come posso aiutarti?"
+    line.appendChild(
+      bubble
+    );
+
+    d.appendChild(
+      line
+    );
+
+
+    // AZIONI SOTTO BOB
+
+    if (
+      role ===
+      "ai"
+    ){
+
+      const actions =
+        document.createElement(
+          "div"
         );
 
+      actions.className =
+        "message-actions";
 
-        speak(
-          "Ciao, come posso aiutarti?"
+
+      // LIKE
+
+      const like =
+        document.createElement(
+          "button"
         );
 
-      };
+      like.className =
+        "message-action";
+
+      like.type =
+        "button";
+
+      like.textContent =
+        "❤️ Mi piace";
 
 
-    // =====================================================
-    // ENTER
-    // =====================================================
+      // DISLIKE
 
-    $("input")
-      .addEventListener(
-        "keydown",
-        (e) => {
+      const dislike =
+        document.createElement(
+          "button"
+        );
 
-          if (
-            e.key ===
-            "Enter"
-          ) {
+      dislike.className =
+        "message-action";
 
-            e.preventDefault();
+      dislike.type =
+        "button";
 
-            sendMessage();
+      dislike.textContent =
+        "👎 Non mi piace";
 
-          }
 
-        }
+      // COPIA
+
+      const copy =
+        document.createElement(
+          "button"
+        );
+
+      copy.className =
+        "message-action";
+
+      copy.type =
+        "button";
+
+      copy.textContent =
+        "📋 Copia";
+
+
+      // CONDIVIDI
+
+      const share =
+        document.createElement(
+          "button"
+        );
+
+      share.className =
+        "message-action";
+
+      share.type =
+        "button";
+
+      share.textContent =
+        "🔗 Condividi";
+
+
+      like.onclick =
+        () => {
+
+          setLike(
+            like,
+            dislike
+          );
+
+        };
+
+
+      dislike.onclick =
+        () => {
+
+          setDislike(
+            like,
+            dislike
+          );
+
+        };
+
+
+      copy.onclick =
+        () => {
+
+          copyMessage(
+            text || ""
+          );
+
+        };
+
+
+      share.onclick =
+        () => {
+
+          shareMessage(
+            text || ""
+          );
+
+        };
+
+
+      actions.appendChild(
+        like
+      );
+
+      actions.appendChild(
+        dislike
+      );
+
+      actions.appendChild(
+        copy
+      );
+
+      actions.appendChild(
+        share
       );
 
 
-    // =====================================================
-    // BACKEND STATUS
-    // =====================================================
+      d.appendChild(
+        actions
+      );
 
-    async function checkBackend() {
+    }
 
-      try {
 
-        const r =
-          await fetch(
-            API + "/health",
-            {
-              cache:
-                "no-store"
-            }
+    $("messages")
+      .appendChild(
+        d
+      );
+
+
+    $("messages")
+      .scrollTop =
+      999999;
+
+  }
+
+
+  // =====================================================
+  // PULISCI
+  // =====================================================
+
+  $("clearBtn").onclick =
+    () => {
+
+      $("messages")
+        .innerHTML =
+        "";
+
+      add(
+        "ai",
+        "Ciao 👋 Sono ChatAI Bob. Come posso aiutarti?"
+      );
+
+      speak(
+        "Ciao, sono ChatAI Bob. Come posso aiutarti?"
+      );
+
+    };
+
+
+  // =====================================================
+  // ENTER
+  // =====================================================
+
+  $("input")
+    .addEventListener(
+      "keydown",
+      (e) => {
+
+        if (
+          e.key ===
+          "Enter"
+        ){
+
+          e.preventDefault();
+
+          sendMessage();
+
+        }
+
+      }
+    );
+
+
+  // =====================================================
+  // BACKEND STATUS
+  // =====================================================
+
+  async function checkBackend(){
+
+    try{
+
+      const r =
+        await fetch(
+          API +
+          "/health",
+          {
+            cache:
+              "no-store"
+          }
+        );
+
+
+      const d =
+        await r
+          .json()
+          .catch(
+            () =>
+              null
           );
 
 
-        const d =
-          await r
-            .json()
-            .catch(
-              () => null
-            );
-
+      if (
+        d &&
+        d.status ===
+          "ok"
+      ){
 
         $("status")
           .textContent =
-          (
-            d &&
-            d.status ===
-              "ok"
-          )
-            ? "Online"
-            : "Offline";
+          "Online";
 
-      }
-
-      catch {
+      }else{
 
         $("status")
           .textContent =
@@ -609,543 +1588,659 @@
 
     }
 
+    catch{
 
-    // =====================================================
-    // FETCH SICURO
-    // =====================================================
-
-    async function fetchJsonOrThrow(
-      url,
-      options
-    ) {
-
-      const res =
-        await fetch(
-          url,
-          options
-        );
-
-
-      const raw =
-        await res.text();
-
-
-      let data =
-        null;
-
-
-      try {
-
-        data =
-          raw
-            ? JSON.parse(raw)
-            : null;
-
-      }
-
-      catch {
-
-        data =
-          null;
-
-      }
-
-
-      if (!res.ok) {
-
-        const msg =
-          (
-            data &&
-            (
-              data.detail ||
-              data.error ||
-              data.message
-            )
-          ) ||
-          raw ||
-          (
-            "HTTP " +
-            res.status
-          );
-
-
-        throw new Error(
-          "HTTP " +
-          res.status +
-          " - " +
-          msg
-        );
-
-      }
-
-
-      return data;
+      $("status")
+        .textContent =
+        "Offline";
 
     }
 
-
-    // =====================================================
-    // CHAT
-    // =====================================================
-
-    async function sendMessage() {
-
-      const input =
-        $("input");
+  }
 
 
-      const text =
-        input.value.trim();
+  // =====================================================
+  // FETCH SICURO
+  // =====================================================
 
+  async function fetchJsonOrThrow(
+    url,
+    options
+  ){
 
-      if (!text)
-        return;
-
-
-      input.value =
-        "";
-
-
-      add(
-        "user",
-        text
+    const res =
+      await fetch(
+        url,
+        options
       );
 
 
-      const typing =
-        document.createElement(
-          "div"
-        );
+    const raw =
+      await res.text();
 
 
-      typing.className =
-        "msg ai";
+    let data =
+      null;
 
 
-      typing.innerHTML =
-        `<div class="bubble">…</div>`;
+    try{
 
+      data =
+        raw
+          ? JSON.parse(raw)
+          : null;
 
-      $("messages")
-        .appendChild(
-          typing
-        );
+    }
 
+    catch{
 
-      $("messages")
-        .scrollTop =
-        999999;
-
-
-      $("sendBtn")
-        .disabled =
-        true;
-
-
-      try {
-
-        const d =
-          await fetchJsonOrThrow(
-            API + "/chat",
-            {
-
-              method:
-                "POST",
-
-              headers: {
-
-                "Content-Type":
-                  "application/json",
-
-                "Accept":
-                  "application/json"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  message:
-                    text,
-
-                  client_id:
-                    CLIENT_ID
-
-                })
-
-            }
-          );
-
-
-        typing.remove();
-
-
-        const outRaw =
-          (
-            d &&
-            typeof d.text ===
-              "string"
-          )
-            ? d.text
-            : "";
-
-
-        const out =
-          cleanText(
-            outRaw
-          ) ||
-          "Nessuna risposta.";
-
-
-        add(
-          "ai",
-          out
-        );
-
-
-        speak(
-          out
-        );
-
-      }
-
-      catch (e) {
-
-        typing.remove();
-
-
-        add(
-          "ai",
-          "❌ Errore: " +
-          (
-            e &&
-            e.message
-              ? e.message
-              : "sconosciuto"
-          )
-        );
-
-
-        speak(
-          "Errore di risposta"
-        );
-
-      }
-
-      finally {
-
-        $("sendBtn")
-          .disabled =
-          false;
-
-      }
+      data =
+        null;
 
     }
 
 
-    // =====================================================
-    // MICROFONO
-    // =====================================================
+    if (!res.ok){
 
-    function startMic() {
-
-      if (
-        !(
-          "webkitSpeechRecognition"
-          in window
-        )
-      ) {
-
-        alert(
-          "Il microfono non è supportato su questo browser"
+      const msg =
+        (
+          data &&
+          (
+            data.detail ||
+            data.error ||
+            data.message
+          )
+        ) ||
+        raw ||
+        (
+          "HTTP " +
+          res.status
         );
 
-        return;
 
-      }
-
-
-      const recognition =
-        new webkitSpeechRecognition();
-
-
-      recognition.lang =
-        "it-IT";
-
-
-      recognition.interimResults =
-        false;
-
-
-      recognition.continuous =
-        false;
-
-
-      recognition.onresult =
-        function(event) {
-
-          const t =
-            event
-              .results[0][0]
-              .transcript;
-
-
-          $("input")
-            .value =
-            t;
-
-
-          sendMessage();
-
-        };
-
-
-      recognition.onerror =
-        function() {
-
-          // niente spam
-
-        };
-
-
-      recognition.onend =
-        function() {
-
-          const mic =
-            $("micBtn");
-
-          if (mic) {
-
-            mic.textContent =
-              "🎤 Microfono";
-
-          }
-
-        };
-
-
-      recognition.start();
+      throw new Error(
+        "HTTP " +
+        res.status +
+        " - " +
+        msg
+      );
 
     }
 
 
-    // =====================================================
-    // FOTO
-    // =====================================================
+    return data;
 
-    $("photoBtn")
+  }
+
+
+  // =====================================================
+  // CHAT
+  // =====================================================
+
+  async function sendMessage(){
+
+    const input =
+      $("input");
+
+
+    const text =
+      input.value.trim();
+
+
+    if (!text)
+      return;
+
+
+    input.value =
+      "";
+
+
+    add(
+      "user",
+      text
+    );
+
+
+    // TYPING
+
+    const typing =
+      document.createElement(
+        "div"
+      );
+
+    typing.className =
+      "msg ai";
+
+
+    const typingLine =
+      document.createElement(
+        "div"
+      );
+
+    typingLine.className =
+      "message-line";
+
+
+    const avatar =
+      document.createElement(
+        "div"
+      );
+
+    avatar.className =
+      "avatar";
+
+    avatar.textContent =
+      "🤖";
+
+
+    const bubble =
+      document.createElement(
+        "div"
+      );
+
+    bubble.className =
+      "bubble";
+
+
+    bubble.innerHTML =
+      `
+        <div class="typing">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      `;
+
+
+    typingLine.appendChild(
+      avatar
+    );
+
+    typingLine.appendChild(
+      bubble
+    );
+
+    typing.appendChild(
+      typingLine
+    );
+
+
+    $("messages")
+      .appendChild(
+        typing
+      );
+
+
+    $("messages")
+      .scrollTop =
+      999999;
+
+
+    $("sendBtn")
       .disabled =
       true;
 
 
-    $("photo")
-      .addEventListener(
-        "change",
-        () => {
+    try{
 
-          const file =
-            $("photo")
-              .files &&
-            $("photo")
-              .files[0];
+      const d =
+        await fetchJsonOrThrow(
+          API +
+          "/chat",
+          {
 
+            method:
+              "POST",
 
-          $("photoBtn")
-            .disabled =
-            !file;
+            headers:{
+              "Content-Type":
+                "application/json",
 
-        }
-      );
+              "Accept":
+                "application/json"
+            },
 
+            body:
+              JSON.stringify({
 
-    async function sendPhoto() {
+                message:
+                  text,
 
-      const fileInput =
-        $("photo");
+                client_id:
+                  CLIENT_ID
 
+              })
 
-      const file =
-        fileInput.files &&
-        fileInput.files[0];
-
-
-      if (!file) {
-
-        add(
-          "ai",
-          "📸 Seleziona prima una foto dalla galleria."
+          }
         );
 
 
-        speak(
-          "Seleziona prima una foto dalla galleria"
-        );
+      typing.remove();
 
 
-        return;
+      const outRaw =
+        (
+          d &&
+          typeof d.text ===
+            "string"
+        )
+          ? d.text
+          : "";
 
-      }
 
-
-      const btn =
-        $("photoBtn");
-
-
-      btn.disabled =
-        true;
+      const out =
+        cleanText(
+          outRaw
+        ) ||
+        "Nessuna risposta.";
 
 
       add(
-        "user",
-        "📸 Analizza foto"
+        "ai",
+        out
       );
 
 
-      const typing =
-        document.createElement(
-          "div"
+      speak(
+        out
+      );
+
+    }
+
+    catch(e){
+
+      typing.remove();
+
+
+      const errorText =
+        "❌ Errore: " +
+        (
+          e &&
+          e.message
+            ? e.message
+            : "sconosciuto"
         );
 
 
-      typing.className =
-        "msg ai";
-
-
-      typing.innerHTML =
-        `<div class="bubble">Analisi in corso...</div>`;
-
-
-      $("messages")
-        .appendChild(
-          typing
-        );
-
-
-      $("messages")
-        .scrollTop =
-        999999;
-
-
-      const form =
-        new FormData();
-
-
-      form.append(
-        "file",
-        file
+      add(
+        "ai",
+        errorText
       );
 
 
-      form.append(
-        "client_id",
-        CLIENT_ID
+      speak(
+        "Errore di risposta"
       );
 
+    }
 
-      try {
+    finally{
 
-        const d =
-          await fetchJsonOrThrow(
-            API + "/ocr_photo",
-            {
+      $("sendBtn")
+        .disabled =
+        false;
 
-              method:
-                "POST",
+      $("input")
+        .focus();
 
-              body:
-                form
+    }
 
-            }
-          );
+  }
 
 
-        typing.remove();
+  // =====================================================
+  // MICROFONO
+  // =====================================================
+
+  function startMic(){
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
 
 
-        const raw =
-          (
-            d &&
-            typeof d.text ===
-              "string"
-          )
-            ? d.text
-            : "";
+    if (!SpeechRecognition){
 
+      alert(
+        "Il microfono non è supportato su questo browser"
+      );
 
-        const out =
-          cleanText(
-            raw
-          ) ||
-          "📷 Foto ricevuta, ma nessun testo rilevato.";
-
-
-        add(
-          "ai",
-          out
-        );
-
-
-        speak(
-          out
-        );
-
-      }
-
-      catch (e) {
-
-        typing.remove();
-
-
-        add(
-          "ai",
-          "❌ Foto: " +
-          (
-            e &&
-            e.message
-              ? e.message
-              : "errore"
-          )
-        );
-
-
-        speak(
-          "Errore durante l’analisi della foto"
-        );
-
-      }
-
-      finally {
-
-        fileInput.value =
-          "";
-
-        btn.disabled =
-          true;
-
-      }
+      return;
 
     }
 
 
-    // =====================================================
-    // START
-    // =====================================================
+    const recognition =
+      new SpeechRecognition();
+
+
+    recognition.lang =
+      "it-IT";
+
+
+    recognition.interimResults =
+      false;
+
+
+    recognition.continuous =
+      false;
+
+
+    const mic =
+      $("micBtn");
+
+
+    mic.textContent =
+      "🔴";
+
+
+    recognition.onresult =
+      function(event){
+
+        const t =
+          event
+            .results[0][0]
+            .transcript;
+
+
+        $("input")
+          .value =
+          t;
+
+
+        sendMessage();
+
+      };
+
+
+    recognition.onerror =
+      function(){
+
+        mic.textContent =
+          "🎤";
+
+      };
+
+
+    recognition.onend =
+      function(){
+
+        mic.textContent =
+          "🎤";
+
+      };
+
+
+    recognition.start();
+
+  }
+
+
+  // =====================================================
+  // FOTO
+  // =====================================================
+
+  $("photo")
+    .addEventListener(
+      "change",
+      () => {
+
+        const file =
+          $("photo")
+            .files &&
+          $("photo")
+            .files[0];
+
+
+        $("photoBtn")
+          .disabled =
+          !file;
+
+      }
+    );
+
+
+  async function sendPhoto(){
+
+    const fileInput =
+      $("photo");
+
+
+    const file =
+      fileInput.files &&
+      fileInput.files[0];
+
+
+    if (!file){
+
+      add(
+        "ai",
+        "📸 Seleziona prima una foto dalla galleria."
+      );
+
+      speak(
+        "Seleziona prima una foto dalla galleria"
+      );
+
+      return;
+
+    }
+
+
+    const btn =
+      $("photoBtn");
+
+
+    btn.disabled =
+      true;
+
 
     add(
-      "ai",
-      "Ciao 👋 Sono ChatAI Bob. Scrivi pure."
+      "user",
+      "📸 Analizza foto"
     );
 
 
-    checkBackend();
+    const typing =
+      document.createElement(
+        "div"
+      );
 
 
-    setInterval(
-      checkBackend,
-      30000
+    typing.className =
+      "msg ai";
+
+
+    const typingLine =
+      document.createElement(
+        "div"
+      );
+
+
+    typingLine.className =
+      "message-line";
+
+
+    const avatar =
+      document.createElement(
+        "div"
+      );
+
+
+    avatar.className =
+      "avatar";
+
+    avatar.textContent =
+      "🤖";
+
+
+    const bubble =
+      document.createElement(
+        "div"
+      );
+
+
+    bubble.className =
+      "bubble";
+
+
+    bubble.innerHTML =
+      `
+        <div class="typing">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      `;
+
+
+    typingLine.appendChild(
+      avatar
     );
 
-  </script>
+    typingLine.appendChild(
+      bubble
+    );
+
+
+    typing.appendChild(
+      typingLine
+    );
+
+
+    $("messages")
+      .appendChild(
+        typing
+      );
+
+
+    $("messages")
+      .scrollTop =
+      999999;
+
+
+    const form =
+      new FormData();
+
+
+    form.append(
+      "file",
+      file
+    );
+
+
+    form.append(
+      "client_id",
+      CLIENT_ID
+    );
+
+
+    try{
+
+      const d =
+        await fetchJsonOrThrow(
+          API +
+          "/ocr_photo",
+          {
+
+            method:
+              "POST",
+
+            body:
+              form
+
+          }
+        );
+
+
+      typing.remove();
+
+
+      const raw =
+        (
+          d &&
+          typeof d.text ===
+            "string"
+        )
+          ? d.text
+          : "";
+
+
+      const out =
+        cleanText(
+          raw
+        ) ||
+        "📷 Foto ricevuta, ma nessun testo rilevato.";
+
+
+      add(
+        "ai",
+        out
+      );
+
+
+      speak(
+        out
+      );
+
+    }
+
+    catch(e){
+
+      typing.remove();
+
+
+      add(
+        "ai",
+        "❌ Foto: " +
+        (
+          e &&
+          e.message
+            ? e.message
+            : "errore"
+        )
+      );
+
+
+      speak(
+        "Errore durante l'analisi della foto"
+      );
+
+    }
+
+    finally{
+
+      fileInput.value =
+        "";
+
+      btn.disabled =
+        true;
+
+    }
+
+  }
+
+
+  // =====================================================
+  // START
+  // =====================================================
+
+  add(
+    "ai",
+    "Ciao 👋 Sono ChatAI Bob. Scrivi pure."
+  );
+
+
+  checkBackend();
+
+
+  setInterval(
+    checkBackend,
+    30000
+  );
+
+</script>
 
 </body>
+
 </html>
