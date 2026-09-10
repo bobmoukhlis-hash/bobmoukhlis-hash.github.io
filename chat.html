@@ -628,7 +628,69 @@
 
       font-size:11px;
     }
+/* =========================
+   MODERN TOOLS MENU
+   ========================= */
 
+.tools-panel{
+  display:none;
+  margin-top:10px;
+  padding:10px;
+  gap:8px;
+  flex-wrap:wrap;
+  background:rgba(10,16,32,.96);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  box-shadow:0 12px 35px rgba(0,0,0,.25);
+  animation:toolsIn .18s ease;
+}
+
+.tools-panel.show{
+  display:flex;
+}
+
+.plus-btn{
+  font-size:22px;
+}
+
+.plus-btn.active{
+  background:#1e293b;
+  color:#38bdf8;
+  transform:rotate(45deg);
+}
+
+@keyframes toolsIn{
+  from{
+    opacity:0;
+    transform:translateY(-6px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+
+/* IL TUO CODICE RIMANE QUI */
+
+.support{
+  margin-top:10px;
+
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:center;
+
+  gap:10px;
+
+  padding:9px 2px;
+
+  color:#64748b;
+
+  font-size:11px;
+}
     /* =========================
        SUPPORT
        ========================= */
