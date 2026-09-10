@@ -847,37 +847,78 @@
 
       <!-- TOOLBAR -->
 
-      <div class="toolbar">
+      <div class="input-box">
 
-        <div class="input-box">
+  <button
+    class="icon-btn plus-btn"
+    id="plusBtn"
+    type="button"
+    onclick="toggleTools()"
+    title="Altre funzioni"
+  >
+    ＋
+  </button>
 
-          <input
-            id="input"
-            type="text"
-            placeholder="Scrivi a Bob..."
-            autocomplete="off"
-          />
+  <input
+    id="input"
+    type="text"
+    placeholder="Scrivi a Bob..."
+    autocomplete="off"
+  />
 
-          <button
-            class="icon-btn"
-            id="micBtn"
-            onclick="startMic()"
-            title="Microfono"
-          >
-            🎤
-          </button>
+  <button
+    class="icon-btn"
+    id="micBtn"
+    onclick="startMic()"
+    title="Microfono"
+  >
+    🎤
+  </button>
 
-          <button
-            class="icon-btn send-btn"
-            id="sendBtn"
-            onclick="sendMessage()"
-            title="Invia"
-          >
-            ➤
-          </button>
+  <button
+    class="icon-btn send-btn"
+    id="sendBtn"
+    onclick="sendMessage()"
+    title="Invia"
+  >
+    ➤
+  </button>
 
-        </div>
+</div>
 
+<div
+  class="tools-panel"
+  id="toolsPanel"
+>
+
+  <button
+    class="tool-btn"
+    id="clearBtn"
+    type="button"
+  >
+    🗑️ Pulisci
+  </button>
+
+  <button
+    class="tool-btn"
+    id="voiceToggle"
+    onclick="toggleVoice()"
+    type="button"
+  >
+    🔊 Voce ON
+  </button>
+
+  <button
+    class="tool-btn"
+    id="photoBtn"
+    onclick="sendPhoto()"
+    type="button"
+    disabled
+  >
+    📸 Analizza foto
+  </button>
+
+</div>
 
         <div class="bottom-tools">
 
