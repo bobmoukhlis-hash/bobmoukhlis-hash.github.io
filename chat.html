@@ -1174,7 +1174,19 @@
       .trim();
 
   }
+function toggleTools(){
+  const panel = $("toolsPanel");
+  const plus = $("plusBtn");
 
+  if(!panel || !plus) return;
+
+  panel.classList.toggle("show");
+
+  plus.classList.toggle(
+    "active",
+    panel.classList.contains("show")
+  );
+}
 
   // =====================================================
   // VOCE
