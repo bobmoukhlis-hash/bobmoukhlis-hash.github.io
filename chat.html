@@ -1,45 +1,25 @@
+```html
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
+
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>ChatAI Bob</title>
 
   <link rel="manifest" href="./manifest.json" />
+
   <meta name="theme-color" content="#0b1220" />
+
   <meta name="mobile-web-app-capable" content="yes" />
+
   <meta name="apple-mobile-web-app-capable" content="yes" />
-.message-actions{
-  display:flex;
-  gap:7px;
-  margin-top:7px;
-  padding-left:3px;
-}
 
-.message-action{
-  background:#111827;
-  color:#9ca3af;
-  border:1px solid #1f2937;
-  border-radius:10px;
-  padding:6px 9px;
-  font-size:12px;
-  font-weight:normal;
-  cursor:pointer;
-  transition:.2s ease;
-}
-
-.message-action:hover{
-  border-color:#38bdf8;
-  color:#fff;
-  transform:translateY(-1px);
-}
-
-.message-action.active{
-  background:#172033;
-  border-color:#38bdf8;
-  color:#fff;
-}
   <style>
+
     body{
       margin:0;
       font-family:Arial, sans-serif;
@@ -89,10 +69,15 @@
     .msg{
       margin:10px 0;
       display:flex;
+      flex-direction:column;
     }
 
     .msg.user{
-      justify-content:flex-end;
+      align-items:flex-end;
+    }
+
+    .msg.ai{
+      align-items:flex-start;
     }
 
     .bubble{
@@ -177,7 +162,43 @@
     .paypal-btn:hover{
       opacity:.9;
     }
+
+    /* MI PIACE / NON MI PIACE */
+
+    .message-actions{
+      display:flex;
+      gap:7px;
+      margin-top:7px;
+      padding-left:3px;
+      flex-wrap:wrap;
+    }
+
+    .message-action{
+      background:#111827;
+      color:#9ca3af;
+      border:1px solid #1f2937;
+      border-radius:10px;
+      padding:6px 9px;
+      font-size:12px;
+      font-weight:normal;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    .message-action:hover{
+      border-color:#38bdf8;
+      color:#fff;
+      transform:translateY(-1px);
+    }
+
+    .message-action.active{
+      background:#172033;
+      border-color:#38bdf8;
+      color:#fff;
+    }
+
   </style>
+
 </head>
 
 <body>
