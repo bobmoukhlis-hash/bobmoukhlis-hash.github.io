@@ -2421,104 +2421,472 @@
      VOICE
      ===================================================== */
 
-  let VOICE_ON =
-    localStorage.getItem(
-      VOICE_KEY
-    ) !== "false";
+  ```javascript
+/* =====================================================
+   VOICE CHAT CONTINUA
+   Tu parli → Bob risponde → Bob finisce → microfono riparte
+   ===================================================== */
+
+let VOICE_ON =
+  localStorage.getItem(
+    VOICE_KEY
+  ) !== "false";
 
 
-  function updateVoiceUI() {
-
-    const toggle =
-      $("voiceToggle");
-
-    if (toggle) {
-
-      toggle.textContent =
-        VOICE_ON
-          ? "🔊 Voce ON"
-          : "🔇 Voce OFF";
-
-    }
+/*
+   Modalità conversazione continua.
+   false = microfono normale
+   true  = conversazione automatica
+*/
+let VOICE_CHAT_ACTIVE = false;
 
 
-    const setting =
-      $("voiceSetting");
+/*
+   Riconoscimento vocale attuale
+*/
+let voiceRecognition = null;
 
-    if (setting) {
 
-      setting.classList.toggle(
-        "on",
-        VOICE_ON
-      );
+/* =====================================================
+   AGGIORNA UI VOCE
+   ===================================================== */
 
-    }
+function updateVoiceUI() {
+
+  const toggle =
+    $("voiceToggle");
+
+  if (toggle) {
+
+    toggle.textContent =
+      VOICE_ON
+        ? "🔊 Voce ON"
+        : "🔇 Voce OFF";
 
   }
 
 
-  function toggleVoice() {
+  const setting =
+    $("voiceSetting");
 
-    VOICE_ON =
-      !VOICE_ON;
+  if (setting) {
 
-    localStorage.setItem(
-      VOICE_KEY,
-      String(VOICE_ON)
+    setting.classList.toggle(
+      "on",
+      VOICE_ON
     );
 
-    updateVoiceUI();
+  }
+
+}
+
+
+/* =====================================================
+   ATTIVA / DISATTIVA VOCE
+   ===================================================== */
+
+function toggleVoice() {
+
+  VOICE_ON =
+    !VOICE_ON;
+
+  localStorage.setItem(
+    VOICE_KEY,
+    String(VOICE_ON)
+  );
+
+  updateVoiceUI();
+
+
+  if (!VOICE_ON) {
+
+    VOICE_CHAT_ACTIVE =
+      false;
+
+
+    if (voiceRecognition) {
+
+      try {
+
+        voiceRecognition.stop();
+
+      } catch {}
+
+    }
 
 
     if (
-      !VOICE_ON &&
-      "speechSynthesis" in window
+      "speechSynthesis"
+      in window
     ) {
 
       speechSynthesis.cancel();
 
     }
 
+  }
 
-    showToast(
-      VOICE_ON
-        ? "Voce attivata 🔊"
-        : "Voce disattivata 🔇"
+
+  showToast(
+    VOICE_ON
+      ? "Voce attivata 🔊"
+      : "Voce disattivata 🔇"
+  );
+
+}
+
+
+/* =====================================================
+   CONVERSAZIONE VOCALE CONTINUA
+   ===================================================== */
+
+function startVoiceChat() {
+
+  if (!VOICE_ON) {
+
+    VOICE_ON =
+      true;
+
+    localStorage.setItem(
+      VOICE_KEY,
+      "true"
     );
+
+    updateVoiceUI();
 
   }
 
 
-  function speak(text) {
-
-    if (!VOICE_ON)
-      return;
-
-    if (!text)
-      return;
-
-    if (
-      !("speechSynthesis" in window)
-    )
-      return;
+  VOICE_CHAT_ACTIVE =
+    true;
 
 
-    const u =
-      new SpeechSynthesisUtterance(
-        text
-      );
+  startMic();
 
-    u.lang =
-      "it-IT";
+}
 
-    u.rate =
-      1;
+
+/* =====================================================
+   STOP CONVERSAZIONE VOCALE
+   ===================================================== */
+
+function stopVoiceChat() {
+
+  VOICE_CHAT_ACTIVE =
+    false;
+
+
+  if (voiceRecognition) {
+
+    try {
+
+      voiceRecognition.stop();
+
+    } catch {}
+
+  }
+
+
+  if (
+    "speechSynthesis"
+    in window
+  ) {
 
     speechSynthesis.cancel();
 
-    speechSynthesis.speak(u);
+  }
+
+
+  const mic =
+    $("micBtn");
+
+  if (mic) {
+
+    mic.textContent =
+      "🎤";
 
   }
+
+
+  showToast(
+    "Conversazione vocale terminata"
+  );
+
+}
+
+
+/* =====================================================
+   MICROFONO
+   ===================================================== */
+
+function startMic() {
+
+  if (
+    !(
+      "webkitSpeechRecognition"
+      in window
+    )
+  ) {
+
+    alert(
+      "Il microfono non è supportato su questo browser."
+    );
+
+    VOICE_CHAT_ACTIVE =
+      false;
+
+    return;
+
+  }
+
+
+  /*
+     Se stiamo già ascoltando,
+     non creare un secondo riconoscimento.
+  */
+
+  if (voiceRecognition) {
+
+    try {
+
+      voiceRecognition.stop();
+
+    } catch {}
+
+  }
+
+
+  const recognition =
+    new webkitSpeechRecognition();
+
+
+  voiceRecognition =
+    recognition;
+
+
+  recognition.lang =
+    "it-IT";
+
+
+  recognition.interimResults =
+    false;
+
+
+  /*
+     Una frase alla volta.
+     Dopo la risposta di Bob
+     verrà riavviato automaticamente.
+  */
+
+  recognition.continuous =
+    false;
+
+
+  const mic =
+    $("micBtn");
+
+  if (mic) {
+
+    mic.textContent =
+      "🔴";
+
+  }
+
+
+  recognition.onresult =
+    function(event) {
+
+      const text =
+        event
+          .results[0][0]
+          .transcript
+          .trim();
+
+
+      if (!text) {
+
+        return;
+
+      }
+
+
+      const input =
+        $("input");
+
+      if (input) {
+
+        input.value =
+          text;
+
+        autoResize();
+
+      }
+
+
+      /*
+         Invia automaticamente la domanda.
+      */
+
+      sendMessage();
+
+    };
+
+
+  recognition.onerror =
+    function(event) {
+
+      console.log(
+        "VOICE ERROR:",
+        event
+      );
+
+
+      /*
+         Se la modalità continua è attiva,
+         non mostriamo un errore ogni volta.
+      */
+
+      if (
+        VOICE_CHAT_ACTIVE
+      ) {
+
+        if (
+          event &&
+          (
+            event.error ===
+              "not-allowed" ||
+
+            event.error ===
+              "service-not-allowed"
+          )
+        ) {
+
+          VOICE_CHAT_ACTIVE =
+            false;
+
+          showToast(
+            "Permesso microfono necessario 🎤"
+          );
+
+        }
+
+      } else {
+
+        showToast(
+          "Microfono non disponibile"
+        );
+
+      }
+
+    };
+
+
+  recognition.onend =
+    function() {
+
+      /*
+         Non spegnere la modalità continua.
+         Bob deve poter rispondere prima
+         di riattivare il microfono.
+      */
+
+      if (!VOICE_CHAT_ACTIVE) {
+
+        if (mic) {
+
+          mic.textContent =
+            "🎤";
+
+        }
+
+      }
+
+    };
+
+
+  try {
+
+    recognition.start();
+
+
+    showToast(
+      "Parla ora 🎤"
+    );
+
+
+  } catch (error) {
+
+    console.log(
+      "VOICE START ERROR:",
+      error
+    );
+
+
+    if (mic) {
+
+      mic.textContent =
+        "🎤";
+
+    }
+
+  }
+
+}
+
+
+/* =====================================================
+   VOCE DI BOB
+   ===================================================== */
+
+function speak(text) {
+
+  if (!VOICE_ON)
+    return;
+
+  if (!text)
+    return;
+
+  if (!("speechSynthesis" in window))
+    return;
+
+  const u =
+    new SpeechSynthesisUtterance(text);
+
+  u.lang = "it-IT";
+  u.rate = 1;
+
+  speechSynthesis.cancel();
+
+  u.onend = function() {
+
+    if (
+      VOICE_CHAT_ACTIVE &&
+      VOICE_ON
+    ) {
+
+      setTimeout(
+        function() {
+          startMic();
+        },
+        400
+      );
+
+    }
+
+  };
+
+  u.onerror = function() {
+
+    console.log(
+      "SPEECH SYNTHESIS ERROR"
+    );
+
+  };
+
+  speechSynthesis.speak(u);
+
+}
+
 
 
   /* =====================================================
