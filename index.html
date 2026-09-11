@@ -246,18 +246,23 @@
     }
 
     .chat-input {
-      width: 100%;
-      min-height: 58px;
-      padding: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+  width: 100%;
+  min-height: 58px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 
-      text-decoration: none;
+  text-decoration: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
 
-      background: #151b23;
-      border: 1px solid rgba(255,255,255,0.09);
-      border-radius: 18px;
+  background: #151b23;
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 18px;
 
       box-shadow: 0 10px 35px rgba(0,0,0,0.22);
 
@@ -577,26 +582,29 @@
       </section>
 
 
-           <!-- START CHAT -->
+          <!-- START CHAT -->
 
-      <div class="start-chat">
+<div class="start-chat">
 
-        <a href="chat.html" class="chat-input">
+  <button
+    type="button"
+    class="chat-input"
+    onclick="window.location.href='chat.html';"
+  >
 
-          <span class="plus">＋</span>
+    <span class="plus">＋</span>
 
-          <span class="placeholder" onclick="window.location.href='chat.html';">
-  Scrivi un messaggio...
-</span>
+    <span class="placeholder">
+      Scrivi un messaggio...
+    </span>
 
-          <span class="mic">🎤</span>
+    <span class="mic">🎤</span>
 
-          <span class="send">➤</span>
+    <span class="send">➤</span>
 
-        </a>
+  </button>
 
-      </div>
-
+</div>
 
       <!-- FEATURES -->
 
