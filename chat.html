@@ -2067,23 +2067,22 @@ function toggleTools(){
   // =====================================================
 
   $("photo")
-    .addEventListener(
-      "change",
-      () => {
+  .addEventListener(
+    "change",
+    () => {
 
-        const file =
-          $("photo")
-            .files &&
-          $("photo")
-            .files[0];
+      const file =
+        $("photo")
+          .files &&
+        $("photo")
+          .files[0];
 
-
-        $("photoBtn")
-          .disabled =
-          !file;
-
+      if(file){
+        sendPhoto();
       }
-    );
+
+    }
+  );
 
 function openPhotoPicker(){
 
