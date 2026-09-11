@@ -264,158 +264,30 @@
       align-items:flex-end;
     }
 
-    .msg.ai{
-      align-items:flex-start;
-    }
-
-    .message-line{
-      display:flex;
-      align-items:flex-start;
-      gap:9px;
-
-      max-width:92%;
-    }
-
     .avatar{
-      flex:0 0 32px;
+  flex:0 0 32px;
 
-      width:32px;
-      height:32px;
+  width:32px;
+  height:32px;
 
-      display:flex;
-      align-items:center;
-      justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-      border-radius:11px;
+  border-radius:11px;
 
-      background:
-        linear-gradient(
-          135deg,
-          #38bdf8,
-          #6366f1
-        );
+  background:
+    linear-gradient(
+      135deg,
+      #19c37d,
+      #0f9f68
+    );
 
-      font-size:16px;
+  font-size:16px;
 
-      box-shadow:
-        0 5px 18px rgba(56,189,248,.18);
-    }
-
-    .bubble{
-      max-width:calc(100% - 40px);
-
-      padding:13px 15px;
-
-      border-radius:18px;
-
-      background:
-        linear-gradient(
-          145deg,
-          #121b2d,
-          #0d1525
-        );
-
-      border:
-        1px solid rgba(255,255,255,.07);
-
-      color:#e5e7eb;
-
-      white-space:pre-wrap;
-
-      line-height:1.5;
-
-      font-size:15px;
-
-      box-shadow:
-        0 8px 25px rgba(0,0,0,.15);
-    }
-
-    .msg.user .message-line{
-      justify-content:flex-end;
-    }
-
-    .msg.user .bubble{
-      max-width:82%;
-
-      background:
-        linear-gradient(
-          135deg,
-          #0ea5e9,
-          #2563eb
-        );
-
-      border-color:rgba(255,255,255,.12);
-
-      color:#fff;
-
-      border-bottom-right-radius:6px;
-    }
-
-    .msg.ai .bubble{
-      border-bottom-left-radius:6px;
-    }
-
-    /* =========================
-       MESSAGE ACTIONS
-       ========================= */
-
-    .message-actions{
-      display:flex;
-
-      align-items:center;
-
-      gap:6px;
-
-      margin-top:8px;
-
-      margin-left:41px;
-
-      flex-wrap:wrap;
-    }
-
-    .message-action{
-      appearance:none;
-
-      border:1px solid rgba(255,255,255,.08);
-
-      background:rgba(15,23,42,.75);
-
-      color:#94a3b8;
-
-      border-radius:10px;
-
-      padding:6px 9px;
-
-      font-size:11px;
-
-      font-weight:600;
-
-      cursor:pointer;
-
-      transition:
-        transform .18s ease,
-        background .18s ease,
-        border-color .18s ease,
-        color .18s ease;
-    }
-
-    .message-action:hover{
-      transform:translateY(-1px);
-
-      background:#172033;
-
-      border-color:#38bdf8;
-
-      color:#fff;
-    }
-
-    .message-action.active{
-      background:#172033;
-
-      border-color:#38bdf8;
-
-      color:#fff;
-    }
+  box-shadow:
+    0 5px 18px rgba(25,195,125,.20);
+}
 
     /* =========================
        TYPING
@@ -1621,21 +1493,20 @@ function toggleTools(){
         .innerHTML =
         "";
 
-      add(
-        "ai",
-        "Ciao 👋 Sono ChatAI Bob. Come posso aiutarti?"
-      );
+     add(
+  "ai",
+  "Ciao 👋 Sono Bob. Come posso aiutarti?"
+);
 
-      speak(
-        "Ciao, sono ChatAI Bob. Come posso aiutarti?"
-      );
+speak(
+  "Ciao, sono Bob. Come posso aiutarti?"
+);
 
-    };
+};
 
 
-  // =====================================================
-  // ENTER
-  // =====================================================
+// =====================================================
+// ENTER
 
   $("input")
     .addEventListener(
@@ -2350,9 +2221,9 @@ function openPhotoPicker(){
   // =====================================================
 
   add(
-    "ai",
-    "Ciao 👋 Sono ChatAI Bob. Scrivi pure."
-  );
+  "ai",
+  "Ciao 👋 Sono Bob. Come posso aiutarti oggi?"
+);
 
 
   checkBackend();
