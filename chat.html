@@ -64,33 +64,32 @@
        HEADER
        ========================= */
 
-    .top{
-      position:sticky;
-      top:0;
-      z-index:50;
+   .top{
+  position:sticky;
+  top:0;
+  z-index:50;
 
-      width:100%;
+  width:100%;
 
-      padding:
-        calc(12px + env(safe-area-inset-top))
-        16px
-        12px;
+  padding:
+    calc(12px + env(safe-area-inset-top))
+    16px
+    12px;
 
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
+  display:flex;
+  align-items:center;
+  gap:12px;
 
-      background:rgba(5,9,18,.88);
+  background:rgba(11,15,20,.92);
 
-      backdrop-filter:blur(18px);
-      -webkit-backdrop-filter:blur(18px);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
 
-      border-bottom:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(255,255,255,.08);
 
-      box-shadow:
-        0 8px 30px rgba(0,0,0,.25);
-    }
-
+  box-shadow:
+    0 8px 30px rgba(0,0,0,.25);
+}
     .brand{
       display:flex;
       align-items:center;
@@ -165,7 +164,35 @@
       box-shadow:
         0 0 10px rgba(34,197,94,.8);
     }
+.menu-btn{
+  width:40px;
+  height:40px;
 
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+
+  background:#151b23;
+  color:#f4f7fb;
+
+  font-size:22px;
+  cursor:pointer;
+
+  transition:
+    background .2s ease,
+    transform .2s ease;
+}
+
+.menu-btn:hover{
+  background:#1d262f;
+}
+
+.menu-btn:active{
+  transform:scale(.94);
+}
     /* =========================
        MAIN
        ========================= */
@@ -864,40 +891,44 @@
 
   <!-- HEADER -->
 
-  <div class="top">
+<div class="top">
 
-    <div class="brand">
+  <button
+    class="menu-btn"
+    type="button"
+    onclick="toggleSideMenu()"
+    aria-label="Menu"
+  >
+    ☰
+  </button>
 
-      <div class="logo">
-        🤖
-      </div>
+  <div class="brand">
 
-      <div class="brand-text">
-
-        <div class="brand-title">
-          ChatAI Bob
-        </div>
-
-        <div class="brand-subtitle">
-          Il tuo assistente AI
-        </div>
-
-      </div>
-
+    <div class="logo">
+      🤖
     </div>
 
-    <div class="status">
+    <div class="brand-text">
 
-      <span class="status-dot"></span>
-
-      <span id="status">
-        Controllo...
-      </span>
+      <div class="brand-title">
+        Bob World
+      </div>
 
     </div>
 
   </div>
 
+  <div class="status">
+
+    <span class="status-dot"></span>
+
+    <span id="status">
+      Online
+    </span>
+
+  </div>
+
+</div>
 
   <!-- CONTENUTO -->
 
