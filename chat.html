@@ -2085,7 +2085,15 @@ function toggleTools(){
       }
     );
 
+function openPhotoPicker(){
 
+  const fileInput =
+    $("photo");
+
+  if(!fileInput) return;
+
+  fileInput.click();
+}
   async function sendPhoto(){
 
     const fileInput =
