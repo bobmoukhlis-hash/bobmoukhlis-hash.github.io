@@ -1188,45 +1188,117 @@
   ></div>
 
   <aside
-    class="side-menu"
-    id="sideMenu"
-  >
+  class="side-menu"
+  id="sideMenu"
+>
 
-    <div class="side-menu-header">
+  <div class="side-menu-header">
 
-      <div class="side-menu-title">
-        💬 Conversazioni
-      </div>
-
-      <button
-        class="close-menu"
-        type="button"
-        onclick="closeSideMenu()"
-        aria-label="Chiudi menu"
-      >
-        ×
-      </button>
-
+    <div class="side-menu-title">
+      🤖 Bob World
     </div>
 
     <button
-      class="new-chat-btn"
+      class="close-menu"
       type="button"
-      onclick="newConversation()"
+      onclick="closeSideMenu()"
+      aria-label="Chiudi menu"
     >
-      ＋ Nuova chat
+      ×
     </button>
 
-    <div class="conversations-title">
-      Le tue chat
-    </div>
+  </div>
 
-    <div
-      class="conversation-list"
-      id="conversationList"
-    ></div>
 
-  </aside>
+  <button
+    class="new-chat-btn"
+    type="button"
+    onclick="newConversation()"
+  >
+    ＋ Nuova chat
+  </button>
+
+
+  <div class="conversations-title">
+    Le tue chat
+  </div>
+
+
+  <div
+    class="conversation-list"
+    id="conversationList"
+  ></div>
+
+
+  <div class="menu-section-title">
+    Bob World
+  </div>
+
+
+  <button
+    class="menu-item"
+    type="button"
+    onclick="openBobSection('images')"
+  >
+    <span class="menu-item-icon">🖼️</span>
+    <span>Le mie immagini</span>
+  </button>
+
+
+  <button
+    class="menu-item"
+    type="button"
+    onclick="openBobSection('files')"
+  >
+    <span class="menu-item-icon">📁</span>
+    <span>I miei file</span>
+  </button>
+
+
+  <button
+    class="menu-item"
+    type="button"
+    onclick="openBobSection('videos')"
+  >
+    <span class="menu-item-icon">🎬</span>
+    <span>I miei video</span>
+  </button>
+
+
+  <button
+    class="menu-item"
+    type="button"
+    onclick="openBobSection('credits')"
+  >
+    <span class="menu-item-icon">💎</span>
+    <span>I miei crediti</span>
+  </button>
+
+
+  <button
+    class="menu-item"
+    type="button"
+    onclick="openBobSection('settings')"
+  >
+    <span class="menu-item-icon">⚙️</span>
+    <span>Impostazioni</span>
+  </button>
+
+
+  <div class="menu-divider"></div>
+
+
+  <a
+    class="menu-item menu-support"
+    href="https://www.paypal.me/bobbob1979"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <span class="menu-item-icon">❤️</span>
+    <span>Supporta Bob</span>
+  </a>
+
+</aside>
 
 
   <!-- =========================
