@@ -931,25 +931,29 @@
         rgba(25,195,125,.08);
     }
 
-    input[type="text"]{
-      flex:1;
+   input[type="text"]{
+  flex:1;
+  width:100%;
+  min-height:42px;
+  background:transparent;
+  color:#fff;
+  border:0;
+  outline:none;
+  padding:10px 8px;
+  font-size:14px;
 
-      width:100%;
+  position:relative;
+  z-index:30;
+  pointer-events:auto;
+  touch-action:manipulation;
+  cursor:text;
+  -webkit-user-select:text;
+  user-select:text;
+}
 
-      min-height:42px;
-
-      background:transparent;
-
-      color:#fff;
-
-      border:0;
-
-      outline:none;
-
-      padding:10px 8px;
-
-      font-size:14px;
-    }
+input[type="text"]::placeholder{
+  color:#64748b;
+}
 
     input[type="text"]::placeholder{
       color:#64748b;
@@ -1791,12 +1795,14 @@
 
 
           <input
-            id="input"
-            type="text"
-            placeholder="Scrivi a Bob..."
-            autocomplete="off"
-            enterkeyhint="send"
-          >
+  id="input"
+  type="text"
+  placeholder="Scrivi un messaggio..."
+  autocomplete="off"
+  enterkeyhint="send"
+  onclick="this.focus()"
+  ontouchstart="this.focus()"
+>
 
 
           <button
