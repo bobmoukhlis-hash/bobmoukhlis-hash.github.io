@@ -767,6 +767,181 @@
     0 0 0 2px rgba(25,195,125,.06);
 }
     /* =========================
+   SIDE MENU - CONVERSAZIONI
+   ========================= */
+
+.side-menu{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:200;
+
+  width:290px;
+  max-width:85vw;
+  height:100vh;
+
+  padding:
+    calc(18px + env(safe-area-inset-top))
+    14px
+    calc(18px + env(safe-area-inset-bottom));
+
+  background:#0b111c;
+
+  border-right:1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    15px 0 45px rgba(0,0,0,.40);
+
+  transform:translateX(-105%);
+  transition:transform .25s ease;
+
+  overflow-y:auto;
+}
+
+.side-menu.show{
+  transform:translateX(0);
+}
+
+.side-menu-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:18px;
+}
+
+.side-menu-title{
+  font-size:17px;
+  font-weight:800;
+}
+
+.close-menu{
+  width:38px;
+  height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:11px;
+
+  background:#151b23;
+  color:#fff;
+
+  font-size:20px;
+  cursor:pointer;
+}
+
+.new-chat-btn{
+  width:100%;
+
+  padding:11px 13px;
+
+  border:1px solid rgba(25,195,125,.35);
+  border-radius:12px;
+
+  background:rgba(25,195,125,.12);
+  color:#19c37d;
+
+  font-size:13px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  margin-bottom:15px;
+}
+
+.new-chat-btn:hover{
+  background:rgba(25,195,125,.20);
+}
+
+.conversations-title{
+  margin:8px 4px;
+
+  color:#64748b;
+
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.conversation-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.conversation-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  width:100%;
+
+  padding:10px;
+
+  border:1px solid transparent;
+  border-radius:11px;
+
+  background:transparent;
+  color:#cbd5e1;
+
+  cursor:pointer;
+
+  text-align:left;
+}
+
+.conversation-item:hover{
+  background:#151b23;
+}
+
+.conversation-item.active{
+  background:#17231f;
+  border-color:rgba(25,195,125,.25);
+}
+
+.conversation-name{
+  flex:1;
+
+  overflow:hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+
+  font-size:12px;
+}
+
+.delete-conversation{
+  flex:0 0 auto;
+
+  border:0;
+  background:transparent;
+
+  color:#64748b;
+
+  cursor:pointer;
+
+  font-size:14px;
+}
+
+.delete-conversation:hover{
+  color:#ef4444;
+}
+
+.menu-overlay{
+  display:none;
+
+  position:fixed;
+  inset:0;
+  z-index:150;
+
+  background:rgba(0,0,0,.48);
+}
+
+.menu-overlay.show{
+  display:block;
+}
+    /* =========================
        MOBILE
        ========================= */
 
@@ -839,6 +1014,39 @@
 </head>
 
 <body>
+
+<div class="menu-overlay" id="menuOverlay" onclick="toggleSideMenu()"></div>
+
+<aside class="side-menu" id="sideMenu">
+  <div class="side-menu-header">
+    <div class="side-menu-title">💬 Conversazioni</div>
+
+    <button
+      class="close-menu"
+      type="button"
+      onclick="toggleSideMenu()"
+    >
+      ×
+    </button>
+  </div>
+
+  <button
+    class="new-chat-btn"
+    type="button"
+    onclick="newConversation()"
+  >
+    ＋ Nuova chat
+  </button>
+
+  <div class="conversations-title">
+    Le tue chat
+  </div>
+
+  <div
+    class="conversation-list"
+    id="conversationList"
+  ></div>
+</aside>
 
 <div class="app">
 
