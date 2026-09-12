@@ -696,7 +696,76 @@
 
       transform:translate(-50%,0);
     }
+/* =========================
+   MESSAGE ACTIONS
+   ========================= */
 
+.message-actions{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+
+  margin-top:8px;
+  margin-left:42px;
+}
+
+.message-action{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  min-height:32px;
+
+  padding:7px 10px;
+
+  border-radius:10px;
+
+  border:1px solid rgba(255,255,255,.08);
+
+  background:#111827;
+
+  color:#94a3b8;
+
+  font-family:inherit;
+  font-size:11px;
+  line-height:1;
+
+  cursor:pointer;
+
+  -webkit-appearance:none;
+  appearance:none;
+
+  user-select:none;
+  -webkit-user-select:none;
+
+  touch-action:manipulation;
+
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    color .18s ease,
+    transform .12s ease;
+}
+
+.message-action:hover{
+  background:#1e293b;
+  color:#fff;
+  border-color:rgba(25,195,125,.35);
+}
+
+.message-action:active{
+  transform:scale(.95);
+}
+
+.message-action.active{
+  background:rgba(25,195,125,.16);
+  color:#19c37d;
+  border-color:rgba(25,195,125,.55);
+
+  box-shadow:
+    0 0 0 2px rgba(25,195,125,.06);
+}
     /* =========================
        MOBILE
        ========================= */
@@ -1234,39 +1303,25 @@ function focusChatInput(event){
 
 
   // =====================================================
-  // LIKE
-  // =====================================================
+// LIKE / DISLIKE
+// =====================================================
 
-  function setLike(
-    like,
-    dislike
-  ){
+function setLike(like, dislike){
 
-    like.classList.add(
-      "active"
-    );
+  like.classList.add("active");
+  dislike.classList.remove("active");
 
-    dislike.classList.remove(
-      "active"
-    );
-
-  }
+  showToast("❤️ Mi piace");
+}
 
 
-  function setDislike(
-    like,
-    dislike
-  ){
+function setDislike(like, dislike){
 
-    dislike.classList.add(
-      "active"
-    );
+  dislike.classList.add("active");
+  like.classList.remove("active");
 
-    like.classList.remove(
-      "active"
-    );
-
-  }
+  showToast("👎 Feedback ricevuto");
+}
 
 
   // =====================================================
