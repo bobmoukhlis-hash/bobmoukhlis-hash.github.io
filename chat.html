@@ -1880,23 +1880,24 @@ speak(
 // =====================================================
 // ENTER
 
-  $("input")
-    .addEventListener(
-      "keydown",
-      (e) => {
+ const bubble =
+      document.createElement(
+        "div"
+      );
 
-        if (
-          e.key ===
-          "Enter"
-        ){
+    bubble.className =
+      "bubble";
 
-          e.preventDefault();
+    bubble.textContent =
+      text || "";
 
-          sendMessage();
 
-        }
+    line.appendChild(
+      bubble
+    );
 
-      }
+    d.appendChild(
+      line
     );
 
 
