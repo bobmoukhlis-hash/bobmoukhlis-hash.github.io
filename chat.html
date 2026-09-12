@@ -1170,7 +1170,158 @@
       }
 
     }
+/* =========================
+   BOB WORLD - MENU MODERNO
+   ========================= */
 
+.menu-section-title{
+  margin:18px 4px 9px;
+  padding-left:6px;
+
+  color:#8b9cff;
+
+  font-size:11px;
+  font-weight:800;
+
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+
+
+.menu-item{
+  width:100%;
+  min-height:48px;
+
+  display:flex;
+  align-items:center;
+
+  gap:12px;
+
+  padding:10px 12px;
+  margin:5px 0;
+
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(30,41,59,.55),
+      rgba(15,23,42,.45)
+    );
+
+  color:#dbeafe;
+
+  font-family:inherit;
+  font-size:13px;
+  font-weight:600;
+
+  text-align:left;
+  text-decoration:none;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.16);
+
+  transition:
+    transform .18s ease,
+    background .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease,
+    color .18s ease;
+}
+
+
+.menu-item:hover{
+  background:
+    linear-gradient(
+      135deg,
+      rgba(59,130,246,.18),
+      rgba(139,92,246,.16)
+    );
+
+  border-color:
+    rgba(99,102,241,.35);
+
+  color:#ffffff;
+
+  box-shadow:
+    0 6px 20px rgba(59,130,246,.12);
+}
+
+
+.menu-item:active{
+  transform:scale(.97);
+}
+
+
+.menu-item-icon{
+  width:30px;
+  height:30px;
+
+  flex:0 0 30px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:9px;
+
+  background:
+    rgba(59,130,246,.12);
+
+  font-size:17px;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.04);
+}
+
+
+.menu-support{
+  color:#fda4af;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(244,63,94,.10),
+      rgba(190,24,93,.08)
+    );
+}
+
+
+.menu-support:hover{
+  color:#fff;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(244,63,94,.20),
+      rgba(190,24,93,.16)
+    );
+
+  border-color:
+    rgba(244,63,94,.30);
+
+  box-shadow:
+    0 6px 20px rgba(244,63,94,.12);
+}
+
+
+.menu-divider{
+  height:1px;
+
+  margin:
+    16px 5px 10px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(148,163,184,.18),
+      transparent
+    );
+}
   </style>
 
 </head>
