@@ -1530,26 +1530,28 @@ function setDislike(like, dislike, message){
         "🔗 Condividi";
 
 
-      like.onclick =
-        () => {
+     like.onclick =
+  () => {
 
-          setLike(
-            like,
-            dislike
-          );
+    setLike(
+      like,
+      dislike,
+      text
+    );
 
-        };
+  };
 
 
-      dislike.onclick =
-        () => {
+dislike.onclick =
+  () => {
 
-          setDislike(
-            like,
-            dislike
-          );
+    setDislike(
+      like,
+      dislike,
+      text
+    );
 
-        };
+  };
 
 
       copy.onclick =
