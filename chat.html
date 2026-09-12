@@ -903,6 +903,9 @@
        ========================= */
 
     .input-box{
+      position:relative;
+      z-index:100;
+
       display:flex;
 
       align-items:center;
@@ -1778,8 +1781,7 @@ input[type="text"]::placeholder{
         <!-- TOOLBAR -->
 
         <div
-          class="input-box"
-          onclick="focusChatInput(event)"
+          <div class="input-box">
         >
 
           <button
@@ -1802,7 +1804,6 @@ input[type="text"]::placeholder{
   enterkeyhint="send"
   inputmode="text"
   autocapitalize="sentences"
-  onclick="this.focus()"
 >
 
 
