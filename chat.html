@@ -459,6 +459,154 @@
     }
 
     /* =========================
+       BOB WORLD MENU
+       ========================= */
+
+    .menu-section-title{
+      margin:18px 4px 9px;
+      padding-left:6px;
+
+      color:#8b9cff;
+
+      font-size:11px;
+      font-weight:800;
+
+      text-transform:uppercase;
+      letter-spacing:1px;
+    }
+
+    .menu-item{
+      width:100%;
+      min-height:48px;
+
+      display:flex;
+      align-items:center;
+
+      gap:12px;
+
+      padding:10px 12px;
+      margin:5px 0;
+
+      border:
+        1px solid rgba(255,255,255,.06);
+
+      border-radius:13px;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(30,41,59,.55),
+          rgba(15,23,42,.45)
+        );
+
+      color:#dbeafe;
+
+      font-family:inherit;
+      font-size:13px;
+      font-weight:600;
+
+      text-align:left;
+      text-decoration:none;
+
+      cursor:pointer;
+
+      box-shadow:
+        0 4px 14px rgba(0,0,0,.16);
+
+      transition:
+        transform .18s ease,
+        background .18s ease,
+        border-color .18s ease,
+        box-shadow .18s ease,
+        color .18s ease;
+    }
+
+    .menu-item:hover{
+      background:
+        linear-gradient(
+          135deg,
+          rgba(59,130,246,.18),
+          rgba(139,92,246,.16)
+        );
+
+      border-color:
+        rgba(99,102,241,.35);
+
+      color:#ffffff;
+
+      box-shadow:
+        0 6px 20px rgba(59,130,246,.12);
+    }
+
+    .menu-item:active{
+      transform:scale(.97);
+    }
+
+    .menu-item-icon{
+      width:30px;
+      height:30px;
+
+      flex:0 0 30px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:9px;
+
+      background:
+        rgba(59,130,246,.12);
+
+      font-size:17px;
+
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    .menu-support{
+      color:#fda4af;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(244,63,94,.10),
+          rgba(190,24,93,.08)
+        );
+    }
+
+    .menu-support:hover{
+      color:#fff;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(244,63,94,.20),
+          rgba(190,24,93,.16)
+        );
+
+      border-color:
+        rgba(244,63,94,.30);
+
+      box-shadow:
+        0 6px 20px rgba(244,63,94,.12);
+    }
+
+    .menu-divider{
+      height:1px;
+
+      margin:
+        16px 5px 10px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(148,163,184,.18),
+          transparent
+        );
+    }
+
+    /* =========================
        MAIN
        ========================= */
 
@@ -1092,6 +1240,263 @@
     }
 
     /* =========================
+       BOB CREDITS MODAL
+       ========================= */
+
+    .credits-modal{
+      position:fixed;
+
+      inset:0;
+
+      z-index:9999;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      padding:20px;
+
+      background:
+        rgba(0,0,0,.68);
+
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+
+    .credits-box{
+      width:100%;
+      max-width:390px;
+
+      padding:22px;
+
+      border:
+        1px solid rgba(255,255,255,.10);
+
+      border-radius:22px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #111827,
+          #0b1220
+        );
+
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.45);
+
+      color:#fff;
+
+      animation:
+        creditsIn .20s ease;
+    }
+
+    @keyframes creditsIn{
+
+      from{
+        opacity:0;
+        transform:
+          translateY(10px)
+          scale(.97);
+      }
+
+      to{
+        opacity:1;
+        transform:
+          translateY(0)
+          scale(1);
+      }
+
+    }
+
+    .credits-header{
+      display:flex;
+
+      align-items:center;
+      justify-content:space-between;
+
+      margin-bottom:20px;
+    }
+
+    .credits-title{
+      font-size:20px;
+      font-weight:800;
+    }
+
+    .credits-close{
+      width:36px;
+      height:36px;
+
+      display:flex;
+
+      align-items:center;
+      justify-content:center;
+
+      border:0;
+
+      border-radius:10px;
+
+      background:
+        rgba(255,255,255,.07);
+
+      color:#cbd5e1;
+
+      font-size:22px;
+
+      cursor:pointer;
+    }
+
+    .credits-close:hover{
+      background:
+        rgba(255,255,255,.12);
+
+      color:#fff;
+    }
+
+    .credits-balance{
+      padding:22px;
+
+      border-radius:18px;
+
+      text-align:center;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(59,130,246,.18),
+          rgba(139,92,246,.18)
+        );
+
+      border:
+        1px solid rgba(99,102,241,.25);
+    }
+
+    .credits-balance-label{
+      color:#94a3b8;
+
+      font-size:12px;
+
+      margin-bottom:6px;
+    }
+
+    .credits-number{
+      font-size:42px;
+
+      font-weight:900;
+
+      background:
+        linear-gradient(
+          90deg,
+          #60a5fa,
+          #a78bfa
+        );
+
+      -webkit-background-clip:text;
+      background-clip:text;
+
+      color:transparent;
+    }
+
+    .credits-unit{
+      color:#cbd5e1;
+
+      font-size:13px;
+
+      margin-top:2px;
+    }
+
+    .credits-info{
+      display:grid;
+
+      grid-template-columns:
+        1fr 1fr;
+
+      gap:10px;
+
+      margin-top:14px;
+    }
+
+    .credits-stat{
+      padding:12px;
+
+      border-radius:12px;
+
+      background:
+        rgba(255,255,255,.05);
+
+      text-align:center;
+    }
+
+    .credits-stat strong{
+      display:block;
+
+      font-size:18px;
+
+      color:#e2e8f0;
+    }
+
+    .credits-stat span{
+      color:#64748b;
+
+      font-size:11px;
+    }
+
+    .credits-actions{
+      margin-top:18px;
+    }
+
+    .credits-action{
+      width:100%;
+
+      min-height:46px;
+
+      margin-top:9px;
+
+      border:
+        1px solid rgba(255,255,255,.08);
+
+      border-radius:12px;
+
+      background:
+        rgba(255,255,255,.05);
+
+      color:#e2e8f0;
+
+      font-family:inherit;
+
+      font-size:13px;
+
+      font-weight:700;
+
+      cursor:pointer;
+
+      transition:.18s ease;
+    }
+
+    .credits-action:hover{
+      background:
+        rgba(59,130,246,.14);
+
+      border-color:
+        rgba(99,102,241,.30);
+
+      transform:
+        translateY(-1px);
+    }
+
+    .credits-note{
+      margin-top:15px;
+
+      color:#64748b;
+
+      font-size:10px;
+
+      line-height:1.5;
+
+      text-align:center;
+    }
+
+    /* =========================
        MOBILE
        ========================= */
 
@@ -1169,159 +1574,13 @@
         width:285px;
       }
 
+      .credits-box{
+        max-width:100%;
+        padding:18px;
+      }
+
     }
-/* =========================
-   BOB WORLD - MENU MODERNO
-   ========================= */
 
-.menu-section-title{
-  margin:18px 4px 9px;
-  padding-left:6px;
-
-  color:#8b9cff;
-
-  font-size:11px;
-  font-weight:800;
-
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-
-.menu-item{
-  width:100%;
-  min-height:48px;
-
-  display:flex;
-  align-items:center;
-
-  gap:12px;
-
-  padding:10px 12px;
-  margin:5px 0;
-
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:13px;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(30,41,59,.55),
-      rgba(15,23,42,.45)
-    );
-
-  color:#dbeafe;
-
-  font-family:inherit;
-  font-size:13px;
-  font-weight:600;
-
-  text-align:left;
-  text-decoration:none;
-
-  cursor:pointer;
-
-  box-shadow:
-    0 4px 14px rgba(0,0,0,.16);
-
-  transition:
-    transform .18s ease,
-    background .18s ease,
-    border-color .18s ease,
-    box-shadow .18s ease,
-    color .18s ease;
-}
-
-
-.menu-item:hover{
-  background:
-    linear-gradient(
-      135deg,
-      rgba(59,130,246,.18),
-      rgba(139,92,246,.16)
-    );
-
-  border-color:
-    rgba(99,102,241,.35);
-
-  color:#ffffff;
-
-  box-shadow:
-    0 6px 20px rgba(59,130,246,.12);
-}
-
-
-.menu-item:active{
-  transform:scale(.97);
-}
-
-
-.menu-item-icon{
-  width:30px;
-  height:30px;
-
-  flex:0 0 30px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border-radius:9px;
-
-  background:
-    rgba(59,130,246,.12);
-
-  font-size:17px;
-
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.04);
-}
-
-
-.menu-support{
-  color:#fda4af;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(244,63,94,.10),
-      rgba(190,24,93,.08)
-    );
-}
-
-
-.menu-support:hover{
-  color:#fff;
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(244,63,94,.20),
-      rgba(190,24,93,.16)
-    );
-
-  border-color:
-    rgba(244,63,94,.30);
-
-  box-shadow:
-    0 6px 20px rgba(244,63,94,.12);
-}
-
-
-.menu-divider{
-  height:1px;
-
-  margin:
-    16px 5px 10px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(148,163,184,.18),
-      transparent
-    );
-}
   </style>
 
 </head>
@@ -1338,118 +1597,119 @@
     onclick="closeSideMenu()"
   ></div>
 
+
   <aside
-  class="side-menu"
-  id="sideMenu"
->
+    class="side-menu"
+    id="sideMenu"
+  >
 
-  <div class="side-menu-header">
+    <div class="side-menu-header">
 
-    <div class="side-menu-title">
-      🤖 Bob World
+      <div class="side-menu-title">
+        🤖 Bob World
+      </div>
+
+      <button
+        class="close-menu"
+        type="button"
+        onclick="closeSideMenu()"
+        aria-label="Chiudi menu"
+      >
+        ×
+      </button>
+
     </div>
 
+
     <button
-      class="close-menu"
+      class="new-chat-btn"
       type="button"
-      onclick="closeSideMenu()"
-      aria-label="Chiudi menu"
+      onclick="newConversation()"
     >
-      ×
+      ＋ Nuova chat
     </button>
 
-  </div>
+
+    <div class="conversations-title">
+      Le tue chat
+    </div>
 
 
-  <button
-    class="new-chat-btn"
-    type="button"
-    onclick="newConversation()"
-  >
-    ＋ Nuova chat
-  </button>
+    <div
+      class="conversation-list"
+      id="conversationList"
+    ></div>
 
 
-  <div class="conversations-title">
-    Le tue chat
-  </div>
+    <div class="menu-section-title">
+      Bob World
+    </div>
 
 
-  <div
-    class="conversation-list"
-    id="conversationList"
-  ></div>
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openBobSection('images')"
+    >
+      <span class="menu-item-icon">🖼️</span>
+      <span>Le mie immagini</span>
+    </button>
 
 
-  <div class="menu-section-title">
-    Bob World
-  </div>
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openBobSection('files')"
+    >
+      <span class="menu-item-icon">📁</span>
+      <span>I miei file</span>
+    </button>
 
 
-  <button
-    class="menu-item"
-    type="button"
-    onclick="openBobSection('images')"
-  >
-    <span class="menu-item-icon">🖼️</span>
-    <span>Le mie immagini</span>
-  </button>
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openBobSection('videos')"
+    >
+      <span class="menu-item-icon">🎬</span>
+      <span>I miei video</span>
+    </button>
 
 
-  <button
-    class="menu-item"
-    type="button"
-    onclick="openBobSection('files')"
-  >
-    <span class="menu-item-icon">📁</span>
-    <span>I miei file</span>
-  </button>
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openBobSection('credits')"
+    >
+      <span class="menu-item-icon">💎</span>
+      <span>I miei crediti</span>
+    </button>
 
 
-  <button
-    class="menu-item"
-    type="button"
-    onclick="openBobSection('videos')"
-  >
-    <span class="menu-item-icon">🎬</span>
-    <span>I miei video</span>
-  </button>
+    <button
+      class="menu-item"
+      type="button"
+      onclick="openBobSection('settings')"
+    >
+      <span class="menu-item-icon">⚙️</span>
+      <span>Impostazioni</span>
+    </button>
 
 
-  <button
-    class="menu-item"
-    type="button"
-    onclick="openBobSection('credits')"
-  >
-    <span class="menu-item-icon">💎</span>
-    <span>I miei crediti</span>
-  </button>
+    <div class="menu-divider"></div>
 
 
-  <button
-    class="menu-item"
-    type="button"
-    onclick="openBobSection('settings')"
-  >
-    <span class="menu-item-icon">⚙️</span>
-    <span>Impostazioni</span>
-  </button>
+    <a
+      class="menu-item menu-support"
+      href="https://www.paypal.me/bobbob1979"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <span class="menu-item-icon">❤️</span>
+      <span>Supporta Bob</span>
+    </a>
 
-
-  <div class="menu-divider"></div>
-
-
-  <a
-    class="menu-item menu-support"
-    href="https://www.paypal.me/bobbob1979"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <span class="menu-item-icon">❤️</span>
-    <span>Supporta Bob</span>
-  </a>
-
-</aside>
+  </aside>
 
 
   <!-- =========================
@@ -1471,6 +1731,7 @@
         ☰
       </button>
 
+
       <div class="brand">
 
         <div class="logo">
@@ -1486,6 +1747,7 @@
         </div>
 
       </div>
+
 
       <div class="status">
 
@@ -1527,6 +1789,7 @@
             ＋
           </button>
 
+
           <input
             id="input"
             type="text"
@@ -1534,6 +1797,7 @@
             autocomplete="off"
             enterkeyhint="send"
           >
+
 
           <button
             class="icon-btn"
@@ -1545,6 +1809,7 @@
           >
             🎤
           </button>
+
 
           <button
             class="icon-btn send-btn"
@@ -1575,6 +1840,7 @@
             🗑️ Pulisci
           </button>
 
+
           <button
             class="tool-btn"
             id="voiceToggle"
@@ -1583,6 +1849,7 @@
           >
             🔊 Voce ON
           </button>
+
 
           <button
             class="tool-btn"
@@ -1616,6 +1883,7 @@
           <span>
             Supporta ChatAI Bob ❤️
           </span>
+
 
           <a
             class="paypal-btn"
@@ -1667,6 +1935,7 @@
         "CLIENT_ID"
       );
 
+
     if(!BASE_CLIENT_ID){
 
       BASE_CLIENT_ID =
@@ -1675,6 +1944,7 @@
           .toString(36)
           .slice(2) +
         Date.now().toString(36);
+
 
       localStorage.setItem(
         "CLIENT_ID",
@@ -1710,12 +1980,15 @@
           ) || "[]"
         );
 
+
       if(
         !Array.isArray(
           conversations
         )
       ){
+
         conversations = [];
+
       }
 
     }catch{
@@ -2003,6 +2276,7 @@
 
       $("input").focus();
 
+
       showToast(
         "✨ Nuova chat"
       );
@@ -2029,11 +2303,6 @@
 
       if(!conversation)
         return;
-
-
-      const title =
-        conversation.title ||
-        "questa chat";
 
 
       conversations =
@@ -2272,16 +2541,486 @@
 
 
       if(menu){
+
         menu.classList.remove(
           "show"
         );
+
       }
 
 
       if(overlay){
+
         overlay.classList.remove(
           "show"
         );
+
+      }
+
+    }
+
+
+    // =====================================================
+    // BOB WORLD - SEZIONI MENU
+    // =====================================================
+
+    function openBobSection(section){
+
+      closeSideMenu();
+
+
+      if(section === "images"){
+
+        showToast(
+          "🖼️ Le mie immagini"
+        );
+
+
+        add(
+          "ai",
+          "🖼️ Le mie immagini\n\nLa galleria delle immagini di Bob sarà disponibile qui."
+        );
+
+
+        return;
+
+      }
+
+
+      if(section === "files"){
+
+        showToast(
+          "📁 I miei file"
+        );
+
+
+        add(
+          "ai",
+          "📁 I miei file\n\nLa gestione dei tuoi file sarà disponibile qui."
+        );
+
+
+        return;
+
+      }
+
+
+      if(section === "videos"){
+
+        showToast(
+          "🎬 I miei video"
+        );
+
+
+        add(
+          "ai",
+          "🎬 I miei video\n\nLa sezione video di Bob sarà disponibile qui."
+        );
+
+
+        return;
+
+      }
+
+
+      if(section === "credits"){
+
+        openCreditsPanel();
+
+
+        return;
+
+      }
+
+
+      if(section === "settings"){
+
+        showToast(
+          "⚙️ Impostazioni"
+        );
+
+
+        add(
+          "ai",
+          "⚙️ Impostazioni\n\nLe impostazioni di Bob saranno disponibili qui."
+        );
+
+
+        return;
+
+      }
+
+    }
+
+
+    // =====================================================
+    // BOB CREDITS
+    // =====================================================
+
+    const CREDITS_KEY =
+      "bob_world_credits";
+
+
+    const CREDITS_USED_KEY =
+      "bob_world_credits_used";
+
+
+    function getBobCredits(){
+
+      const saved =
+        localStorage.getItem(
+          CREDITS_KEY
+        );
+
+
+      if(saved === null){
+
+        localStorage.setItem(
+          CREDITS_KEY,
+          "100"
+        );
+
+
+        return 100;
+
+      }
+
+
+      const value =
+        Number(
+          saved
+        );
+
+
+      return Number.isFinite(
+        value
+      )
+        ? Math.max(
+            0,
+            value
+          )
+        : 0;
+
+    }
+
+
+    function getBobCreditsUsed(){
+
+      const saved =
+        localStorage.getItem(
+          CREDITS_USED_KEY
+        );
+
+
+      const value =
+        Number(
+          saved || 0
+        );
+
+
+      return Number.isFinite(
+        value
+      )
+        ? Math.max(
+            0,
+            value
+          )
+        : 0;
+
+    }
+
+
+    function saveBobCredits(
+      value
+    ){
+
+      const safeValue =
+        Math.max(
+          0,
+          Math.floor(
+            Number(value) || 0
+          )
+        );
+
+
+      localStorage.setItem(
+        CREDITS_KEY,
+        String(
+          safeValue
+        )
+      );
+
+
+      return safeValue;
+
+    }
+
+
+    function addBobCredits(
+      amount
+    ){
+
+      const current =
+        getBobCredits();
+
+
+      const safeAmount =
+        Math.max(
+          0,
+          Math.floor(
+            Number(amount) || 0
+          )
+        );
+
+
+      return saveBobCredits(
+        current +
+        safeAmount
+      );
+
+    }
+
+
+    function useBobCredits(
+      amount
+    ){
+
+      const safeAmount =
+        Math.max(
+          0,
+          Math.floor(
+            Number(amount) || 0
+          )
+        );
+
+
+      const current =
+        getBobCredits();
+
+
+      if(
+        current <
+        safeAmount
+      ){
+
+        showToast(
+          "💎 Crediti insufficienti"
+        );
+
+
+        return false;
+
+      }
+
+
+      saveBobCredits(
+        current -
+        safeAmount
+      );
+
+
+      const used =
+        getBobCreditsUsed();
+
+
+      localStorage.setItem(
+        CREDITS_USED_KEY,
+        String(
+          used +
+          safeAmount
+        )
+      );
+
+
+      return true;
+
+    }
+
+
+    function openCreditsPanel(){
+
+      const old =
+        document.getElementById(
+          "creditsModal"
+        );
+
+
+      if(old){
+
+        old.remove();
+
+      }
+
+
+      const credits =
+        getBobCredits();
+
+
+      const used =
+        getBobCreditsUsed();
+
+
+      const modal =
+        document.createElement(
+          "div"
+        );
+
+
+      modal.className =
+        "credits-modal";
+
+
+      modal.id =
+        "creditsModal";
+
+
+      modal.innerHTML = `
+
+        <div class="credits-box">
+
+          <div class="credits-header">
+
+            <div class="credits-title">
+              💎 I miei crediti
+            </div>
+
+            <button
+              class="credits-close"
+              type="button"
+              onclick="closeCreditsPanel()"
+              aria-label="Chiudi"
+            >
+              ×
+            </button>
+
+          </div>
+
+
+          <div class="credits-balance">
+
+            <div class="credits-balance-label">
+              Crediti disponibili
+            </div>
+
+
+            <div
+              class="credits-number"
+              id="creditsNumber"
+            >
+              ${credits}
+            </div>
+
+
+            <div class="credits-unit">
+              BOB Credits
+            </div>
+
+          </div>
+
+
+          <div class="credits-info">
+
+            <div class="credits-stat">
+
+              <strong id="creditsUsed">
+                ${used}
+              </strong>
+
+              <span>
+                Utilizzati
+              </span>
+
+            </div>
+
+
+            <div class="credits-stat">
+
+              <strong>
+                100
+              </strong>
+
+              <span>
+                Crediti iniziali
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="credits-actions">
+
+            <button
+              class="credits-action"
+              type="button"
+              onclick="showToast('💳 Acquisto crediti: in preparazione')"
+            >
+              💳 Acquista crediti
+            </button>
+
+
+            <button
+              class="credits-action"
+              type="button"
+              onclick="showToast('🤖 I crediti saranno usati per le funzioni AI')"
+            >
+              🤖 Come usare i crediti
+            </button>
+
+          </div>
+
+
+          <div class="credits-note">
+
+            Hai 100 crediti iniziali.
+            Per ora vengono salvati localmente
+            su questo dispositivo.
+            Il sistema di pagamento e il saldo
+            online verranno collegati in seguito.
+
+          </div>
+
+        </div>
+
+      `;
+
+
+      modal.addEventListener(
+        "click",
+        function(event){
+
+          if(
+            event.target ===
+            modal
+          ){
+
+            closeCreditsPanel();
+
+          }
+
+        }
+      );
+
+
+      document.body.appendChild(
+        modal
+      );
+
+    }
+
+
+    function closeCreditsPanel(){
+
+      const modal =
+        document.getElementById(
+          "creditsModal"
+        );
+
+
+      if(modal){
+
+        modal.remove();
+
       }
 
     }
@@ -2379,16 +3118,20 @@
 
 
       if(panel){
+
         panel.classList.remove(
           "show"
         );
+
       }
 
 
       if(plus){
+
         plus.classList.remove(
           "active"
         );
+
       }
 
     }
@@ -2417,7 +3160,9 @@
 
 
       if(input){
+
         input.focus();
+
       }
 
     }
@@ -2601,6 +3346,7 @@
 
           area.style.position =
             "fixed";
+
 
           area.style.opacity =
             "0";
@@ -2850,8 +3596,6 @@
         "message-line";
 
 
-      // AVATAR BOB
-
       if(
         role === "ai"
       ){
@@ -2877,8 +3621,6 @@
       }
 
 
-      // BOLLA
-
       const bubble =
         document.createElement(
           "div"
@@ -2903,8 +3645,6 @@
       );
 
 
-      // AZIONI SOLO SOTTO BOB
-
       if(
         role === "ai"
       ){
@@ -2918,8 +3658,6 @@
         actions.className =
           "message-actions";
 
-
-        // LIKE
 
         const like =
           document.createElement(
@@ -2939,8 +3677,6 @@
           "❤️ Mi piace";
 
 
-        // DISLIKE
-
         const dislike =
           document.createElement(
             "button"
@@ -2959,8 +3695,6 @@
           "👎 Non mi piace";
 
 
-        // COPIA
-
         const copy =
           document.createElement(
             "button"
@@ -2978,8 +3712,6 @@
         copy.textContent =
           "📋 Copia";
 
-
-        // CONDIVIDI
 
         const share =
           document.createElement(
@@ -3326,8 +4058,6 @@
       );
 
 
-      // TYPING
-
       const typing =
         document.createElement(
           "div"
@@ -3528,6 +4258,7 @@
         alert(
           "Il microfono non è supportato su questo browser"
         );
+
 
         return;
 
@@ -3934,7 +4665,8 @@
 
     startChat();
 
-</script>
+    </script>
 
 </body>
+
 </html>
