@@ -1306,21 +1306,67 @@ function focusChatInput(event){
 // LIKE / DISLIKE
 // =====================================================
 
-function setLike(like, dislike){
+// =====================================================
+// LIKE / DISLIKE + FEEDBACK BACKEND
+// =====================================================
+
+async function sendFeedback(message, feedback){
+
+  try{
+
+    await fetch(`${API}/feedback`, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+        client_id: CLIENT_ID,
+        message: message,
+        feedback: feedback
+      })
+
+    });
+
+  }catch(error){
+
+    console.error(
+      "Errore feedback:",
+      error
+    );
+
+  }
+
+}
+
+
+function setLike(like, dislike, message){
 
   like.classList.add("active");
   dislike.classList.remove("active");
 
   showToast("❤️ Mi piace");
+
+  sendFeedback(
+    message,
+    "like"
+  );
 }
 
 
-function setDislike(like, dislike){
+function setDislike(like, dislike, message){
 
   dislike.classList.add("active");
   like.classList.remove("active");
 
   showToast("👎 Feedback ricevuto");
+
+  sendFeedback(
+    message,
+    "dislike"
+  );
 }
 
 
