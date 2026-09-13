@@ -1780,9 +1780,7 @@ input[type="text"]::placeholder{
 
         <!-- TOOLBAR -->
 
-        <div
-          <div class="input-box">
-        >
+        <div class="input-box">
 
           <button
             class="icon-btn plus-btn"
@@ -2662,377 +2660,487 @@ input[type="text"]::placeholder{
 
 
     // =====================================================
-    // BOB CREDITS
-    // =====================================================
+// BOB CREDITS - BACKEND / SUPABASE
+// =====================================================
 
-    const CREDITS_KEY =
-      "bob_world_credits";
-
-
-    const CREDITS_USED_KEY =
-      "bob_world_credits_used";
+let BOB_CREDITS = 0;
+let BOB_CREDITS_USED = 0;
 
 
-    function getBobCredits(){
+// =====================================================
+// CARICA CREDITI REALI DAL BACKEND
+// =====================================================
 
-      const saved =
-        localStorage.getItem(
-          CREDITS_KEY
-        );
+async function loadBobCredits(){
 
+  try{
 
-      if(saved === null){
+    const clientId =
+      getActiveClientId();
 
-        localStorage.setItem(
-          CREDITS_KEY,
-          "100"
-        );
+    if(!clientId){
 
-
-        return 100;
-
-      }
-
-
-      const value =
-        Number(
-          saved
-        );
-
-
-      return Number.isFinite(
-        value
-      )
-        ? Math.max(
-            0,
-            value
-          )
-        : 0;
-
-    }
-
-
-    function getBobCreditsUsed(){
-
-      const saved =
-        localStorage.getItem(
-          CREDITS_USED_KEY
-        );
-
-
-      const value =
-        Number(
-          saved || 0
-        );
-
-
-      return Number.isFinite(
-        value
-      )
-        ? Math.max(
-            0,
-            value
-          )
-        : 0;
-
-    }
-
-
-    function saveBobCredits(
-      value
-    ){
-
-      const safeValue =
-        Math.max(
-          0,
-          Math.floor(
-            Number(value) || 0
-          )
-        );
-
-
-      localStorage.setItem(
-        CREDITS_KEY,
-        String(
-          safeValue
-        )
+      console.error(
+        "CLIENT ID mancante"
       );
 
-
-      return safeValue;
-
-    }
-
-
-    function addBobCredits(
-      amount
-    ){
-
-      const current =
-        getBobCredits();
-
-
-      const safeAmount =
-        Math.max(
-          0,
-          Math.floor(
-            Number(amount) || 0
-          )
-        );
-
-
-      return saveBobCredits(
-        current +
-        safeAmount
-      );
+      return 0;
 
     }
 
 
-    function useBobCredits(
-      amount
-    ){
+    const data =
+      await fetchJsonOrThrow(
+        API + "/credits",
+        {
 
-      const safeAmount =
-        Math.max(
-          0,
-          Math.floor(
-            Number(amount) || 0
-          )
-        );
+          method:
+            "POST",
 
+          headers:{
+            "Content-Type":
+              "application/json",
 
-      const current =
-        getBobCredits();
+            "Accept":
+              "application/json"
+          },
 
+          body:
+            JSON.stringify({
 
-      if(
-        current <
-        safeAmount
-      ){
+              client_id:
+                clientId
 
-        showToast(
-          "💎 Crediti insufficienti"
-        );
-
-
-        return false;
-
-      }
-
-
-      saveBobCredits(
-        current -
-        safeAmount
-      );
-
-
-      const used =
-        getBobCreditsUsed();
-
-
-      localStorage.setItem(
-        CREDITS_USED_KEY,
-        String(
-          used +
-          safeAmount
-        )
-      );
-
-
-      return true;
-
-    }
-
-
-    function openCreditsPanel(){
-
-      const old =
-        document.getElementById(
-          "creditsModal"
-        );
-
-
-      if(old){
-
-        old.remove();
-
-      }
-
-
-      const credits =
-        getBobCredits();
-
-
-      const used =
-        getBobCreditsUsed();
-
-
-      const modal =
-        document.createElement(
-          "div"
-        );
-
-
-      modal.className =
-        "credits-modal";
-
-
-      modal.id =
-        "creditsModal";
-
-
-      modal.innerHTML = `
-
-        <div class="credits-box">
-
-          <div class="credits-header">
-
-            <div class="credits-title">
-              💎 I miei crediti
-            </div>
-
-            <button
-              class="credits-close"
-              type="button"
-              onclick="closeCreditsPanel()"
-              aria-label="Chiudi"
-            >
-              ×
-            </button>
-
-          </div>
-
-
-          <div class="credits-balance">
-
-            <div class="credits-balance-label">
-              Crediti disponibili
-            </div>
-
-
-            <div
-              class="credits-number"
-              id="creditsNumber"
-            >
-              ${credits}
-            </div>
-
-
-            <div class="credits-unit">
-              BOB Credits
-            </div>
-
-          </div>
-
-
-          <div class="credits-info">
-
-            <div class="credits-stat">
-
-              <strong id="creditsUsed">
-                ${used}
-              </strong>
-
-              <span>
-                Utilizzati
-              </span>
-
-            </div>
-
-
-            <div class="credits-stat">
-
-              <strong>
-                100
-              </strong>
-
-              <span>
-                Crediti iniziali
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <div class="credits-actions">
-
-            <button
-              class="credits-action"
-              type="button"
-              onclick="showToast('💳 Acquisto crediti: in preparazione')"
-            >
-              💳 Acquista crediti
-            </button>
-
-
-            <button
-              class="credits-action"
-              type="button"
-              onclick="showToast('🤖 I crediti saranno usati per le funzioni AI')"
-            >
-              🤖 Come usare i crediti
-            </button>
-
-          </div>
-
-
-          <div class="credits-note">
-
-            Hai 100 crediti iniziali.
-            Per ora vengono salvati localmente
-            su questo dispositivo.
-            Il sistema di pagamento e il saldo
-            online verranno collegati in seguito.
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      modal.addEventListener(
-        "click",
-        function(event){
-
-          if(
-            event.target ===
-            modal
-          ){
-
-            closeCreditsPanel();
-
-          }
+            })
 
         }
       );
 
 
-      document.body.appendChild(
-        modal
+    const credits =
+      Number(
+        data &&
+        data.credits
+      );
+
+
+    if(
+      !Number.isFinite(
+        credits
+      )
+    ){
+
+      throw new Error(
+        "Saldo crediti non valido"
       );
 
     }
 
 
-    function closeCreditsPanel(){
+    BOB_CREDITS =
+      Math.max(
+        0,
+        Math.floor(
+          credits
+        )
+      );
 
-      const modal =
-        document.getElementById(
-          "creditsModal"
-        );
+
+    updateCreditsUI();
 
 
-      if(modal){
+    return BOB_CREDITS;
 
-        modal.remove();
+  }catch(error){
+
+    console.error(
+      "Errore caricamento crediti:",
+      error
+    );
+
+
+    showToast(
+      "⚠️ Impossibile caricare i crediti"
+    );
+
+
+    return null;
+
+  }
+
+}
+
+
+// =====================================================
+// AGGIORNA INTERFACCIA CREDITI
+// =====================================================
+
+function updateCreditsUI(){
+
+  const number =
+    document.getElementById(
+      "creditsNumber"
+    );
+
+
+  const used =
+    document.getElementById(
+      "creditsUsed"
+    );
+
+
+  if(number){
+
+    number.textContent =
+      String(
+        BOB_CREDITS
+      );
+
+  }
+
+
+  if(used){
+
+    used.textContent =
+      String(
+        BOB_CREDITS_USED
+      );
+
+  }
+
+}
+
+
+// =====================================================
+// LEGGI CREDITI ATTUALI
+// =====================================================
+
+function getBobCredits(){
+
+  return Math.max(
+    0,
+    Math.floor(
+      Number(
+        BOB_CREDITS
+      ) || 0
+    )
+  );
+
+}
+
+
+// =====================================================
+// CREDITI UTILIZZATI
+// =====================================================
+
+function getBobCreditsUsed(){
+
+  return Math.max(
+    0,
+    Math.floor(
+      Number(
+        BOB_CREDITS_USED
+      ) || 0
+    )
+  );
+
+}
+
+
+// =====================================================
+// AGGIUNGI CREDITI
+// =====================================================
+// Per ora NON modifica il saldo online.
+// Il saldo online verrà modificato dal backend
+// quando implementeremo acquisti / bonus.
+
+function addBobCredits(
+  amount
+){
+
+  const safeAmount =
+    Math.max(
+      0,
+      Math.floor(
+        Number(
+          amount
+        ) || 0
+      )
+    );
+
+
+  BOB_CREDITS +=
+    safeAmount;
+
+
+  updateCreditsUI();
+
+
+  return BOB_CREDITS;
+
+}
+
+
+// =====================================================
+// CONSUMO CREDITI
+// =====================================================
+// PER ORA solo controllo locale.
+// NON usiamo ancora questo per scalare Supabase.
+// Lo collegheremo al backend nel prossimo passaggio.
+
+function useBobCredits(
+  amount
+){
+
+  const safeAmount =
+    Math.max(
+      0,
+      Math.floor(
+        Number(
+          amount
+        ) || 0
+      )
+    );
+
+
+  const current =
+    getBobCredits();
+
+
+  if(
+    current <
+    safeAmount
+  ){
+
+    showToast(
+      "💎 Crediti insufficienti"
+    );
+
+
+    return false;
+
+  }
+
+
+  BOB_CREDITS =
+    current -
+    safeAmount;
+
+
+  BOB_CREDITS_USED +=
+    safeAmount;
+
+
+  updateCreditsUI();
+
+
+  return true;
+
+}
+
+
+// =====================================================
+// PANNELLO CREDITI
+// =====================================================
+
+async function openCreditsPanel(){
+
+  const old =
+    document.getElementById(
+      "creditsModal"
+    );
+
+
+  if(old){
+
+    old.remove();
+
+  }
+
+
+  // Prima leggiamo il saldo VERO
+  const loaded =
+    await loadBobCredits();
+
+
+  if(
+    loaded === null
+  ){
+
+    return;
+
+  }
+
+
+  const credits =
+    getBobCredits();
+
+
+  const used =
+    getBobCreditsUsed();
+
+
+  const modal =
+    document.createElement(
+      "div"
+    );
+
+
+  modal.className =
+    "credits-modal";
+
+
+  modal.id =
+    "creditsModal";
+
+
+  modal.innerHTML = `
+
+    <div class="credits-box">
+
+      <div class="credits-header">
+
+        <div class="credits-title">
+          💎 I miei crediti
+        </div>
+
+        <button
+          class="credits-close"
+          type="button"
+          onclick="closeCreditsPanel()"
+          aria-label="Chiudi"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="credits-balance">
+
+        <div class="credits-balance-label">
+          Crediti disponibili
+        </div>
+
+
+        <div
+          class="credits-number"
+          id="creditsNumber"
+        >
+          ${credits}
+        </div>
+
+
+        <div class="credits-unit">
+          BOB Credits
+        </div>
+
+      </div>
+
+
+      <div class="credits-info">
+
+        <div class="credits-stat">
+
+          <strong id="creditsUsed">
+            ${used}
+          </strong>
+
+          <span>
+            Utilizzati
+          </span>
+
+        </div>
+
+
+        <div class="credits-stat">
+
+          <strong>
+            100
+          </strong>
+
+          <span>
+            Crediti iniziali
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="credits-actions">
+
+        <button
+          class="credits-action"
+          type="button"
+          onclick="showToast('💳 Acquisto crediti: in preparazione')"
+        >
+          💳 Acquista crediti
+        </button>
+
+
+        <button
+          class="credits-action"
+          type="button"
+          onclick="showToast('🤖 I crediti saranno usati per le funzioni AI')"
+        >
+          🤖 Come usare i crediti
+        </button>
+
+      </div>
+
+
+      <div class="credits-note">
+
+        Il saldo viene sincronizzato
+        con il server di ChatAI Bob.
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  modal.addEventListener(
+    "click",
+    function(event){
+
+      if(
+        event.target ===
+        modal
+      ){
+
+        closeCreditsPanel();
 
       }
 
     }
+  );
 
+
+  document.body.appendChild(
+    modal
+  );
+
+}
+
+
+function closeCreditsPanel(){
+
+  const modal =
+    document.getElementById(
+      "creditsModal"
+    );
+
+
+  if(modal){
+
+    modal.remove();
+
+  }
+
+}
 
     // =====================================================
     // TOAST
@@ -4613,67 +4721,64 @@ input[type="text"]::placeholder{
 
 
     // =====================================================
-    // START
-    // =====================================================
+// START
+// =====================================================
 
-    function startChat(){
+function startChat(){
 
-      if(activeConversationId){
+  if(activeConversationId){
 
-        const conversation =
-          getActiveConversation();
+    const conversation =
+      getActiveConversation();
 
+    if(conversation){
 
-        if(conversation){
+      loadConversation(
+        conversation.id
+      );
 
-          loadConversation(
-            conversation.id
-          );
+    }else{
 
-        }else{
+      createConversation();
 
-          createConversation();
-
-
-          add(
-            "ai",
-            "Ciao 👋 Sono Bob. Come posso aiutarti oggi?",
-            true
-          );
-
-        }
-
-      }else{
-
-        createConversation();
-
-
-        add(
-          "ai",
-          "Ciao 👋 Sono Bob. Come posso aiutarti oggi?",
-          true
-        );
-
-      }
-
-
-      renderConversationList();
-
-
-      checkBackend();
-
-
-      setInterval(
-        checkBackend,
-        30000
+      add(
+        "ai",
+        "Ciao 👋 Sono Bob. Come posso aiutarti oggi?",
+        true
       );
 
     }
 
+  }else{
 
-    startChat();
+    createConversation();
 
-    </script>
+    add(
+      "ai",
+      "Ciao 👋 Sono Bob. Come posso aiutarti oggi?",
+      true
+    );
+
+  }
+
+
+  renderConversationList();
+
+  checkBackend();
+
+  loadBobCredits();
+
+  setInterval(
+    checkBackend,
+    30000
+  );
+
+}
+
+
+startChat();
+
+</script>
 
 </body>
 
