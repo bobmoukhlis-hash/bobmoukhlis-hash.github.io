@@ -2921,7 +2921,126 @@ function useBobCredits(
   return true;
 
 }
+// =====================================================
+// CONSUMO CREDITI DAL SERVER
+// =====================================================
 
+async function useBobCreditsServer(amount){
+
+  const safeAmount =
+    Math.max(
+      0,
+      Math.floor(
+        Number(amount) || 0
+      )
+    );
+
+  if(safeAmount <= 0){
+    return false;
+  }
+
+  const clientId =
+    getActiveClientId();
+
+  try{
+
+    const response =
+      await fetch(
+        API + "/credits/use",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+
+            "Accept":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              client_id:
+                clientId,
+
+              amount:
+                safeAmount
+            })
+        }
+      );
+
+    const data =
+      await response.json();
+
+    if(!response.ok){
+
+      if(
+        response.status === 402
+      ){
+
+        showToast(
+          "💎 Crediti insufficienti"
+        );
+
+      }else{
+
+        showToast(
+          "⚠️ Errore nel consumo dei crediti"
+        );
+
+      }
+
+      return false;
+    }
+
+    const newBalance =
+      Number(
+        data &&
+        data.credits
+      );
+
+    if(
+      !Number.isFinite(
+        newBalance
+      )
+    ){
+
+      showToast(
+        "⚠️ Saldo non valido"
+      );
+
+      return false;
+    }
+
+    BOB_CREDITS =
+      Math.max(
+        0,
+        Math.floor(
+          newBalance
+        )
+      );
+
+    BOB_CREDITS_USED +=
+      safeAmount;
+
+    updateCreditsUI();
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "Errore consumo crediti:",
+      error
+    );
+
+    showToast(
+      "⚠️ Impossibile contattare il server"
+    );
+
+    return false;
+  }
+}
 
 // =====================================================
 // PANNELLO CREDITI
