@@ -2111,24 +2111,8 @@ input[type="text"]::placeholder{
 
 
     function getActiveClientId(){
-
-      const conversation =
-        getActiveConversation();
-
-
-      if(
-        conversation &&
-        conversation.clientId
-      ){
-
-        return conversation.clientId;
-
-      }
-
-
-      return BASE_CLIENT_ID;
-
-    }
+  return BASE_CLIENT_ID;
+}
 
 
     function saveMessage(
