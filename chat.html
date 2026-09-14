@@ -4828,7 +4828,371 @@ function closeCreditsPanel(){
       }
 
     }
+// =====================================================
+// GENERAZIONE IMMAGINI
+// =====================================================
 
+async function generateImage(){
+
+  const input =
+    $("input");
+
+  if(!input)
+    return;
+
+  const prompt =
+    input.value.trim();
+
+  if(!prompt){
+
+    showToast(
+      "🖼️ Scrivi prima cosa vuoi creare"
+    );
+
+    input.focus();
+
+    return;
+
+  }
+
+
+  const btn =
+    $("imageBtn");
+
+  if(btn){
+    btn.disabled = true;
+  }
+
+
+  input.value = "";
+
+
+  add(
+    "user",
+    "🖼️ " + prompt
+  );
+
+
+  const typing =
+    document.createElement(
+      "div"
+    );
+
+  typing.className =
+    "msg ai";
+
+
+  const typingLine =
+    document.createElement(
+      "div"
+    );
+
+  typingLine.className =
+    "message-line";
+
+
+  const avatar =
+    document.createElement(
+      "div"
+    );
+
+  avatar.className =
+    "avatar";
+
+  avatar.textContent =
+    "🤖";
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+  bubble.className =
+    "bubble";
+
+  bubble.innerHTML =
+    `
+      <div class="typing">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    `;
+
+
+  typingLine.appendChild(
+    avatar
+  );
+
+  typingLine.appendChild(
+    bubble
+  );
+
+  typing.appendChild(
+    typingLine
+  );
+
+
+  $("messages").appendChild(
+    typing
+  );
+
+
+  $("messages").scrollTop =
+    $("messages").scrollHeight;
+
+
+  const form =
+    new FormData();
+
+
+  form.append(
+    "prompt",
+    prompt
+  );
+
+
+  form.append(
+    "client_id",
+    getActiveClientId()
+  );
+
+
+  try{
+
+    const response =
+      await fetch(
+        API +
+        "/generate_image",
+        {
+          method:
+            "POST",
+
+          body:
+            form
+        }
+      );
+
+
+    if(!response.ok){
+
+      let errorMessage =
+        "Generazione immagine non riuscita.";
+
+
+      try{
+
+        const errorData =
+          await response.json();
+
+
+        if(
+          errorData &&
+          errorData.detail
+        ){
+
+          errorMessage =
+            errorData.detail;
+
+        }
+
+      }catch{
+
+        // Nessun JSON disponibile
+
+      }
+
+
+      if(
+        response.status === 402
+      ){
+
+        errorMessage =
+          "💎 Crediti insufficienti per creare l'immagine.";
+
+      }
+
+
+      throw new Error(
+        errorMessage
+      );
+
+    }
+
+
+    const blob =
+      await response.blob();
+
+
+    if(
+      !blob ||
+      blob.size <= 0
+    ){
+
+      throw new Error(
+        "Immagine vuota ricevuta dal server."
+      );
+
+    }
+
+
+    const imageUrl =
+      URL.createObjectURL(
+        blob
+      );
+
+
+    typing.remove();
+
+
+    // -----------------------------------------------------
+    // MOSTRA IMMAGINE
+    // -----------------------------------------------------
+
+    const d =
+      document.createElement(
+        "div"
+      );
+
+    d.className =
+      "msg ai";
+
+
+    const line =
+      document.createElement(
+        "div"
+      );
+
+    line.className =
+      "message-line";
+
+
+    const avatar2 =
+      document.createElement(
+        "div"
+      );
+
+    avatar2.className =
+      "avatar";
+
+    avatar2.textContent =
+      "🤖";
+
+
+    const content =
+      document.createElement(
+        "div"
+      );
+
+    content.style.maxWidth =
+      "82%";
+
+
+    const image =
+      document.createElement(
+        "img"
+      );
+
+    image.src =
+      imageUrl;
+
+    image.alt =
+      "Immagine generata da ChatAI Bob";
+
+    image.style.display =
+      "block";
+
+    image.style.width =
+      "100%";
+
+    image.style.maxWidth =
+      "620px";
+
+    image.style.borderRadius =
+      "16px";
+
+    image.style.border =
+      "1px solid rgba(255,255,255,.08)";
+
+    image.style.boxShadow =
+      "0 8px 25px rgba(0,0,0,.25)";
+
+
+    content.appendChild(
+      image
+    );
+
+
+    line.appendChild(
+      avatar2
+    );
+
+    line.appendChild(
+      content
+    );
+
+
+    d.appendChild(
+      line
+    );
+
+
+    $("messages").appendChild(
+      d
+    );
+
+
+    $("messages").scrollTop =
+      $("messages").scrollHeight;
+
+
+    // -----------------------------------------------------
+    // AGGIORNA SALDO REALE
+    // -----------------------------------------------------
+
+    await loadBobCredits();
+
+
+    showToast(
+      "🖼️ Immagine creata • -15 💎"
+    );
+
+
+  }catch(error){
+
+    typing.remove();
+
+
+    console.error(
+      "Errore generazione immagine:",
+      error
+    );
+
+
+    add(
+      "ai",
+      "🖼️ " +
+      (
+        error &&
+        error.message
+          ? error.message
+          : "Impossibile generare l'immagine."
+      )
+    );
+
+
+  }finally{
+
+    if(btn){
+      btn.disabled = false;
+    }
+
+    input.focus();
+
+  }
+
+    }
 
     // =====================================================
 // START
