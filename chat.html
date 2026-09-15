@@ -4170,45 +4170,23 @@ function closeCreditsPanel(){
     }
 
 
-    ```js
-// =====================================================
+   // =====================================================
 // FETCH SICURO
 // =====================================================
 
-async function fetchJsonOrThrow(
-  url,
-  options
-){
+async function fetchJsonOrThrow(url, options){
 
-  const res =
-    await fetch(
-      url,
-      options
-    );
+  const res = await fetch(url, options);
 
+  const raw = await res.text();
 
-  const raw =
-    await res.text();
-
-
-  let data =
-    null;
-
+  let data = null;
 
   try{
-
-    data =
-      raw
-        ? JSON.parse(raw)
-        : null;
-
+    data = raw ? JSON.parse(raw) : null;
   }catch{
-
-    data =
-      null;
-
+    data = null;
   }
-
 
   if(!res.ok){
 
@@ -4222,11 +4200,7 @@ async function fetchJsonOrThrow(
         )
       ) ||
       raw ||
-      (
-        "HTTP " +
-        res.status
-      );
-
+      ("HTTP " + res.status);
 
     throw new Error(
       "HTTP " +
@@ -4234,12 +4208,9 @@ async function fetchJsonOrThrow(
       " - " +
       msg
     );
-
   }
 
-
   return data;
-
 }
 
 
@@ -4254,20 +4225,16 @@ function isImageRequest(text){
       .toLowerCase()
       .trim();
 
-
   const action =
     /\b(crea|creare|genera|generare|disegna|disegnare|fammi|realizza|realizzare)\b/i;
 
-
   const image =
     /\b(foto|fotografia|immagine|immagini|disegno|picture|image|images)\b/i;
-
 
   return (
     action.test(t) &&
     image.test(t)
   );
-
 }
 
 
@@ -4277,34 +4244,27 @@ function isImageRequest(text){
 
 async function sendMessage(){
 
-  const input =
-    $("input");
-
+  const input = $("input");
 
   if(!input)
     return;
 
-
   const text =
     input.value.trim();
-
 
   if(!text)
     return;
 
 
   // =====================================================
-  // RICHIESTA IMMAGINE AUTOMATICA
+  // IMMAGINE AUTOMATICA
   // =====================================================
 
   if(isImageRequest(text)){
 
-    input.value =
-      text;
-
+    input.value = text;
 
     await generateImage();
-
 
     return;
   }
@@ -4316,10 +4276,7 @@ async function sendMessage(){
 
   ensureConversation();
 
-
-  input.value =
-    "";
-
+  input.value = "";
 
   add(
     "user",
@@ -4327,63 +4284,57 @@ async function sendMessage(){
   );
 
 
-  const typing =
-    document.createElement(
-      "div"
-    );
+  // =====================================================
+  // INDICATORE "STO PENSANDO"
+  // =====================================================
 
+  const typing =
+    document.createElement("div");
 
   typing.className =
     "msg ai";
 
 
   const typingLine =
-    document.createElement(
-      "div"
-    );
-
+    document.createElement("div");
 
   typingLine.className =
     "message-line";
 
 
   const avatar =
-    document.createElement(
-      "div"
-    );
-
+    document.createElement("div");
 
   avatar.className =
     "avatar";
-
 
   avatar.textContent =
     "🤖";
 
 
   const bubble =
-    document.createElement(
-      "div"
-    );
-
+    document.createElement("div");
 
   bubble.className =
     "bubble";
 
-
-  bubble.textContent =
-    "Sto pensando...";
+  bubble.innerHTML =
+    `
+      <div class="typing">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    `;
 
 
   typingLine.appendChild(
     avatar
   );
 
-
   typingLine.appendChild(
     bubble
   );
-
 
   typing.appendChild(
     typingLine
@@ -4394,10 +4345,17 @@ async function sendMessage(){
     typing
   );
 
-
   $("messages").scrollTop =
     $("messages").scrollHeight;
 
+
+  $("sendBtn").disabled =
+    true;
+
+
+  // =====================================================
+  // INVIO AL BACKEND
+  // =====================================================
 
   try{
 
@@ -4405,22 +4363,25 @@ async function sendMessage(){
       await fetchJsonOrThrow(
         API + "/chat",
         {
-          method:
-            "POST",
+          method: "POST",
 
-          headers:
-            {
-              "Content-Type":
-                "application/json"
-            },
+          headers:{
+            "Content-Type":
+              "application/json",
+
+            "Accept":
+              "application/json"
+          },
 
           body:
             JSON.stringify({
+
               message:
                 text,
 
               client_id:
                 getActiveClientId()
+
             })
         }
       );
@@ -4433,6 +4394,7 @@ async function sendMessage(){
       data.reply ||
       data.response ||
       data.message ||
+      data.text ||
       "Non ho ricevuto una risposta.";
 
 
@@ -4444,6 +4406,12 @@ async function sendMessage(){
 
 
     await loadBobCredits();
+
+
+    // Voce, se disponibile
+    if(typeof speak === "function"){
+      speak(reply);
+    }
 
 
   }catch(error){
@@ -4466,165 +4434,22 @@ async function sendMessage(){
       )
     );
 
+
+  }finally{
+
+    $("sendBtn").disabled =
+      false;
+
+    input.focus();
+
   }
 
 }
 
 
-
-  const bubble =
-    document.createElement(
-      "div"
-    );
-
-      bubble.className =
-        "bubble";
-
-
-      bubble.innerHTML =
-        `
-          <div class="typing">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        `;
-
-
-      typingLine.appendChild(
-        avatar
-      );
-
-
-      typingLine.appendChild(
-        bubble
-      );
-
-
-      typing.appendChild(
-        typingLine
-      );
-
-
-      $("messages").appendChild(
-        typing
-      );
-
-
-      $("messages").scrollTop =
-        $("messages").scrollHeight;
-
-
-      $("sendBtn").disabled =
-        true;
-
-
-      try{
-
-        const d =
-          await fetchJsonOrThrow(
-            API +
-            "/chat",
-            {
-
-              method:
-                "POST",
-
-              headers:{
-                "Content-Type":
-                  "application/json",
-
-                "Accept":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-
-                  message:
-                    text,
-
-                  client_id:
-                    getActiveClientId()
-
-                })
-
-            }
-          );
-
-
-        typing.remove();
-
-
-        const outRaw =
-          (
-            d &&
-            typeof d.text ===
-              "string"
-          )
-            ? d.text
-            : "";
-
-
-        const out =
-          cleanText(
-            outRaw
-          ) ||
-          "Nessuna risposta.";
-
-
-        add(
-          "ai",
-          out
-        );
-
-
-        speak(
-          out
-        );
-
-      }catch(e){
-
-        typing.remove();
-
-
-        const errorText =
-          "❌ Errore: " +
-          (
-            e &&
-            e.message
-              ? e.message
-              : "sconosciuto"
-          );
-
-
-        add(
-          "ai",
-          errorText
-        );
-
-
-        speak(
-          "Errore di risposta"
-        );
-
-      }finally{
-
-        $("sendBtn").disabled =
-          false;
-
-
-        $("input").focus();
-
-      }
-
-    }
-
-
-    // =====================================================
-    // MICROFONO
-    // =====================================================
-
+// =====================================================
+// MICROFONO
+// =====================================================
     function startMic(){
 
       const SpeechRecognition =
