@@ -4423,31 +4423,90 @@ img.style.display =
 img.style.marginTop =
   "8px";
 
+img.style.cursor =
+  "pointer";
 
-const link =
-  document.createElement(
-    "a"
-  );
+img.addEventListener(
+  "click",
+  function(){
 
-link.href =
-  imageUrl;
+    const viewer =
+      document.createElement(
+        "div"
+      );
 
-link.target =
-  "_blank";
+    viewer.style.position =
+      "fixed";
 
-link.rel =
-  "noopener";
+    viewer.style.left =
+      "0";
 
-link.style.display =
-  "block";
+    viewer.style.top =
+      "0";
 
-link.appendChild(
-  img
+    viewer.style.width =
+      "100%";
+
+    viewer.style.height =
+      "100%";
+
+    viewer.style.background =
+      "rgba(0,0,0,.95)";
+
+    viewer.style.zIndex =
+      "99999";
+
+    viewer.style.display =
+      "flex";
+
+    viewer.style.alignItems =
+      "center";
+
+    viewer.style.justifyContent =
+      "center";
+
+    viewer.style.padding =
+      "20px";
+
+    const bigImage =
+      document.createElement(
+        "img"
+      );
+
+    bigImage.src =
+      imageUrl;
+
+    bigImage.style.maxWidth =
+      "100%";
+
+    bigImage.style.maxHeight =
+      "100%";
+
+    bigImage.style.objectFit =
+      "contain";
+
+    viewer.appendChild(
+      bigImage
+    );
+
+    viewer.addEventListener(
+      "click",
+      function(){
+
+        viewer.remove();
+
+      }
+    );
+
+    document.body.appendChild(
+      viewer
+    );
+
+  }
 );
 
-
 wrapper.appendChild(
-  link
+  img
 );
 
 chat.appendChild(
