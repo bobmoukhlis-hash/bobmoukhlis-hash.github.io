@@ -1780,55 +1780,69 @@ input[type="text"]::placeholder{
 
         <!-- TOOLBAR -->
 
-        <div class="input-box">
+       <div class="input-box">
 
-          <button
-            class="icon-btn plus-btn"
-            id="plusBtn"
-            type="button"
-            onclick="toggleTools()"
-            title="Altre funzioni"
-            aria-label="Altre funzioni"
-          >
-            ＋
-          </button>
-
-
-          <input
-  id="input"
-  type="text"
-  placeholder="Scrivi un messaggio..."
-  autocomplete="off"
-  enterkeyhint="send"
-  inputmode="text"
-  autocapitalize="sentences"
->
+  <button
+    class="icon-btn plus-btn"
+    id="plusBtn"
+    type="button"
+    onclick="toggleTools()"
+    title="Altre funzioni"
+    aria-label="Altre funzioni"
+  >
+    ＋
+  </button>
 
 
-          <button
-            class="icon-btn"
-            id="micBtn"
-            type="button"
-            onclick="startMic()"
-            title="Microfono"
-            aria-label="Microfono"
-          >
-            🎤
-          </button>
+  <!-- FOTO -->
+
+  <button
+    class="icon-btn"
+    id="photoBtn"
+    type="button"
+    onclick="openPhotoPicker()"
+    title="Carica una foto"
+    aria-label="Carica una foto"
+  >
+    📷
+  </button>
 
 
-          <button
-            class="icon-btn send-btn"
-            id="sendBtn"
-            type="button"
-            onclick="sendMessage()"
-            title="Invia"
-            aria-label="Invia"
-          >
-            ➤
-          </button>
+  <input
+    id="input"
+    type="text"
+    placeholder="Scrivi un messaggio..."
+    autocomplete="off"
+    enterkeyhint="send"
+    inputmode="text"
+    autocapitalize="sentences"
+  >
 
-        </div>
+
+  <button
+    class="icon-btn"
+    id="micBtn"
+    type="button"
+    onclick="startMic()"
+    title="Microfono"
+    aria-label="Microfono"
+  >
+    🎤
+  </button>
+
+
+  <button
+    class="icon-btn send-btn"
+    id="sendBtn"
+    type="button"
+    onclick="sendMessage()"
+    title="Invia"
+    aria-label="Invia"
+  >
+    ➤
+  </button>
+
+</div>
 
 
         <!-- STRUMENTI -->
@@ -1866,8 +1880,6 @@ input[type="text"]::placeholder{
           </button>
 
         </div>
-
-        <!-- INPUT FOTO NASCOSTO -->
 
         <!-- INPUT FOTO NASCOSTO -->
 
