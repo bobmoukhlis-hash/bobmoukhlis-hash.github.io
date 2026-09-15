@@ -4240,9 +4240,24 @@ function closeCreditsPanel(){
       return data;
 
     }
+// =====================================================
+// RICONOSCIMENTO AUTOMATICO IMMAGINI
+// =====================================================
 
+function isImageRequest(text){
 
-   // =====================================================
+  const t = (text || "").toLowerCase().trim();
+
+  const action =
+    /\b(crea|creare|genera|generare|disegna|disegnare|fammi|realizza|realizzare)\b/i;
+
+  const image =
+    /\b(foto|fotografia|immagine|immagini|disegno|picture|image|images)\b/i;
+
+  return action.test(t) && image.test(t);
+}
+
+// =====================================================
 // CHAT
 // =====================================================
 
@@ -4277,6 +4292,10 @@ async function sendMessage(){
     return;
   }
 
+
+  // =====================================================
+  // CHAT NORMALE
+  // =====================================================
 
   ensureConversation();
 
@@ -4321,6 +4340,112 @@ async function sendMessage(){
 
   avatar.textContent =
     "🤖";
+
+
+  const bubble =
+    document.createElement(
+      "div"
+    );
+
+
+  bubble.className =
+    "bubble";
+
+
+  bubble.textContent =
+    "Sto pensando...";
+
+
+  typingLine.appendChild(
+    avatar
+  );
+
+
+  typingLine.appendChild(
+    bubble
+  );
+
+
+  typing.appendChild(
+    typingLine
+  );
+
+
+  $("messages").appendChild(
+    typing
+  );
+
+
+  $("messages").scrollTop =
+    $("messages").scrollHeight;
+
+
+  try{
+
+    const data =
+      await fetchJsonOrThrow(
+        API + "/chat",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            message: text,
+            client_id:
+              getActiveClientId()
+          })
+        }
+      );
+
+
+    typing.remove();
+
+
+    const reply =
+      data.reply ||
+      data.response ||
+      data.message ||
+      "Non ho ricevuto una risposta.";
+
+
+    add(
+      "ai",
+      reply,
+      true
+    );
+
+
+    await loadBobCredits();
+
+
+  }catch(error){
+
+    typing.remove();
+
+
+    console.error(
+      "Errore chat:",
+      error
+    );
+
+
+    add(
+      "ai",
+      "❌ " +
+      (
+        error?.message ||
+        "Errore di connessione."
+      )
+    );
+
+  }
+
+}
+```
 
 
   const bubble =
