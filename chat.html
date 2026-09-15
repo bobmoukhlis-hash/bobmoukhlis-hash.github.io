@@ -4260,7 +4260,6 @@ async function sendMessage(){
 
   if(!input)
     return;
-
   const text =
     input.value.trim();
 
@@ -4268,13 +4267,233 @@ async function sendMessage(){
     return;
 
 
-  // =====================================================
-  // IMMAGINE AUTOMATICA
-  // =====================================================
+  /*
+    FOTO CARICATA:
+    se esiste una foto, inviamo
+    foto + istruzione a /edit_image
+  */
+
+  if(window.bobSelectedPhoto){
+
+    const file =
+      window.bobSelectedPhoto;
+
+    input.value = "";
+
+    add(
+      "user",
+      text
+    );
+
+    const typing =
+      add(
+        "ai",
+        "🎨 Sto modificando la foto..."
+      );
+
+    $("sendBtn").disabled = true;
+
+    try{
+
+      const form =
+        new FormData();
+
+      form.append(
+        "file",
+        file
+      );
+
+      form.append(
+        "prompt",
+        text
+      );
+
+      form.append(
+        "client_id",
+        getActiveClientId()
+      );
+
+
+      const response =
+        await fetch(
+          API + "/edit_image",
+          {
+            method:
+              "POST",
+
+            body:
+              form
+          }
+        );
+
+
+      if(!response.ok){
+
+        let errorMessage =
+          "Errore durante la modifica della foto.";
+
+        try{
+
+          const errorData =
+            await response.json();
+
+          if(errorData.detail){
+
+            errorMessage =
+              errorData.detail;
+
+          }
+
+        }catch(e){}
+
+        throw new Error(
+          errorMessage
+        );
+      }
+
+
+      const blob =
+        await response.blob();
+
+
+      const imageUrl =
+        URL.createObjectURL(blob);
+
+
+      if(typing &&
+         typing.remove){
+
+        typing.remove();
+
+      }
+
+
+      add(
+        "ai",
+        "🎨 Foto modificata"
+      );
+
+
+      /*
+        Mostra l'immagine modificata
+        direttamente nella chat.
+      */
+
+      const chat =
+        $("chat");
+
+      if(chat){
+
+        const wrapper =
+          document.createElement(
+            "div"
+          );
+
+        wrapper.className =
+          "message ai";
+
+
+        const img =
+          document.createElement(
+            "img"
+          );
+
+        img.src =
+          imageUrl;
+
+        img.alt =
+          "Foto modificata da Bob";
+
+        img.style.maxWidth =
+          "100%";
+
+        img.style.borderRadius =
+          "16px";
+
+        img.style.display =
+          "block";
+
+        img.style.marginTop =
+          "8px";
+
+
+        wrapper.appendChild(
+          img
+        );
+
+        chat.appendChild(
+          wrapper
+        );
+
+
+        chat.scrollTop =
+          chat.scrollHeight;
+
+      }
+
+
+      window.bobSelectedPhoto =
+        null;
+
+      window.bobSelectedPhotoUrl =
+        null;
+
+
+      input.placeholder =
+        "Scrivi un messaggio...";
+
+
+      await loadBobCredits();
+
+
+    }catch(error){
+
+      if(typing &&
+         typing.remove){
+
+        typing.remove();
+
+      }
+
+      console.error(
+        "Errore modifica foto:",
+        error
+      );
+
+
+      add(
+        "ai",
+        "❌ " +
+        (
+          error &&
+          error.message
+            ? error.message
+            : "Errore durante la modifica della foto."
+        )
+      );
+
+
+    }finally{
+
+      $("sendBtn").disabled =
+        false;
+
+      input.focus();
+
+    }
+
+    return;
+  }
+
+
+  /*
+    RICHIESTA IMMAGINE DA TESTO
+  */
 
   if(isImageRequest(text)){
 
-    input.value = text;
+    input.value =
+      text;
 
     await generateImage();
 
@@ -4282,9 +4501,9 @@ async function sendMessage(){
   }
 
 
-  // =====================================================
-  // CHAT NORMALE
-  // =====================================================
+  /*
+    CHAT NORMALE
+  */
 
   ensureConversation();
 
@@ -4296,78 +4515,16 @@ async function sendMessage(){
   );
 
 
-  // =====================================================
-  // INDICATORE "STO PENSANDO"
-  // =====================================================
-
   const typing =
-    document.createElement("div");
-
-  typing.className =
-    "msg ai";
-
-
-  const typingLine =
-    document.createElement("div");
-
-  typingLine.className =
-    "message-line";
-
-
-  const avatar =
-    document.createElement("div");
-
-  avatar.className =
-    "avatar";
-
-  avatar.textContent =
-    "🤖";
-
-
-  const bubble =
-    document.createElement("div");
-
-  bubble.className =
-    "bubble";
-
-  bubble.innerHTML =
-    `
-      <div class="typing">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-    `;
-
-
-  typingLine.appendChild(
-    avatar
-  );
-
-  typingLine.appendChild(
-    bubble
-  );
-
-  typing.appendChild(
-    typingLine
-  );
-
-
-  $("messages").appendChild(
-    typing
-  );
-
-  $("messages").scrollTop =
-    $("messages").scrollHeight;
+    add(
+      "ai",
+      "..."
+    );
 
 
   $("sendBtn").disabled =
     true;
 
-
-  // =====================================================
-  // INVIO AL BACKEND
-  // =====================================================
 
   try{
 
@@ -4375,7 +4532,8 @@ async function sendMessage(){
       await fetchJsonOrThrow(
         API + "/chat",
         {
-          method: "POST",
+          method:
+            "POST",
 
           headers:{
             "Content-Type":
@@ -4387,19 +4545,22 @@ async function sendMessage(){
 
           body:
             JSON.stringify({
-
               message:
                 text,
 
               client_id:
                 getActiveClientId()
-
             })
         }
       );
 
 
-    typing.remove();
+    if(typing &&
+       typing.remove){
+
+      typing.remove();
+
+    }
 
 
     const reply =
@@ -4420,16 +4581,26 @@ async function sendMessage(){
     await loadBobCredits();
 
 
-    // Voce, se disponibile
-    if(typeof speak === "function"){
-      speak(reply);
+    if(
+      typeof speak ===
+      "function"
+    ){
+
+      speak(
+        reply
+      );
+
     }
 
 
   }catch(error){
 
-    typing.remove();
+    if(typing &&
+       typing.remove){
 
+      typing.remove();
+
+    }
 
     console.error(
       "Errore chat:",
@@ -4441,8 +4612,10 @@ async function sendMessage(){
       "ai",
       "❌ " +
       (
-        error?.message ||
-        "Errore di connessione."
+        error &&
+        error.message
+          ? error.message
+          : "Errore di connessione."
       )
     );
 
