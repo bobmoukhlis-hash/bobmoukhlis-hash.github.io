@@ -4395,59 +4395,67 @@ if(chat){
     "message ai";
 
   const img =
-    document.createElement(
-      "img"
-    );
-
-  img.src =
-    imageUrl;
-
-  img.alt =
-    "Foto modificata da Bob";
-
-  img.style.maxWidth =
-    "100%";
-
-  img.style.width =
-    "auto";
-
-  img.style.height =
-    "auto";
-
-  img.style.borderRadius =
-    "16px";
-
-  img.style.display =
-    "block";
-
-  img.style.marginTop =
-    "8px";
-
-  img.style.cursor =
-    "pointer";
-
-  img.onclick =
-    function(){
-
-      window.open(
-        imageUrl,
-        "_blank"
-      );
-
-    };
-
-  wrapper.appendChild(
-    img
+  document.createElement(
+    "img"
   );
 
-  chat.appendChild(
-    wrapper
+img.src =
+  imageUrl;
+
+img.alt =
+  "Foto modificata da Bob";
+
+img.style.maxWidth =
+  "100%";
+
+img.style.width =
+  "auto";
+
+img.style.height =
+  "auto";
+
+img.style.borderRadius =
+  "16px";
+
+img.style.display =
+  "block";
+
+img.style.marginTop =
+  "8px";
+
+
+const link =
+  document.createElement(
+    "a"
   );
 
-  chat.scrollTop =
-    chat.scrollHeight;
-}
-```
+link.href =
+  imageUrl;
+
+link.target =
+  "_blank";
+
+link.rel =
+  "noopener";
+
+link.style.display =
+  "block";
+
+link.appendChild(
+  img
+);
+
+
+wrapper.appendChild(
+  link
+);
+
+chat.appendChild(
+  wrapper
+);
+
+chat.scrollTop =
+  chat.scrollHeight;
 
 
       window.bobSelectedPhoto =
