@@ -4379,7 +4379,7 @@ async function sendMessage(){
         direttamente nella chat.
       */
 
-      ```js
+     ```js
 const chat =
   $("messages") ||
   $("chat");
@@ -4423,6 +4423,19 @@ if(chat){
   img.style.marginTop =
     "8px";
 
+  img.style.cursor =
+    "pointer";
+
+  img.onclick =
+    function(){
+
+      window.open(
+        imageUrl,
+        "_blank"
+      );
+
+    };
+
   wrapper.appendChild(
     img
   );
@@ -4435,6 +4448,7 @@ if(chat){
     chat.scrollHeight;
 }
 ```
+
 
 
         wrapper.className =
