@@ -4170,92 +4170,106 @@ function closeCreditsPanel(){
     }
 
 
-    // =====================================================
-    // FETCH SICURO
-    // =====================================================
+    ```js
+// =====================================================
+// FETCH SICURO
+// =====================================================
 
-    async function fetchJsonOrThrow(
+async function fetchJsonOrThrow(
+  url,
+  options
+){
+
+  const res =
+    await fetch(
       url,
       options
-    ){
-
-      const res =
-        await fetch(
-          url,
-          options
-        );
+    );
 
 
-      const raw =
-        await res.text();
+  const raw =
+    await res.text();
 
 
-      let data =
-        null;
+  let data =
+    null;
 
 
-      try{
+  try{
 
-        data =
-          raw
-            ? JSON.parse(raw)
-            : null;
+    data =
+      raw
+        ? JSON.parse(raw)
+        : null;
 
-      }catch{
+  }catch{
 
-        data =
-          null;
+    data =
+      null;
 
-      }
-
-
-      if(!res.ok){
-
-        const msg =
-          (
-            data &&
-            (
-              data.detail ||
-              data.error ||
-              data.message
-            )
-          ) ||
-          raw ||
-          (
-            "HTTP " +
-            res.status
-          );
+  }
 
 
-        throw new Error(
-          "HTTP " +
-          res.status +
-          " - " +
-          msg
-        );
+  if(!res.ok){
 
-      }
+    const msg =
+      (
+        data &&
+        (
+          data.detail ||
+          data.error ||
+          data.message
+        )
+      ) ||
+      raw ||
+      (
+        "HTTP " +
+        res.status
+      );
 
 
-      return data;
+    throw new Error(
+      "HTTP " +
+      res.status +
+      " - " +
+      msg
+    );
 
-    }
+  }
+
+
+  return data;
+
+}
+
+
 // =====================================================
 // RICONOSCIMENTO AUTOMATICO IMMAGINI
 // =====================================================
 
 function isImageRequest(text){
 
-  const t = (text || "").toLowerCase().trim();
+  const t =
+    (text || "")
+      .toLowerCase()
+      .trim();
+
 
   const action =
     /\b(crea|creare|genera|generare|disegna|disegnare|fammi|realizza|realizzare)\b/i;
 
+
   const image =
     /\b(foto|fotografia|immagine|immagini|disegno|picture|image|images)\b/i;
 
-  return action.test(t) && image.test(t);
+
+  return (
+    action.test(t) &&
+    image.test(t)
+  );
+
 }
+
 
 // =====================================================
 // CHAT
@@ -4285,9 +4299,12 @@ async function sendMessage(){
 
   if(isImageRequest(text)){
 
-    input.value = text;
+    input.value =
+      text;
+
 
     await generateImage();
+
 
     return;
   }
@@ -4299,8 +4316,10 @@ async function sendMessage(){
 
   ensureConversation();
 
+
   input.value =
     "";
+
 
   add(
     "user",
@@ -4386,18 +4405,23 @@ async function sendMessage(){
       await fetchJsonOrThrow(
         API + "/chat",
         {
-          method: "POST",
+          method:
+            "POST",
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+          headers:
+            {
+              "Content-Type":
+                "application/json"
+            },
 
-          body: JSON.stringify({
-            message: text,
-            client_id:
-              getActiveClientId()
-          })
+          body:
+            JSON.stringify({
+              message:
+                text,
+
+              client_id:
+                getActiveClientId()
+            })
         }
       );
 
@@ -4445,7 +4469,7 @@ async function sendMessage(){
   }
 
 }
-```
+
 
 
   const bubble =
