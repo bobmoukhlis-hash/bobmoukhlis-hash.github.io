@@ -4379,15 +4379,63 @@ async function sendMessage(){
         direttamente nella chat.
       */
 
-      const chat =
-        $("chat");
+      ```js
+const chat =
+  $("messages") ||
+  $("chat");
 
-      if(chat){
+if(chat){
 
-        const wrapper =
-          document.createElement(
-            "div"
-          );
+  const wrapper =
+    document.createElement(
+      "div"
+    );
+
+  wrapper.className =
+    "message ai";
+
+  const img =
+    document.createElement(
+      "img"
+    );
+
+  img.src =
+    imageUrl;
+
+  img.alt =
+    "Foto modificata da Bob";
+
+  img.style.maxWidth =
+    "100%";
+
+  img.style.width =
+    "auto";
+
+  img.style.height =
+    "auto";
+
+  img.style.borderRadius =
+    "16px";
+
+  img.style.display =
+    "block";
+
+  img.style.marginTop =
+    "8px";
+
+  wrapper.appendChild(
+    img
+  );
+
+  chat.appendChild(
+    wrapper
+  );
+
+  chat.scrollTop =
+    chat.scrollHeight;
+}
+```
+
 
         wrapper.className =
           "message ai";
@@ -4516,10 +4564,10 @@ async function sendMessage(){
 
 
   const typing =
-    add(
-      "ai",
-      "..."
-    );
+  add(
+    "ai",
+    "🎨 Sto modificando la foto..."
+  );
 
 
   $("sendBtn").disabled =
