@@ -4596,228 +4596,88 @@ async function sendMessage(){
     }
 
 
-    async function sendPhoto(){
+     js
+async function sendPhoto(){
 
-      const fileInput =
-        $("photo");
+  const fileInput = $("photo");
 
+  const file =
+    fileInput &&
+    fileInput.files &&
+    fileInput.files[0];
 
-      const file =
-        fileInput.files &&
-        fileInput.files[0];
+  if(!file){
 
+    add(
+      "ai",
+      "📸 Seleziona prima una foto dalla galleria."
+    );
 
-      if(!file){
+    return;
+  }
 
-        add(
-          "ai",
-          "📸 Seleziona prima una foto dalla galleria."
-        );
+  const btn = $("photoBtn");
 
+  if(btn){
+    btn.disabled = true;
+  }
 
-        speak(
-          "Seleziona prima una foto dalla galleria"
-        );
+  try{
 
+    const imageUrl =
+      URL.createObjectURL(file);
 
-        return;
+    add(
+      "user",
+      "📷 Foto caricata"
+    );
 
-      }
+    window.bobSelectedPhoto = file;
+    window.bobSelectedPhotoUrl = imageUrl;
 
+    add(
+      "ai",
+      "📸 Foto ricevuta. Ora scrivi cosa vuoi modificare.\n\n" +
+      "Esempio: \"Togli lo sfondo e mettimi sulla spiaggia\"."
+    );
 
-      const btn =
-        $("photoBtn");
+    const input = $("input");
 
+    if(input){
 
-      btn.disabled =
-        true;
+      input.placeholder =
+        "Cosa vuoi modificare nella foto?";
 
-
-      add(
-        "user",
-        "📸 Analizza foto"
-      );
-
-
-      const typing =
-        document.createElement(
-          "div"
-        );
-
-
-      typing.className =
-        "msg ai";
-
-
-      const typingLine =
-        document.createElement(
-          "div"
-        );
-
-
-      typingLine.className =
-        "message-line";
-
-
-      const avatar =
-        document.createElement(
-          "div"
-        );
-
-
-      avatar.className =
-        "avatar";
-
-
-      avatar.textContent =
-        "🤖";
-
-
-      const bubble =
-        document.createElement(
-          "div"
-        );
-
-
-      bubble.className =
-        "bubble";
-
-
-      bubble.innerHTML =
-        `
-          <div class="typing">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        `;
-
-
-      typingLine.appendChild(
-        avatar
-      );
-
-
-      typingLine.appendChild(
-        bubble
-      );
-
-
-      typing.appendChild(
-        typingLine
-      );
-
-
-      $("messages").appendChild(
-        typing
-      );
-
-
-      $("messages").scrollTop =
-        $("messages").scrollHeight;
-
-
-      const form =
-        new FormData();
-
-
-      form.append(
-        "file",
-        file
-      );
-
-
-      form.append(
-        "client_id",
-        getActiveClientId()
-      );
-
-
-      try{
-
-        const d =
-          await fetchJsonOrThrow(
-            API +
-            "/ocr_photo",
-            {
-
-              method:
-                "POST",
-
-              body:
-                form
-
-            }
-          );
-
-
-        typing.remove();
-
-
-        const raw =
-          (
-            d &&
-            typeof d.text ===
-              "string"
-          )
-            ? d.text
-            : "";
-
-
-        const out =
-          cleanText(
-            raw
-          ) ||
-          "📷 Foto ricevuta, ma nessun testo rilevato.";
-
-
-        add(
-          "ai",
-          out
-        );
-
-
-        speak(
-          out
-        );
-
-      }catch(e){
-
-        typing.remove();
-
-
-        const errorText =
-          "❌ Foto: " +
-          (
-            e &&
-            e.message
-              ? e.message
-              : "errore"
-          );
-
-
-        add(
-          "ai",
-          errorText
-        );
-
-
-        speak(
-          "Errore durante l'analisi della foto"
-        );
-
-      }finally{
-
-        fileInput.value =
-          "";
-
-
-        btn.disabled =
-          false;
-
-      }
+      input.focus();
 
     }
+
+  }catch(error){
+
+    console.error(
+      "Errore caricamento foto:",
+      error
+    );
+
+    add(
+      "ai",
+      "❌ Errore durante il caricamento della foto."
+    );
+
+  }finally{
+
+    if(fileInput){
+      fileInput.value = "";
+    }
+
+    if(btn){
+      btn.disabled = false;
+    }
+
+  }
+}
+
+
 // =====================================================
 // GENERAZIONE IMMAGINI
 // =====================================================
