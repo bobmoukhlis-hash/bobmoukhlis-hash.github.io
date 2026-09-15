@@ -4242,80 +4242,91 @@ function closeCreditsPanel(){
     }
 
 
-    // =====================================================
-    // CHAT
-    // =====================================================
+   // =====================================================
+// CHAT
+// =====================================================
 
-    async function sendMessage(){
+async function sendMessage(){
 
-      const input =
-        $("input");
-
-
-      if(!input)
-        return;
+  const input =
+    $("input");
 
 
-      const text =
-        input.value.trim();
+  if(!input)
+    return;
 
 
-      if(!text)
-        return;
+  const text =
+    input.value.trim();
 
 
-      ensureConversation();
+  if(!text)
+    return;
 
 
-      input.value =
-        "";
+  // =====================================================
+  // RICHIESTA IMMAGINE AUTOMATICA
+  // =====================================================
+
+  if(isImageRequest(text)){
+
+    input.value = text;
+
+    await generateImage();
+
+    return;
+  }
 
 
-      add(
-        "user",
-        text
-      );
+  ensureConversation();
+
+  input.value =
+    "";
+
+  add(
+    "user",
+    text
+  );
 
 
-      const typing =
-        document.createElement(
-          "div"
-        );
+  const typing =
+    document.createElement(
+      "div"
+    );
 
 
-      typing.className =
-        "msg ai";
+  typing.className =
+    "msg ai";
 
 
-      const typingLine =
-        document.createElement(
-          "div"
-        );
+  const typingLine =
+    document.createElement(
+      "div"
+    );
 
 
-      typingLine.className =
-        "message-line";
+  typingLine.className =
+    "message-line";
 
 
-      const avatar =
-        document.createElement(
-          "div"
-        );
+  const avatar =
+    document.createElement(
+      "div"
+    );
 
 
-      avatar.className =
-        "avatar";
+  avatar.className =
+    "avatar";
 
 
-      avatar.textContent =
-        "🤖";
+  avatar.textContent =
+    "🤖";
 
 
-      const bubble =
-        document.createElement(
-          "div"
-        );
-
+  const bubble =
+    document.createElement(
+      "div"
+    );
 
       bubble.className =
         "bubble";
