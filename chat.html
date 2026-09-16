@@ -4672,37 +4672,76 @@ async function sendMessage(){
 
 
       console.error(
-        "Errore modifica foto:",
-        error
-      );
+        }catch(error){
 
+  if(
+    typing &&
+    typing.remove
+  ){
 
-      add(
-        "ai",
-        "❌ " +
-        (
-          error &&
-          error.message
-            ? error.message
-            : "Errore durante la modifica della foto."
-        )
-      );
-
-
-    }finally{
-
-      $("sendBtn").disabled =
-        false;
-
-      input.focus();
-
-    }
-
-    return;
+    typing.remove();
 
   }
 
+  window.bobSelectedPhoto =
+    null;
 
+  window.bobSelectedPhotoUrl =
+    null;
+
+  input.placeholder =
+    "Scrivi un messaggio...";
+
+  console.error(
+    }catch(error){
+
+  if(
+    typing &&
+    typing.remove
+  ){
+
+    typing.remove();
+
+  }
+
+  window.bobSelectedPhoto =
+    null;
+
+  window.bobSelectedPhotoUrl =
+    null;
+
+  input.placeholder =
+    "Scrivi un messaggio...";
+
+  console.error(
+    "Errore modifica foto:",
+    error
+  );
+
+  add(
+    "ai",
+    "❌ " +
+    (
+      error &&
+      error.message
+        ? error.message
+        : "Errore durante la modifica della foto."
+    )
+  );
+
+}finally{
+
+  $("sendBtn").disabled =
+    false;
+
+  input.focus();
+
+}
+
+return;
+
+}
+  
   // ===================================================
 // RICHIESTA IMMAGINE
 // ===================================================
