@@ -4379,25 +4379,201 @@ async function sendMessage(){
         direttamente nella chat.
       */
 
-     ```js
+      js
 const chat =
   $("messages") ||
   $("chat");
 
+const chat = $("messages");
+
 if(chat){
 
   const wrapper =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
   wrapper.className =
-    "message ai";
+    "msg ai";
+
+  const line =
+    document.createElement("div");
+
+  line.className =
+    "message-line";
+
+  const avatar =
+    document.createElement("div");
+
+  avatar.className =
+    "avatar";
+
+  avatar.textContent =
+    "🤖";
+
+  const content =
+    document.createElement("div");
+
+  content.style.maxWidth =
+    "82%";
 
   const img =
-  document.createElement(
-    "img"
+    document.createElement("img");
+
+  img.src =
+    imageUrl;
+
+  img.alt =
+    "Foto modificata da Bob";
+
+  img.style.display =
+    "block";
+
+  img.style.width =
+    "100%";
+
+  img.style.maxWidth =
+    "620px";
+
+  img.style.borderRadius =
+    "16px";
+
+  img.style.border =
+    "1px solid rgba(255,255,255,.08)";
+
+  img.style.boxShadow =
+    "0 8px 25px rgba(0,0,0,.25)";
+
+  img.style.cursor =
+    "pointer";
+
+  img.style.pointerEvents =
+    "auto";
+
+  img.setAttribute(
+    "role",
+    "button"
   );
+
+  /*
+   * APERTURA FOTO
+   */
+
+  img.addEventListener(
+    "click",
+    function(){
+
+      const viewer =
+        document.createElement("div");
+
+      viewer.style.position =
+        "fixed";
+
+      viewer.style.left =
+        "0";
+
+      viewer.style.top =
+        "0";
+
+      viewer.style.width =
+        "100%";
+
+      viewer.style.height =
+        "100%";
+
+      viewer.style.background =
+        "rgba(0,0,0,.95)";
+
+      viewer.style.zIndex =
+        "999999";
+
+      viewer.style.display =
+        "flex";
+
+      viewer.style.alignItems =
+        "center";
+
+      viewer.style.justifyContent =
+        "center";
+
+      viewer.style.padding =
+        "20px";
+
+      viewer.style.boxSizing =
+        "border-box";
+
+      viewer.style.cursor =
+        "pointer";
+
+      const bigImage =
+        document.createElement("img");
+
+      bigImage.src =
+        imageUrl;
+
+      bigImage.style.maxWidth =
+        "100%";
+
+      bigImage.style.maxHeight =
+        "100%";
+
+      bigImage.style.width =
+        "auto";
+
+      bigImage.style.height =
+        "auto";
+
+      bigImage.style.objectFit =
+        "contain";
+
+      bigImage.style.borderRadius =
+        "10px";
+
+      bigImage.style.pointerEvents =
+        "none";
+
+      viewer.appendChild(
+        bigImage
+      );
+
+      viewer.addEventListener(
+        "click",
+        function(){
+
+          viewer.remove();
+
+        }
+      );
+
+      document.body.appendChild(
+        viewer
+      );
+
+    }
+  );
+
+  content.appendChild(
+    img
+  );
+
+  line.appendChild(
+    avatar
+  );
+
+  line.appendChild(
+    content
+  );
+
+  wrapper.appendChild(
+    line
+  );
+
+  chat.appendChild(
+    wrapper
+  );
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
+}
 
 img.src =
   imageUrl;
@@ -4423,7 +4599,7 @@ img.style.display =
 img.style.marginTop =
   "8px";
 
-```javascript
+   javascript
 img.style.cursor = "pointer";
 img.style.pointerEvents = "auto";
 
@@ -4819,8 +4995,7 @@ chat.scrollTop =
     }
 
 
-     js
-async function sendPhoto(){
+     async function sendPhoto(){
 
   const fileInput = $("photo");
 
@@ -4904,6 +5079,7 @@ async function sendPhoto(){
 // =====================================================
 // GENERAZIONE IMMAGINI
 // =====================================================
+
 
 async function generateImage(){
 
@@ -5192,6 +5368,132 @@ async function generateImage(){
       "0 8px 25px rgba(0,0,0,.25)";
 
 
+    // -----------------------------------------------------
+    // FOTO CLICCABILE
+    // -----------------------------------------------------
+
+    image.style.cursor =
+      "pointer";
+
+    image.style.pointerEvents =
+      "auto";
+
+    image.setAttribute(
+      "role",
+      "button"
+    );
+
+    image.setAttribute(
+      "tabindex",
+      "0"
+    );
+
+
+    image.addEventListener(
+      "click",
+      function(){
+
+        const viewer =
+          document.createElement(
+            "div"
+          );
+
+        viewer.style.position =
+          "fixed";
+
+        viewer.style.left =
+          "0";
+
+        viewer.style.top =
+          "0";
+
+        viewer.style.width =
+          "100%";
+
+        viewer.style.height =
+          "100%";
+
+        viewer.style.background =
+          "rgba(0,0,0,.95)";
+
+        viewer.style.zIndex =
+          "999999";
+
+        viewer.style.display =
+          "flex";
+
+        viewer.style.alignItems =
+          "center";
+
+        viewer.style.justifyContent =
+          "center";
+
+        viewer.style.padding =
+          "20px";
+
+        viewer.style.boxSizing =
+          "border-box";
+
+        viewer.style.cursor =
+          "pointer";
+
+
+        const bigImage =
+          document.createElement(
+            "img"
+          );
+
+        bigImage.src =
+          imageUrl;
+
+        bigImage.alt =
+          "Immagine generata da ChatAI Bob";
+
+        bigImage.style.maxWidth =
+          "100%";
+
+        bigImage.style.maxHeight =
+          "100%";
+
+        bigImage.style.width =
+          "auto";
+
+        bigImage.style.height =
+          "auto";
+
+        bigImage.style.objectFit =
+          "contain";
+
+        bigImage.style.borderRadius =
+          "10px";
+
+        bigImage.style.pointerEvents =
+          "none";
+
+
+        viewer.appendChild(
+          bigImage
+        );
+
+
+        viewer.addEventListener(
+          "click",
+          function(){
+
+            viewer.remove();
+
+          }
+        );
+
+
+        document.body.appendChild(
+          viewer
+        );
+
+      }
+    );
+
+
     content.appendChild(
       image
     );
@@ -5234,7 +5536,9 @@ async function generateImage(){
 
   }catch(error){
 
-    typing.remove();
+    if(typing){
+      typing.remove();
+    }
 
 
     console.error(
@@ -5261,11 +5565,9 @@ async function generateImage(){
       btn.disabled = false;
     }
 
-    input.focus();
-
   }
 
-    }
+}
 
     // =====================================================
 // START
