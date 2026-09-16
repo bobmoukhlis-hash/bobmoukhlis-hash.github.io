@@ -4377,15 +4377,7 @@ async function sendMessage(){
 
   if(!text)
     return;
-if(
-  window.bobSelectedPhoto &&
-  !window.bobSelectedPhotoUrl
-){
 
-  window.bobSelectedPhoto =
-    null;
-
-}
 
   // ===================================================
   // FOTO DA MODIFICARE
@@ -4409,7 +4401,8 @@ if(
         "🎨 Sto modificando la foto..."
       );
 
-    $("sendBtn").disabled = true;
+    $("sendBtn").disabled =
+      true;
 
     try{
 
@@ -4448,7 +4441,7 @@ if(
       if(!response.ok){
 
         let errorMessage =
-          "Errore durante la modifica della foto.";
+          "Modifica immagine non riuscita.";
 
         try{
 
@@ -4583,12 +4576,6 @@ if(
       img.style.borderRadius =
         "16px";
 
-      img.style.border =
-        "1px solid rgba(255,255,255,.08)";
-
-      img.style.boxShadow =
-        "0 8px 25px rgba(0,0,0,.25)";
-
       img.style.cursor =
         "pointer";
 
@@ -4597,11 +4584,6 @@ if(
 
       img.style.touchAction =
         "manipulation";
-
-      img.setAttribute(
-        "role",
-        "button"
-      );
 
 
       img.addEventListener(
@@ -4654,17 +4636,11 @@ if(
       window.bobSelectedPhotoUrl =
         null;
 
-
       input.placeholder =
         "Scrivi un messaggio...";
 
 
       await loadBobCredits();
-
-
-      showToast(
-        "🎨 Foto modificata"
-      );
 
 
     }catch(error){
@@ -4679,83 +4655,203 @@ if(
       }
 
 
+      window.bobSelectedPhoto =
+        null;
+
+      window.bobSelectedPhotoUrl =
+        null;
+
+      input.placeholder =
+        "Scrivi un messaggio...";
+
+
       console.error(
-        }catch(error){
+        "Errore modifica foto:",
+        error
+      );
 
-  if(
-    typing &&
-    typing.remove
-  ){
 
-    typing.remove();
+      add(
+        "ai",
+        "❌ " +
+        (
+          error &&
+          error.message
+            ? error.message
+            : "Modifica immagine non riuscita."
+        )
+      );
 
-  }
 
-  window.bobSelectedPhoto =
-    null;
+    }finally{
 
-  window.bobSelectedPhotoUrl =
-    null;
+      $("sendBtn").disabled =
+        false;
 
-  input.placeholder =
-    "Scrivi un messaggio...";
+      input.focus();
 
-  console.error(
-    }catch(error){
+    }
 
-  if(
-    typing &&
-    typing.remove
-  ){
-
-    typing.remove();
+    return;
 
   }
 
-  window.bobSelectedPhoto =
-    null;
 
-  window.bobSelectedPhotoUrl =
-    null;
+  // ===================================================
+  // RICHIESTA IMMAGINE
+  // ===================================================
 
-  input.placeholder =
-    "Scrivi un messaggio...";
+  if(
+    isImageRequest(
+      text
+    )
+  ){
 
-  console.error(
-    "Errore modifica foto:",
-    error
-  );
+    input.value =
+      text;
+
+    await generateImage();
+
+    return;
+
+  }
+
+
+  // ===================================================
+  // CHAT NORMALE
+  // ===================================================
+
+  ensureConversation();
+
+  input.value = "";
 
   add(
-    "ai",
-    "❌ " +
-    (
-      error &&
-      error.message
-        ? error.message
-        : "Errore durante la modifica della foto."
-    )
+    "user",
+    text
   );
 
-}finally{
+
+  const typing =
+    add(
+      "ai",
+      "⏳ Sto pensando..."
+    );
+
 
   $("sendBtn").disabled =
-    false;
+    true;
 
-  input.focus();
 
-}
+  try{
 
-window.bobSelectedPhoto =
-  null;
+    const data =
+      await fetchJsonOrThrow(
+        API + "/chat",
+        {
+          method:
+            "POST",
 
-window.bobSelectedPhotoUrl =
-  null;
+          headers:{
+            "Content-Type":
+              "application/json",
 
-input.placeholder =
-  "Scrivi un messaggio...";
+            "Accept":
+              "application/json"
+          },
 
-return;
+          body:
+            JSON.stringify({
+
+              message:
+                text,
+
+              client_id:
+                getActiveClientId()
+
+            })
+
+        }
+      );
+
+
+    if(
+      typing &&
+      typing.remove
+    ){
+
+      typing.remove();
+
+    }
+
+
+    const reply =
+      data.reply ||
+      data.response ||
+      data.message ||
+      data.text ||
+      "Non ho ricevuto una risposta.";
+
+
+    add(
+      "ai",
+      reply,
+      true
+    );
+
+
+    await loadBobCredits();
+
+
+    if(
+      typeof speak ===
+      "function"
+    ){
+
+      speak(
+        reply
+      );
+
+    }
+
+
+  }catch(error){
+
+    if(
+      typing &&
+      typing.remove
+    ){
+
+      typing.remove();
+
+    }
+
+
+    console.error(
+      "Errore chat:",
+      error
+    );
+
+
+    add(
+      "ai",
+      "❌ " +
+      (
+        error &&
+        error.message
+          ? error.message
+          : "Errore di connessione."
+      )
+    );
+
+
+  }finally{
+
+    $("sendBtn").disabled =
+      false;
+
+    input.focus();
+
+  }
 
 }
   
