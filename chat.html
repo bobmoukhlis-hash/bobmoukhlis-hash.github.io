@@ -4249,17 +4249,129 @@ function isImageRequest(text){
   );
 }
 
+// =====================================================
+// VISUALIZZATORE IMMAGINI
+// =====================================================
 
+function openImageViewer(imageUrl){
+
+  if(!imageUrl)
+    return;
+
+
+  const viewer =
+    document.createElement(
+      "div"
+    );
+
+  viewer.style.position =
+    "fixed";
+
+  viewer.style.left =
+    "0";
+
+  viewer.style.top =
+    "0";
+
+  viewer.style.width =
+    "100%";
+
+  viewer.style.height =
+    "100%";
+
+  viewer.style.background =
+    "rgba(0,0,0,.95)";
+
+  viewer.style.zIndex =
+    "999999";
+
+  viewer.style.display =
+    "flex";
+
+  viewer.style.alignItems =
+    "center";
+
+  viewer.style.justifyContent =
+    "center";
+
+  viewer.style.padding =
+    "20px";
+
+  viewer.style.boxSizing =
+    "border-box";
+
+  viewer.style.cursor =
+    "pointer";
+
+  viewer.style.touchAction =
+    "manipulation";
+
+
+  const bigImage =
+    document.createElement(
+      "img"
+    );
+
+  bigImage.src =
+    imageUrl;
+
+  bigImage.alt =
+    "Immagine ingrandita";
+
+  bigImage.style.maxWidth =
+    "100%";
+
+  bigImage.style.maxHeight =
+    "100%";
+
+  bigImage.style.width =
+    "auto";
+
+  bigImage.style.height =
+    "auto";
+
+  bigImage.style.objectFit =
+    "contain";
+
+  bigImage.style.borderRadius =
+    "10px";
+
+  bigImage.style.pointerEvents =
+    "none";
+
+
+  viewer.appendChild(
+    bigImage
+  );
+
+
+  viewer.addEventListener(
+    "click",
+    function(){
+
+      viewer.remove();
+
+    }
+  );
+
+
+  document.body.appendChild(
+    viewer
+  );
+
+}
 // =====================================================
 // CHAT
 // =====================================================
 
 async function sendMessage(){
 
-  const input = $("input");
+  const input =
+    $("input");
 
   if(!input)
     return;
+
   const text =
     input.value.trim();
 
@@ -4267,11 +4379,9 @@ async function sendMessage(){
     return;
 
 
-  /*
-    FOTO CARICATA:
-    se esiste una foto, inviamo
-    foto + istruzione a /edit_image
-  */
+  // ===================================================
+  // FOTO DA MODIFICARE
+  // ===================================================
 
   if(window.bobSelectedPhoto){
 
@@ -4337,18 +4447,22 @@ async function sendMessage(){
           const errorData =
             await response.json();
 
-          if(errorData.detail){
+          if(
+            errorData &&
+            errorData.detail
+          ){
 
             errorMessage =
               errorData.detail;
 
           }
 
-        }catch(e){}
+        }catch(error){}
 
         throw new Error(
           errorMessage
         );
+
       }
 
 
@@ -4356,306 +4470,174 @@ async function sendMessage(){
         await response.blob();
 
 
+      if(
+        !blob ||
+        blob.size <= 0
+      ){
+
+        throw new Error(
+          "Immagine vuota ricevuta dal server."
+        );
+
+      }
+
+
       const imageUrl =
-        URL.createObjectURL(blob);
+        URL.createObjectURL(
+          blob
+        );
 
 
-      if(typing &&
-         typing.remove){
+      if(
+        typing &&
+        typing.remove
+      ){
 
         typing.remove();
 
       }
 
 
-      add(
-        "ai",
-        "🎨 Foto modificata"
-      );
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+      wrapper.className =
+        "msg ai";
 
 
-      /*
-        Mostra l'immagine modificata
-        direttamente nella chat.
-      */
+      const line =
+        document.createElement(
+          "div"
+        );
 
-      js
-const chat =
-  $("messages") ||
-  $("chat");
+      line.className =
+        "message-line";
 
-const chat = $("messages");
 
-if(chat){
+      const avatar =
+        document.createElement(
+          "div"
+        );
 
-  const wrapper =
-    document.createElement("div");
+      avatar.className =
+        "avatar";
 
-  wrapper.className =
-    "msg ai";
+      avatar.textContent =
+        "🤖";
 
-  const line =
-    document.createElement("div");
 
-  line.className =
-    "message-line";
+      const content =
+        document.createElement(
+          "div"
+        );
 
-  const avatar =
-    document.createElement("div");
+      content.style.maxWidth =
+        "82%";
 
-  avatar.className =
-    "avatar";
 
-  avatar.textContent =
-    "🤖";
+      const label =
+        document.createElement(
+          "div"
+        );
 
-  const content =
-    document.createElement("div");
+      label.className =
+        "bubble";
 
-  content.style.maxWidth =
-    "82%";
+      label.textContent =
+        "🎨 Foto modificata";
 
-  const img =
-    document.createElement("img");
 
-  img.src =
-    imageUrl;
+      const img =
+        document.createElement(
+          "img"
+        );
 
-  img.alt =
-    "Foto modificata da Bob";
-
-  img.style.display =
-    "block";
-
-  img.style.width =
-    "100%";
-
-  img.style.maxWidth =
-    "620px";
-
-  img.style.borderRadius =
-    "16px";
-
-  img.style.border =
-    "1px solid rgba(255,255,255,.08)";
-
-  img.style.boxShadow =
-    "0 8px 25px rgba(0,0,0,.25)";
-
-  img.style.cursor =
-    "pointer";
-
-  img.style.pointerEvents =
-    "auto";
-
-  img.setAttribute(
-    "role",
-    "button"
-  );
-
-  /*
-   * APERTURA FOTO
-   */
-
-  img.addEventListener(
-    "click",
-    function(){
-
-      const viewer =
-        document.createElement("div");
-
-      viewer.style.position =
-        "fixed";
-
-      viewer.style.left =
-        "0";
-
-      viewer.style.top =
-        "0";
-
-      viewer.style.width =
-        "100%";
-
-      viewer.style.height =
-        "100%";
-
-      viewer.style.background =
-        "rgba(0,0,0,.95)";
-
-      viewer.style.zIndex =
-        "999999";
-
-      viewer.style.display =
-        "flex";
-
-      viewer.style.alignItems =
-        "center";
-
-      viewer.style.justifyContent =
-        "center";
-
-      viewer.style.padding =
-        "20px";
-
-      viewer.style.boxSizing =
-        "border-box";
-
-      viewer.style.cursor =
-        "pointer";
-
-      const bigImage =
-        document.createElement("img");
-
-      bigImage.src =
+      img.src =
         imageUrl;
 
-      bigImage.style.maxWidth =
+      img.alt =
+        "Foto modificata da Bob";
+
+      img.style.display =
+        "block";
+
+      img.style.width =
         "100%";
 
-      bigImage.style.maxHeight =
-        "100%";
+      img.style.maxWidth =
+        "620px";
 
-      bigImage.style.width =
+      img.style.marginTop =
+        "8px";
+
+      img.style.borderRadius =
+        "16px";
+
+      img.style.border =
+        "1px solid rgba(255,255,255,.08)";
+
+      img.style.boxShadow =
+        "0 8px 25px rgba(0,0,0,.25)";
+
+      img.style.cursor =
+        "pointer";
+
+      img.style.pointerEvents =
         "auto";
 
-      bigImage.style.height =
-        "auto";
+      img.style.touchAction =
+        "manipulation";
 
-      bigImage.style.objectFit =
-        "contain";
-
-      bigImage.style.borderRadius =
-        "10px";
-
-      bigImage.style.pointerEvents =
-        "none";
-
-      viewer.appendChild(
-        bigImage
+      img.setAttribute(
+        "role",
+        "button"
       );
 
-      viewer.addEventListener(
+
+      img.addEventListener(
         "click",
         function(){
 
-          viewer.remove();
+          openImageViewer(
+            imageUrl
+          );
 
         }
       );
 
-      document.body.appendChild(
-        viewer
+
+      content.appendChild(
+        label
       );
 
-    }
-  );
-
-  content.appendChild(
-    img
-  );
-
-  line.appendChild(
-    avatar
-  );
-
-  line.appendChild(
-    content
-  );
-
-  wrapper.appendChild(
-    line
-  );
-
-  chat.appendChild(
-    wrapper
-  );
-
-  chat.scrollTop =
-    chat.scrollHeight;
-
-}
-
-img.src =
-  imageUrl;
-
-img.alt =
-  "Foto modificata da Bob";
-
-img.style.maxWidth =
-  "100%";
-
-img.style.width =
-  "auto";
-
-img.style.height =
-  "auto";
-
-img.style.borderRadius =
-  "16px";
-
-img.style.display =
-  "block";
-
-img.style.marginTop =
-  "8px";
-
-   javascript
-img.style.cursor = "pointer";
-img.style.pointerEvents = "auto";
-
-img.setAttribute("role", "button");
-
-// Apertura foto a schermo intero
-img.addEventListener("click", function () {
-
-  const viewer = document.createElement("div");
-
-  viewer.style.position = "fixed";
-  viewer.style.left = "0";
-  viewer.style.top = "0";
-  viewer.style.width = "100%";
-  viewer.style.height = "100%";
-  viewer.style.background = "rgba(0,0,0,0.95)";
-  viewer.style.zIndex = "99999";
-  viewer.style.display = "flex";
-  viewer.style.alignItems = "center";
-  viewer.style.justifyContent = "center";
-  viewer.style.padding = "20px";
-  viewer.style.boxSizing = "border-box";
-
-  const bigImage = document.createElement("img");
-
-  bigImage.src = imageUrl;
-
-  bigImage.style.maxWidth = "100%";
-  bigImage.style.maxHeight = "100%";
-  bigImage.style.width = "auto";
-  bigImage.style.height = "auto";
-  bigImage.style.objectFit = "contain";
-  bigImage.style.pointerEvents = "none";
-
-  viewer.appendChild(bigImage);
-
-  // Tocca lo sfondo per chiudere
-  viewer.addEventListener("click", function () {
-    viewer.remove();
-  });
-
-  document.body.appendChild(viewer);
-});
-```
+      content.appendChild(
+        img
+      );
 
 
-wrapper.appendChild(
-  img
-);
+      line.appendChild(
+        avatar
+      );
 
-chat.appendChild(
-  wrapper
-);
+      line.appendChild(
+        content
+      );
 
-chat.scrollTop =
-  chat.scrollHeight;
+
+      wrapper.appendChild(
+        line
+      );
+
+
+      $("messages").appendChild(
+        wrapper
+      );
+
+
+      $("messages").scrollTop =
+        $("messages").scrollHeight;
 
 
       window.bobSelectedPhoto =
@@ -4672,14 +4654,22 @@ chat.scrollTop =
       await loadBobCredits();
 
 
+      showToast(
+        "🎨 Foto modificata"
+      );
+
+
     }catch(error){
 
-      if(typing &&
-         typing.remove){
+      if(
+        typing &&
+        typing.remove
+      ){
 
         typing.remove();
 
       }
+
 
       console.error(
         "Errore modifica foto:",
@@ -4709,7 +4699,168 @@ chat.scrollTop =
     }
 
     return;
+
   }
+
+
+  // ===================================================
+  // RICHIESTA IMMAGINE
+  // ===================================================
+
+  if(
+    isImageRequest(
+      text
+    )
+  ){
+
+    input.value =
+      text;
+
+    await generateImage();
+
+    return;
+
+  }
+
+
+  // ===================================================
+  // CHAT NORMALE
+  // ===================================================
+
+  ensureConversation();
+
+  input.value = "";
+
+
+  add(
+    "user",
+    text
+  );
+
+
+  const typing =
+    add(
+      "ai",
+      "⏳ Sto pensando..."
+    );
+
+
+  $("sendBtn").disabled =
+    true;
+
+
+  try{
+
+    const data =
+      await fetchJsonOrThrow(
+        API + "/chat",
+        {
+          method:
+            "POST",
+
+          headers:{
+            "Content-Type":
+              "application/json",
+
+            "Accept":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+
+              message:
+                text,
+
+              client_id:
+                getActiveClientId()
+
+            })
+
+        }
+      );
+
+
+    if(
+      typing &&
+      typing.remove
+    ){
+
+      typing.remove();
+
+    }
+
+
+    const reply =
+      data.reply ||
+      data.response ||
+      data.message ||
+      data.text ||
+      "Non ho ricevuto una risposta.";
+
+
+    add(
+      "ai",
+      reply,
+      true
+    );
+
+
+    await loadBobCredits();
+
+
+    if(
+      typeof speak ===
+      "function"
+    ){
+
+      speak(
+        reply
+      );
+
+    }
+
+
+  }catch(error){
+
+    if(
+      typing &&
+      typing.remove
+    ){
+
+      typing.remove();
+
+    }
+
+
+    console.error(
+      "Errore chat:",
+      error
+    );
+
+
+    add(
+      "ai",
+      "❌ " +
+      (
+        error &&
+        error.message
+          ? error.message
+          : "Errore di connessione."
+      )
+    );
+
+
+  } finally {
+
+    $("sendBtn").disabled =
+      false;
+
+    input.focus();
+
+  }
+
+}
 
 
   /*
@@ -5368,16 +5519,26 @@ async function generateImage(){
       "0 8px 25px rgba(0,0,0,.25)";
 image.style.cursor = "pointer";
 image.style.pointerEvents = "auto";
+image.style.touchAction = "manipulation";
+
+image.setAttribute(
+  "role",
+  "button"
+);
+
+image.setAttribute(
+  "tabindex",
+  "0"
+);
 
 image.addEventListener(
   "click",
   function(){
 
-    alert("FOTO CLICCATA");
+    openImageViewer(imageUrl);
 
   }
 );
-
     // -----------------------------------------------------
     // FOTO CLICCABILE
     // -----------------------------------------------------
