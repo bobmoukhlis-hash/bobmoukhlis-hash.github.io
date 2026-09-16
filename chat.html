@@ -4377,7 +4377,15 @@ async function sendMessage(){
 
   if(!text)
     return;
+if(
+  window.bobSelectedPhoto &&
+  !window.bobSelectedPhotoUrl
+){
 
+  window.bobSelectedPhoto =
+    null;
+
+}
 
   // ===================================================
   // FOTO DA MODIFICARE
@@ -4737,6 +4745,15 @@ async function sendMessage(){
   input.focus();
 
 }
+
+window.bobSelectedPhoto =
+  null;
+
+window.bobSelectedPhotoUrl =
+  null;
+
+input.placeholder =
+  "Scrivi un messaggio...";
 
 return;
 
