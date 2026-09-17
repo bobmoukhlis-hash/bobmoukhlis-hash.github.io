@@ -5027,13 +5027,163 @@ function startMic(){
     window.bobSelectedPhoto = file;
     window.bobSelectedPhotoUrl = imageUrl;
 
-    add(
-      "ai",
+
+    // =================================================
+    // MESSAGGIO MODIFICA FOTO
+    // =================================================
+
+    const wrapper =
+      document.createElement("div");
+
+    wrapper.className =
+      "msg ai";
+
+
+    const line =
+      document.createElement("div");
+
+    line.className =
+      "message-line";
+
+
+    const avatar =
+      document.createElement("div");
+
+    avatar.className =
+      "avatar";
+
+    avatar.textContent =
+      "🤖";
+
+
+    const content =
+      document.createElement("div");
+
+    content.style.maxWidth =
+      "82%";
+
+
+    const bubble =
+      document.createElement("div");
+
+    bubble.className =
+      "bubble";
+
+    bubble.textContent =
       "📸 Foto ricevuta. Ora scrivi cosa vuoi modificare.\n\n" +
-      "Esempio: \"Togli lo sfondo e mettimi sulla spiaggia\"."
+      "Esempio: \"Togli lo sfondo e mettimi sulla spiaggia\".";
+
+
+    // =================================================
+    // PULSANTE ANNULLA
+    // =================================================
+
+    const cancelBtn =
+      document.createElement("button");
+
+    cancelBtn.type =
+      "button";
+
+    cancelBtn.textContent =
+      "❌ Annulla modifica";
+
+    cancelBtn.style.display =
+      "block";
+
+    cancelBtn.style.marginTop =
+      "10px";
+
+    cancelBtn.style.padding =
+      "9px 14px";
+
+    cancelBtn.style.borderRadius =
+      "10px";
+
+    cancelBtn.style.border =
+      "1px solid rgba(255,255,255,.15)";
+
+    cancelBtn.style.background =
+      "rgba(255,255,255,.08)";
+
+    cancelBtn.style.color =
+      "#fff";
+
+    cancelBtn.style.cursor =
+      "pointer";
+
+    cancelBtn.style.touchAction =
+      "manipulation";
+
+
+    cancelBtn.addEventListener(
+      "click",
+      function(){
+
+        window.bobSelectedPhoto =
+          null;
+
+        window.bobSelectedPhotoUrl =
+          null;
+
+
+        const input =
+          $("input");
+
+        if(input){
+
+          input.placeholder =
+            "Scrivi un messaggio...";
+
+          input.focus();
+
+        }
+
+
+        wrapper.remove();
+
+
+        showToast(
+          "📷 Modifica foto annullata"
+        );
+
+      }
     );
 
-    const input = $("input");
+
+    content.appendChild(
+      bubble
+    );
+
+    content.appendChild(
+      cancelBtn
+    );
+
+
+    line.appendChild(
+      avatar
+    );
+
+    line.appendChild(
+      content
+    );
+
+
+    wrapper.appendChild(
+      line
+    );
+
+
+    $("messages").appendChild(
+      wrapper
+    );
+
+
+    $("messages").scrollTop =
+      $("messages").scrollHeight;
+
+
+    const input =
+      $("input");
 
     if(input){
 
@@ -5067,9 +5217,8 @@ function startMic(){
     }
 
   }
+
 }
-
-
 // =====================================================
 // GENERAZIONE IMMAGINI
 // =====================================================
