@@ -4425,16 +4425,13 @@ async function sendMessage(){
       );
 
       const response =
-        await fetch(
-          API + "/edit_image",
-          {
-            method:
-              "POST",
-
-            body:
-              form
-          }
-        );
+  await fetch(
+    API + "/edit_image",
+    {
+      method: "POST",
+      body: form
+    }
+  );
 
 
       if(!response.ok){
